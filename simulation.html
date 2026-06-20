@@ -340,8 +340,15 @@
       </section>
 
       <section class="card pad rev-sec">
-        <div class="label">Verify customer contact</div>
+        <div class="label">Verify customer identity &amp; contact</div>
         <div class="rev-contact">
+          <div class="rev-crow">
+            <span class="rev-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"></rect><circle cx="9" cy="10" r="2"></circle><path d="M15 8h3M15 12h3M5 16h14"></path></svg></span>
+            <div class="rev-ctext"><div class="rev-clabel">TRN <span id="trn-status"></span></div>
+              <div class="rev-cval" id="rev-trn">&mdash;</div>
+              <input class="rev-cinput" id="rev-trn-input" placeholder="Enter TRN (e.g. 123-456-789)" inputmode="numeric" style="display:none"></div>
+            <button class="rev-update" id="trn-update" onclick="toggleUpdate('trn')">Update</button>
+          </div>
           <div class="rev-crow">
             <span class="rev-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.81.36 1.6.7 2.34a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.74-1.27a2 2 0 0 1 2.11-.45c.74.34 1.53.57 2.34.7A2 2 0 0 1 22 16.92z"></path></svg></span>
             <div class="rev-ctext"><div class="rev-clabel">Phone on file</div><div class="rev-cval" id="rev-phone">+1 876 978 4128</div>
@@ -414,13 +421,20 @@
 (function(){
   "use strict";
   var P=new URLSearchParams(location.search);
-  var purchase=parseFloat(P.get('amount'))||227000;
+  var purchase=parseFloat(P.get('amount'));
   var deposit=parseFloat(P.get('down')); if(isNaN(deposit)) deposit=57000;
   var acct=P.get('cart')||'HP-00471';
+  if(P.get('mode')==='cash'){ deposit=0; }
+  else if(isNaN(purchase)){ purchase=227000; }
   var fromCarts=P.get('fromCarts')==='1';
+  var isCash=P.get('mode')==='cash';
+  var cName=P.get('name'), cRating=P.get('rating')||'A', cCosacs=P.get('cosacs')||'';
+  var cTrn=P.get('trn')||'', trnOnFile=P.get('trnOnFile')==='1', cArrears=P.get('arrears')==='1', cId=P.get('id')||'';
 
-  var income=54000, committed=7557.74;
-  var availMmiBase=0.40*income-committed;
+  var income=parseFloat(P.get('income')); if(isNaN(income)) income=54000;
+  var committed=parseFloat(P.get('committed')); if(isNaN(committed)) committed=7557.74;
+  var dsr=parseFloat(P.get('dsr')); if(isNaN(dsr)) dsr=0.40;
+  var availMmiBase=dsr*income-committed;
   var ICON_OK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M9 12l2 2 4-4"></path></svg>';
   var ICON_WARN='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>';
 
@@ -429,6 +443,7 @@
     {id:'bf',     name:'Black Friday', badge:'', rate:0.04920, min:12, max:60, grace:3},
     {id:'staff',  name:'Staff',        badge:'', rate:0.05250, min:6,  max:54, grace:0}
   ];
+  if(isCash){ for(var _i=0;_i<PROMOS.length;_i++){ if(PROMOS[_i].max>36) PROMOS[_i].max=36; if(PROMOS[_i].min>PROMOS[_i].max) PROMOS[_i].min=PROMOS[_i].max; } }
   var pi=0, term=PROMOS[0].max, promoOpen=false;
 
   var CART_DETAILS={
@@ -479,10 +494,11 @@
   }
   function render(){
     var p=PROMOS[pi];
-    document.getElementById('cb-acct').textContent='Cart · '+acct;
-    document.getElementById('cb-items').textContent=detail().count;
-    document.getElementById('v-purchase').textContent=money(purchase);
-    document.getElementById('v-financed').textContent=money(financed());
+    var _a=document.getElementById('cb-acct'); if(_a) _a.textContent='Cart · '+acct;
+    var _it=document.getElementById('cb-items'); if(_it) _it.textContent=detail().count;
+    var _vp=document.getElementById('v-purchase'); if(_vp) _vp.textContent=money(purchase);
+    var _vf=document.getElementById('v-financed'); if(_vf) _vf.textContent=money(financed());
+    var _dm=document.getElementById('disb-max'); if(_dm) _dm.textContent='Max available to disburse: '+money(slBase());
     document.getElementById('crumb-carts').style.display=fromCarts?'':'none';
     document.getElementById('crumb-carts-sep').style.display=fromCarts?'':'none';
 
@@ -524,9 +540,11 @@
 
   var dep=document.getElementById('dep');
   function setDep(v){ if(isNaN(v)) v=0; deposit=Math.min(Math.max(0,v), purchase); render(); }
-  dep.addEventListener('input', function(){ setDep(parseFloat((dep.value||'').replace(/[^0-9.]/g,''))); });
-  dep.addEventListener('change', function(){ dep.value=Number(deposit).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); });
-  dep.addEventListener('blur', function(){ dep.value=Number(deposit).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); });
+  if(dep){
+    dep.addEventListener('input', function(){ setDep(parseFloat((dep.value||'').replace(/[^0-9.]/g,''))); });
+    dep.addEventListener('change', function(){ dep.value=Number(deposit).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); });
+    dep.addEventListener('blur', function(){ dep.value=Number(deposit).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); });
+  }
 
   window.openDetail=function(){
     var d=detail();
@@ -548,15 +566,36 @@
     else if(where==='customer'){ msg.action='back'; }
     else if(where==='carts'){ msg.action='back-to-carts'; }
     if(window.parent&&window.parent!==window){ try{ window.parent.postMessage(msg,'*'); return; }catch(e){} } window.location.href='01-customer-search.html'; };
+  var trnVal = (trnOnFile && cTrn) ? cTrn : '';
+  function trnOk(){ return (trnVal||'').replace(/[^0-9]/g,'').length>=9; }
+  function setupTrn(){
+    var lbl=document.getElementById('trn-status'), val=document.getElementById('rev-trn'),
+        inp=document.getElementById('rev-trn-input'), btn=document.getElementById('trn-update');
+    if(!val) return;
+    inp.oninput=function(){ trnVal=inp.value; if(inp.value.trim()) val.textContent=inp.value; updateSubmit(); };
+    if(trnOnFile && cTrn){
+      trnVal=cTrn; val.textContent=cTrn; val.style.display=''; inp.style.display='none';
+      lbl.innerHTML='<span style="color:#15A35B;font-weight:600">&middot; on file</span>'; if(btn) btn.style.display='';
+    } else {
+      trnVal=''; val.style.display='none'; inp.style.display='block'; inp.value='';
+      lbl.innerHTML='<span style="color:#D32F45;font-weight:600">&middot; required</span>'; if(btn) btn.style.display='none';
+    }
+    updateSubmit();
+  }
   window.showReview=function(){
     var p=PROMOS[pi], inst=instFor(term);
-    var rows=[['Product · cart','Hired Purchase · '+acct],['Amount to finance',money(financed())],
-      ['Down payment',money(deposit)],['Term · promotion',term+' months · '+p.name+' · '+rateStr(p)],
-      ['CPI insurance',money(cpiFor(term))],['First installment due',firstPay()]];
+    var rows = isCash
+      ? [['Product','Cash Loan'],['Amount to disburse',money(financed())],
+         ['Term · promotion',term+' months · '+p.name+' · '+rateStr(p)],
+         ['CPI insurance',money(cpiFor(term))],['First installment due',firstPay()]]
+      : [['Product · cart','Hired Purchase · '+acct],['Amount to finance',money(financed())],
+         ['Down payment',money(deposit)],['Term · promotion',term+' months · '+p.name+' · '+rateStr(p)],
+         ['CPI insurance',money(cpiFor(term))],['First installment due',firstPay()]];
     var h=''; for(var i=0;i<rows.length;i++) h+='<div class="rev-row"><span>'+rows[i][0]+'</span><span>'+rows[i][1]+'</span></div>';
     h+='<div class="rev-row hi"><span>Monthly installment</span><span>'+money(inst)+'</span></div>';
     document.getElementById('rev-credit').innerHTML=h;
-    document.getElementById('rev-summary').innerHTML=acct+' · <b>'+money0(inst)+'/mo</b> over '+term+'m';
+    document.getElementById('rev-summary').innerHTML=(isCash?'Cash loan':acct)+' · <b>'+money0(inst)+'/mo</b> over '+term+'m';
+    setupTrn();
     document.getElementById('sim-view').style.display='none';
     document.getElementById('review-view').style.display='block';
     window.scrollTo(0,0);
@@ -582,19 +621,64 @@
     _el('addr-parish').onchange=function(){ _addrMode(); _addrRecompute(); }; _el('addr-street').focus(); _addrRecompute(); }
   window.toggleUpdate=function(which){
     var inp=document.getElementById('rev-'+which+'-input'), val=document.getElementById('rev-'+which);
-    if(inp.style.display==='none'||!inp.style.display){ inp.style.display='block'; if(which==='addr'){ _addrInit(val.textContent); } else { inp.value=val.textContent; inp.oninput=function(){ if(inp.value.trim()) val.textContent=inp.value; }; inp.focus(); } }
+    if(inp.style.display==='none'||!inp.style.display){ inp.style.display='block';
+      if(which==='addr'){ _addrInit(val.textContent); }
+      else if(which==='trn'){ inp.value=(val.textContent==='—'?'':val.textContent); inp.oninput=function(){ trnVal=inp.value; if(inp.value.trim()) val.textContent=inp.value; updateSubmit(); }; inp.focus(); }
+      else { inp.value=val.textContent; inp.oninput=function(){ if(inp.value.trim()) val.textContent=inp.value; }; inp.focus(); } }
     else { inp.style.display='none'; }
   };
   window.updateSubmit=function(){ var c=document.getElementById('rev-csr').value.trim(); var st=(document.getElementById('rev-store')||{}).value||''; var ok=(document.getElementById('rev-confirmchk')||{}).checked;
-    document.getElementById('rev-submit').disabled = (c.length<3 || !st || !ok); };
+    document.getElementById('rev-submit').disabled = (c.length<3 || !st || !ok || !trnOk()); };
   window.submitReview=function(){
-    var c=document.getElementById('rev-csr').value.trim(); var st=(document.getElementById('rev-store')||{}).value||''; var ok=(document.getElementById('rev-confirmchk')||{}).checked; if(c.length<3||!st||!ok) return;
+    var c=document.getElementById('rev-csr').value.trim(); var st=(document.getElementById('rev-store')||{}).value||''; var ok=(document.getElementById('rev-confirmchk')||{}).checked; if(c.length<3||!st||!ok||!trnOk()) return;
     var t=document.getElementById('toast'); t.textContent='Credit request submitted · '+c+' · '+st;
     t.className='show'; clearTimeout(window.__t); window.__t=setTimeout(function(){ t.className=''; },3500);
     var b=document.getElementById('rev-submit'); b.disabled=true; b.textContent='Submitted';
   };
 
-  dep.value=Number(deposit).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+  function fmtAmt(n){ return Number(n||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+  function decode(s){ try{ return decodeURIComponent(s); }catch(e){ return s; } }
+  function populateHeader(){
+    if(!cName) return;
+    var nm=document.querySelector('.hd-name'); if(nm) nm.textContent=decode(cName);
+    var rc=document.querySelector('.chip.rating'); if(rc) rc.textContent='Rating '+cRating;
+    var ok=document.querySelector('.chip.ok');
+    if(ok && cArrears){ ok.className='chip'; ok.style.background='rgba(244,54,76,.18)'; ok.style.borderColor='rgba(244,54,76,.4)'; ok.style.color='#FF9AA6'; ok.innerHTML='In arrears'; }
+    var meta=document.querySelector('.hd-meta');
+    if(meta){ var idDigits=(cTrn||'').replace(/[^0-9]/g,'')||cId;
+      meta.innerHTML='<span><b>ID</b> '+(idDigits||'—')+'</span>'+
+        (cCosacs?'<span><b>COSACS</b> '+cCosacs+'</span>':'')+
+        '<span><b>Net income</b> '+money(income)+' / mo</span>'; }
+  }
+  function setupCash(){
+    var cur=document.querySelector('.crumb .cur'); if(cur) cur.textContent='Simulate cash loan';
+    document.title='Unicredit · Simulate cash loan';
+    var bar=document.querySelector('.cartbar');
+    if(bar){
+      var cbid=bar.querySelector('.cb-id'); if(cbid) cbid.style.display='none';
+      var see=bar.querySelector('.cb-see'); if(see) see.style.display='none';
+      var figs=bar.querySelector('.cb-figs');
+      if(figs){ figs.innerHTML='<div class="cb-fig fin" style="flex:1"><span class="k">Amount to disburse</span>'+
+        '<span class="dep-wrap"><span class="cur">$</span><input class="dep-input" id="disb" inputmode="decimal" style="width:230px;font-size:18px;color:var(--navy);font-weight:700"></span>'+
+        '<div class="mindown" id="disb-max"></div></div>'; }
+      var disb=document.getElementById('disb');
+      if(disb){
+        disb.value=fmtAmt(purchase);
+        disb.addEventListener('input', function(){ var v=parseFloat((disb.value||'').replace(/[^0-9.]/g,'')); purchase=isNaN(v)?0:Math.max(0,v); render(); });
+        disb.addEventListener('blur', function(){ disb.value=fmtAmt(purchase); });
+      }
+    }
+    var back=document.querySelector('.actionbar .btn-ghost');
+    if(back){ back.textContent='Back to customer'; back.setAttribute('onclick',"nav('customer')"); }
+  }
+
+  if(isCash){
+    if(isNaN(purchase)||!purchase) purchase=Math.round(slBase());
+    setupCash();
+  } else if(dep){
+    dep.value=Number(deposit).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+  }
+  populateHeader();
   render();
 })();
 </script>

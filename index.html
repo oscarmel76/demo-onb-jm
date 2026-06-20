@@ -54,7 +54,20 @@
       var d = e.data;
       if (!d || d.__unicredit !== true) return;
       if (d.action === 'open-hp') {
-        if (d.fromCarts) {
+        if (d.mode === 'cash') {
+          var cs = 'simulation.html?mode=cash' +
+                   '&name=' + encodeURIComponent(d.name || '') +
+                   '&rating=' + encodeURIComponent(d.rating || '') +
+                   '&cosacs=' + encodeURIComponent(d.cosacs || '') +
+                   '&income=' + encodeURIComponent(d.income || '') +
+                   '&committed=' + encodeURIComponent(d.committed || '') +
+                   '&dsr=' + encodeURIComponent(d.dsr || '') +
+                   '&trn=' + encodeURIComponent(d.trn || '') +
+                   '&trnOnFile=' + (d.trnOnFile ? '1' : '0') +
+                   '&arrears=' + (d.arrears ? '1' : '0') +
+                   '&id=' + encodeURIComponent(d.id || '');
+          if (hp.getAttribute('src') !== cs) hp.setAttribute('src', cs);
+        } else if (d.fromCarts) {
           var nextSrc = 'simulation.html?amount=' + encodeURIComponent(d.amount) +
                         '&down=' + encodeURIComponent(d.down) +
                         '&cart=' + encodeURIComponent(d.acct || '') + '&fromCarts=1';
