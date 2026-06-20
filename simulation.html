@@ -350,7 +350,7 @@
           <div class="rev-crow">
             <span class="rev-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></span>
             <div class="rev-ctext"><div class="rev-clabel">Address on file</div><div class="rev-cval" id="rev-addr">12 Hopefield Avenue, Kingston 6, St. Andrew</div>
-              <input class="rev-cinput" id="rev-addr-input" placeholder="New address" style="display:none"></div>
+              <div class="rev-cinput" id="rev-addr-input" style="display:none"><input id="addr-street" placeholder="Street address (house no. + street)" style="width:100%;height:38px;border:1.5px solid #C7CBF0;border-radius:8px;padding:0 11px;font-family:inherit;font-size:14px;color:#1A1B1E;outline:none;margin-bottom:8px;box-sizing:border-box"><div style="display:flex;gap:8px;flex-wrap:wrap"><select id="addr-parish" style="flex:1;min-width:150px;height:38px;border:1.5px solid #E8E8F4;border-radius:8px;padding:0 8px;font-family:inherit;font-size:14px;color:#1A1B1E;background:#fff;outline:none;box-sizing:border-box"></select><input id="addr-city" placeholder="City / Town" style="flex:1;min-width:150px;height:38px;border:1.5px solid #E8E8F4;border-radius:8px;padding:0 11px;font-family:inherit;font-size:14px;color:#1A1B1E;outline:none;box-sizing:border-box"><select id="addr-zone" style="display:none;flex:1;min-width:150px;height:38px;border:1.5px solid #E8E8F4;border-radius:8px;padding:0 8px;font-family:inherit;font-size:14px;color:#1A1B1E;background:#fff;outline:none;box-sizing:border-box"></select></div></div></div>
             <label class="rev-confirm"><input type="checkbox" id="rev-addr-ok"> Confirm</label>
             <button class="rev-update" onclick="toggleUpdate('addr')">Update</button>
           </div>
@@ -559,10 +559,26 @@
   };
   window.showSim=function(){ document.getElementById('review-view').style.display='none';
     document.getElementById('sim-view').style.display=''; window.scrollTo(0,0); };
+  var JA_PARISHES=['Kingston','St. Andrew','St. Catherine','Clarendon','Manchester','St. Elizabeth','Westmoreland','Hanover','St. James','Trelawny','St. Ann','St. Mary','Portland','St. Thomas'];
+  function _el(id){ return document.getElementById(id); }
+  function _isKingston(p){ return p==='Kingston'||p==='St. Andrew'; }
+  function _fillAddrSelects(){ var ps=_el('addr-parish'), zn=_el('addr-zone');
+    if(ps&&!ps.options.length){ var o0=document.createElement('option'); o0.value=''; o0.textContent='Select parish\u2026'; ps.appendChild(o0); JA_PARISHES.forEach(function(x){ var o=document.createElement('option'); o.value=x; o.textContent=x; ps.appendChild(o); }); }
+    if(zn&&!zn.options.length){ var z0=document.createElement('option'); z0.value=''; z0.textContent='Select zone\u2026'; zn.appendChild(z0); for(var i=1;i<=20;i++){ var o=document.createElement('option'); o.value='Kingston '+i; o.textContent='Kingston '+i; zn.appendChild(o); } } }
+  function _addrMode(){ var p=_el('addr-parish').value, city=_el('addr-city'), zone=_el('addr-zone');
+    if(_isKingston(p)){ zone.style.display=''; city.style.display='none'; } else { zone.style.display='none'; city.style.display=''; } }
+  function _addrRecompute(){ var st=_el('addr-street').value.trim(), p=_el('addr-parish').value, loc=_isKingston(p)?_el('addr-zone').value:_el('addr-city').value.trim();
+    var bits=[]; if(st) bits.push(st); if(loc) bits.push(loc); if(p) bits.push(p); _el('rev-addr').textContent=bits.join(', ')||'\u2014'; }
+  function _addrInit(current){ var parts=(current||'').split(',').map(function(s){return s.trim();}).filter(Boolean); var st='',loc='',p='';
+    if(parts.length>=3){ st=parts.slice(0,parts.length-2).join(', '); loc=parts[parts.length-2]; p=parts[parts.length-1]; } else if(parts.length===2){ st=parts[0]; loc=parts[1]; } else { st=parts[0]||''; }
+    _fillAddrSelects(); if(!p&&/^Kingston\s+\d+/i.test(loc)) p='St. Andrew';
+    _el('addr-street').value=st; _el('addr-parish').value=JA_PARISHES.indexOf(p)>=0?p:'';
+    if(_isKingston(_el('addr-parish').value)){ _el('addr-city').value=''; _el('addr-zone').value=/^Kingston\s+\d+/i.test(loc)?loc:''; } else { _el('addr-zone').value=''; _el('addr-city').value=loc; }
+    _addrMode(); _el('addr-street').oninput=_addrRecompute; _el('addr-city').oninput=_addrRecompute; _el('addr-zone').onchange=_addrRecompute;
+    _el('addr-parish').onchange=function(){ _addrMode(); _addrRecompute(); }; _el('addr-street').focus(); _addrRecompute(); }
   window.toggleUpdate=function(which){
     var inp=document.getElementById('rev-'+which+'-input'), val=document.getElementById('rev-'+which);
-    if(inp.style.display==='none'||!inp.style.display){ inp.style.display='block'; inp.value=val.textContent;
-      inp.oninput=function(){ if(inp.value.trim()) val.textContent=inp.value; }; inp.focus(); }
+    if(inp.style.display==='none'||!inp.style.display){ inp.style.display='block'; if(which==='addr'){ _addrInit(val.textContent); } else { inp.value=val.textContent; inp.oninput=function(){ if(inp.value.trim()) val.textContent=inp.value; }; inp.focus(); } }
     else { inp.style.display='none'; }
   };
   window.updateSubmit=function(){ var c=document.getElementById('rev-csr').value.trim();
