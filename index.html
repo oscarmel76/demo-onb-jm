@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unicredit · Plataforma de crédito (demo)</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; background: #171C8F; overflow: hidden; }
+    .stage { position: fixed; inset: 0; }
+    .frame {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      border: 0; opacity: 0; pointer-events: none;
+      transition: opacity 0.22s ease;
+    }
+    .frame.active { opacity: 1; pointer-events: auto; }
+    /* Initial splash while the search bundle unpacks */
+    #boot {
+      position: fixed; inset: 0; z-index: 50;
+      background: #171C8F; display: flex; align-items: center; justify-content: center;
+      transition: opacity 0.3s ease;
+      font-family: Roboto, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    #boot.hidden { opacity: 0; pointer-events: none; }
+    #boot .dot {
+      width: 54px; height: 54px; border-radius: 50%;
+      border: 5px solid rgba(38,208,124,0.25); border-top-color: #26D07C;
+      animation: spin 0.9s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <iframe id="search" class="frame active" src="01-customer-search.html" title="Customer search"></iframe>
+    <iframe id="hp"     class="frame"        src="simulation.html"         title="Financing simulation"></iframe>
+  </div>
+
+  <div id="boot"><div class="dot"></div></div>
+
+  <script>
+    var search = document.getElementById('search');
+    var hp     = document.getElementById('hp');
+    var boot   = document.getElementById('boot');
+
+    function show(which) {
+      var on  = which === 'hp' ? hp : search;
+      var off = which === 'hp' ? search : hp;
+      off.classList.remove('active');
+      on.classList.add('active');
+    }
+
+    window.addEventListener('message', function (e) {
+      var d = e.data;
+      if (!d || d.__unicredit !== true) return;
+      if (d.action === 'open-hp') {
+        if (d.fromCarts) {
+          var nextSrc = 'simulation.html?amount=' + encodeURIComponent(d.amount) +
+                        '&down=' + encodeURIComponent(d.down) +
+                        '&cart=' + encodeURIComponent(d.acct || '') + '&fromCarts=1';
+          if (hp.getAttribute('src') !== nextSrc) hp.setAttribute('src', nextSrc);
+        } else if (hp.getAttribute('src') !== 'simulation.html') {
+          hp.setAttribute('src', 'simulation.html');
+        }
+        show('hp');
+      }
+      else if (d.action === 'back') {
+        show('search');
+        if (d.reset) {
+          try { search.contentWindow.postMessage({ __unicredit: true, action: 'reset-search' }, '*'); } catch (e) {}
+        }
+      }
+      else if (d.action === 'back-to-carts') {
+        show('search');
+        try { search.contentWindow.postMessage({ __unicredit: true, action: 'goto-carts' }, '*'); } catch (e) {}
+      }
+    });
+
+    // Hide the splash once the first (search) iframe has loaded.
+    search.addEventListener('load', function () {
+      setTimeout(function () { boot.classList.add('hidden'); }, 350);
+    });
+    // Safety fallback in case the load event was missed.
+    setTimeout(function () { boot.classList.add('hidden'); }, 4000);
+  </script>
+</body>
+</html>
