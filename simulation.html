@@ -350,7 +350,7 @@
           <div class="rev-crow">
             <span class="rev-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></span>
             <div class="rev-ctext"><div class="rev-clabel">Address on file</div><div class="rev-cval" id="rev-addr">12 Hopefield Avenue, Kingston 6, St. Andrew</div>
-              <div class="rev-cinput" id="rev-addr-input" style="display:none"><input id="addr-street" placeholder="Street address (house no. + street)" style="width:100%;height:38px;border:1.5px solid #C7CBF0;border-radius:8px;padding:0 11px;font-family:inherit;font-size:14px;color:#1A1B1E;outline:none;margin-bottom:8px;box-sizing:border-box"><div style="display:flex;gap:8px;flex-wrap:wrap"><select id="addr-parish" style="flex:1;min-width:150px;height:38px;border:1.5px solid #E8E8F4;border-radius:8px;padding:0 8px;font-family:inherit;font-size:14px;color:#1A1B1E;background:#fff;outline:none;box-sizing:border-box"></select><input id="addr-city" placeholder="City / Town" style="flex:1;min-width:150px;height:38px;border:1.5px solid #E8E8F4;border-radius:8px;padding:0 11px;font-family:inherit;font-size:14px;color:#1A1B1E;outline:none;box-sizing:border-box"><select id="addr-zone" style="display:none;flex:1;min-width:150px;height:38px;border:1.5px solid #E8E8F4;border-radius:8px;padding:0 8px;font-family:inherit;font-size:14px;color:#1A1B1E;background:#fff;outline:none;box-sizing:border-box"></select></div></div></div>
+              <div class="rev-addr-edit" id="rev-addr-input" style="display:none;width:100%;margin-top:8px"><input id="addr-street" placeholder="Street address (house no. + street)" style="width:100%;height:38px;border:1.5px solid #C7CBF0;border-radius:8px;padding:0 11px;font-family:inherit;font-size:14px;color:#1A1B1E;outline:none;margin-bottom:8px;box-sizing:border-box"><div style="display:flex;gap:8px;flex-wrap:wrap"><select id="addr-parish" style="flex:1;min-width:150px;height:38px;border:1.5px solid #E8E8F4;border-radius:8px;padding:0 8px;font-family:inherit;font-size:14px;color:#1A1B1E;background:#fff;outline:none;box-sizing:border-box"></select><input id="addr-city" placeholder="City / Town" style="flex:1;min-width:150px;height:38px;border:1.5px solid #E8E8F4;border-radius:8px;padding:0 11px;font-family:inherit;font-size:14px;color:#1A1B1E;outline:none;box-sizing:border-box"><select id="addr-zone" style="display:none;flex:1;min-width:150px;height:38px;border:1.5px solid #E8E8F4;border-radius:8px;padding:0 8px;font-family:inherit;font-size:14px;color:#1A1B1E;background:#fff;outline:none;box-sizing:border-box"></select></div></div></div>
             <label class="rev-confirm"><input type="checkbox" id="rev-addr-ok"> Confirm</label>
             <button class="rev-update" onclick="toggleUpdate('addr')">Update</button>
           </div>
@@ -364,6 +364,7 @@
             <div class="rev-clabel">CSR number</div>
             <input class="rev-cinput2" id="rev-csr" placeholder="e.g. CSR-04821" oninput="updateSubmit()">
           </div>
+          <div class="rev-csr-field"><div class="rev-clabel">Store / branch</div><select class="rev-cinput2" id="rev-store" onchange="updateSubmit()" style="background:#fff;cursor:pointer"><option value="">Select store…</option><option>Kingston · Half Way Tree</option><option>Kingston · Constant Spring Road</option><option>Portmore · Portmore Pines Plaza</option><option>Spanish Town · Spanish Town Plaza</option><option>Montego Bay · Fairview, St. James</option><option>Mandeville · Manchester Shopping Centre</option><option>Ocho Rios · St. Ann</option><option>May Pen · Clarendon</option></select></div>
           <label class="rev-confirm big"><input type="checkbox" id="rev-confirmchk"> I confirm the credit details with the customer</label>
         </div>
       </section>
@@ -581,11 +582,11 @@
     if(inp.style.display==='none'||!inp.style.display){ inp.style.display='block'; if(which==='addr'){ _addrInit(val.textContent); } else { inp.value=val.textContent; inp.oninput=function(){ if(inp.value.trim()) val.textContent=inp.value; }; inp.focus(); } }
     else { inp.style.display='none'; }
   };
-  window.updateSubmit=function(){ var c=document.getElementById('rev-csr').value.trim();
-    document.getElementById('rev-submit').disabled = c.length<3; };
+  window.updateSubmit=function(){ var c=document.getElementById('rev-csr').value.trim(); var st=(document.getElementById('rev-store')||{}).value||'';
+    document.getElementById('rev-submit').disabled = (c.length<3 || !st); };
   window.submitReview=function(){
-    var c=document.getElementById('rev-csr').value.trim(); if(c.length<3) return;
-    var t=document.getElementById('toast'); t.textContent='Credit request submitted · '+c;
+    var c=document.getElementById('rev-csr').value.trim(); var st=(document.getElementById('rev-store')||{}).value||''; if(c.length<3||!st) return;
+    var t=document.getElementById('toast'); t.textContent='Credit request submitted · '+c+' · '+st;
     t.className='show'; clearTimeout(window.__t); window.__t=setTimeout(function(){ t.className=''; },3500);
     var b=document.getElementById('rev-submit'); b.disabled=true; b.textContent='Submitted';
   };
