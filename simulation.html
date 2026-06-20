@@ -575,7 +575,7 @@
     inp.oninput=function(){ trnVal=inp.value; if(inp.value.trim()) val.textContent=inp.value; updateSubmit(); };
     if(trnOnFile && cTrn){
       trnVal=cTrn; val.textContent=cTrn; val.style.display=''; inp.style.display='none';
-      lbl.innerHTML='<span style="color:#15A35B;font-weight:600">&middot; on file</span>'; if(btn) btn.style.display='';
+      lbl.innerHTML='<span style="color:#15A35B;font-weight:600">&middot; on file</span>'; if(btn) btn.style.display='none';
     } else {
       trnVal=''; val.style.display='none'; inp.style.display='block'; inp.value='';
       lbl.innerHTML='<span style="color:#D32F45;font-weight:600">&middot; required</span>'; if(btn) btn.style.display='none';
