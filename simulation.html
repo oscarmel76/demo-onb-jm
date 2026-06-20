@@ -102,7 +102,9 @@
   .term{ display:flex; align-items:center; justify-content:space-between; gap:12px; background:#fff; border:1.5px solid var(--line);
     border-radius:11px; padding:11px 14px; cursor:pointer; font-family:inherit; transition:border-color .15s, background .15s; width:100%; }
   .term:hover{ border-color:#C7CBF0; }
-  .term.sel{ border-color:var(--navy); background:var(--bg2); }
+  .term.sel{ border-color:var(--navy); border-width:2px; background:var(--bg2); }
+  .term-sel{ font-size:9.5px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--navy); background:#fff; border:1px solid var(--navy); padding:2px 7px; border-radius:9999px; margin-left:8px; }
+  .dec-term{ display:inline-block; font-size:11px; font-weight:700; color:#fff; background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.24); padding:2px 9px; border-radius:9999px; margin-left:7px; vertical-align:1px; }
   .term-l{ display:flex; align-items:center; gap:9px; }
   .term-t{ font-size:14px; font-weight:700; color:var(--ink); }
   .term-tag{ font-size:10px; font-weight:700; padding:2px 8px; border-radius:9999px; background:#EEF0FF; color:var(--navy); }
@@ -288,7 +290,7 @@
       <div class="col">
         <section class="dec">
           <span class="dec-status ok" id="status"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M9 12l2 2 4-4"></path></svg> <span id="status-txt">Approved</span></span>
-          <div class="dec-lbl">Monthly installment</div>
+          <div class="dec-lbl">Monthly installment <span class="dec-term" id="dec-term"></span></div>
           <div class="dec-inst" id="inst">$0.00</div>
           <div class="dec-rows">
             <div class="dec-row"><span>First installment due</span><span id="firstpay">—</span></div>
@@ -344,14 +346,14 @@
             <span class="rev-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.81.36 1.6.7 2.34a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.74-1.27a2 2 0 0 1 2.11-.45c.74.34 1.53.57 2.34.7A2 2 0 0 1 22 16.92z"></path></svg></span>
             <div class="rev-ctext"><div class="rev-clabel">Phone on file</div><div class="rev-cval" id="rev-phone">+1 876 978 4128</div>
               <input class="rev-cinput" id="rev-phone-input" placeholder="New phone number" style="display:none"></div>
-            <label class="rev-confirm"><input type="checkbox" id="rev-phone-ok"> Confirm</label>
+            
             <button class="rev-update" onclick="toggleUpdate('phone')">Update</button>
           </div>
           <div class="rev-crow">
             <span class="rev-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></span>
             <div class="rev-ctext"><div class="rev-clabel">Address on file</div><div class="rev-cval" id="rev-addr">12 Hopefield Avenue, Kingston 6, St. Andrew</div>
               <div class="rev-addr-edit" id="rev-addr-input" style="display:none;width:100%;margin-top:8px"><input id="addr-street" placeholder="Street address (house no. + street)" style="width:100%;height:38px;border:1.5px solid #C7CBF0;border-radius:8px;padding:0 11px;font-family:inherit;font-size:14px;color:#1A1B1E;outline:none;margin-bottom:8px;box-sizing:border-box"><div style="display:flex;gap:8px;flex-wrap:wrap"><select id="addr-parish" style="flex:1;min-width:150px;height:38px;border:1.5px solid #E8E8F4;border-radius:8px;padding:0 8px;font-family:inherit;font-size:14px;color:#1A1B1E;background:#fff;outline:none;box-sizing:border-box"></select><input id="addr-city" placeholder="City / Town" style="flex:1;min-width:150px;height:38px;border:1.5px solid #E8E8F4;border-radius:8px;padding:0 11px;font-family:inherit;font-size:14px;color:#1A1B1E;outline:none;box-sizing:border-box"><select id="addr-zone" style="display:none;flex:1;min-width:150px;height:38px;border:1.5px solid #E8E8F4;border-radius:8px;padding:0 8px;font-family:inherit;font-size:14px;color:#1A1B1E;background:#fff;outline:none;box-sizing:border-box"></select></div></div></div>
-            <label class="rev-confirm"><input type="checkbox" id="rev-addr-ok"> Confirm</label>
+            
             <button class="rev-update" onclick="toggleUpdate('addr')">Update</button>
           </div>
         </div>
@@ -365,7 +367,7 @@
             <input class="rev-cinput2" id="rev-csr" placeholder="e.g. CSR-04821" oninput="updateSubmit()">
           </div>
           <div class="rev-csr-field"><div class="rev-clabel">Store / branch</div><select class="rev-cinput2" id="rev-store" onchange="updateSubmit()" style="background:#fff;cursor:pointer"><option value="">Select store…</option><option>Kingston · Half Way Tree</option><option>Kingston · Constant Spring Road</option><option>Portmore · Portmore Pines Plaza</option><option>Spanish Town · Spanish Town Plaza</option><option>Montego Bay · Fairview, St. James</option><option>Mandeville · Manchester Shopping Centre</option><option>Ocho Rios · St. Ann</option><option>May Pen · Clarendon</option></select></div>
-          <label class="rev-confirm big"><input type="checkbox" id="rev-confirmchk"> I confirm the credit details with the customer</label>
+          <label class="rev-confirm big"><input type="checkbox" id="rev-confirmchk" onchange="updateSubmit()"> I confirm the credit details with the customer</label>
         </div>
       </section>
     </div>
@@ -471,7 +473,7 @@
     var p=PROMOS[pi], list=termsList(), h='';
     for(var k=0;k<list.length;k++){ var t=list[k], st=statusOf(t), mx=(t===p.max);
       h+='<button class="term'+(t===term?' sel':'')+'" onclick="__pt('+t+')"><span class="term-l"><span class="term-t">'+t+' months</span>'+
-         (mx?'<span class="term-tag">Max</span>':'')+'</span><span class="term-r"><span class="term-inst">'+money(instFor(t))+'/mo</span><span class="dot '+st+'"></span></span></button>';
+         (mx?'<span class="term-tag">Max</span>':'')+(t===term?'<span class="term-sel">Selected</span>':'')+'</span><span class="term-r"><span class="term-inst">'+money(instFor(t))+'/mo</span><span class="dot '+st+'"></span></span></button>';
     }
     document.getElementById('terms').innerHTML=h;
   }
@@ -491,6 +493,7 @@
     document.getElementById('inst').className='dec-inst'+(st==='over'?' over':'');
     document.getElementById('firstpay').textContent=firstPay();
     document.getElementById('termrate').textContent=term+'m · '+rateStr(p);
+    document.getElementById('dec-term').textContent=term+' months';
     document.getElementById('grace').textContent=p.grace+(p.grace===1?' month':' months');
     document.getElementById('cpi').textContent=money(cpiFor(term));
     document.getElementById('totfin').textContent=money(principalFor(term));
@@ -582,10 +585,10 @@
     if(inp.style.display==='none'||!inp.style.display){ inp.style.display='block'; if(which==='addr'){ _addrInit(val.textContent); } else { inp.value=val.textContent; inp.oninput=function(){ if(inp.value.trim()) val.textContent=inp.value; }; inp.focus(); } }
     else { inp.style.display='none'; }
   };
-  window.updateSubmit=function(){ var c=document.getElementById('rev-csr').value.trim(); var st=(document.getElementById('rev-store')||{}).value||'';
-    document.getElementById('rev-submit').disabled = (c.length<3 || !st); };
+  window.updateSubmit=function(){ var c=document.getElementById('rev-csr').value.trim(); var st=(document.getElementById('rev-store')||{}).value||''; var ok=(document.getElementById('rev-confirmchk')||{}).checked;
+    document.getElementById('rev-submit').disabled = (c.length<3 || !st || !ok); };
   window.submitReview=function(){
-    var c=document.getElementById('rev-csr').value.trim(); var st=(document.getElementById('rev-store')||{}).value||''; if(c.length<3||!st) return;
+    var c=document.getElementById('rev-csr').value.trim(); var st=(document.getElementById('rev-store')||{}).value||''; var ok=(document.getElementById('rev-confirmchk')||{}).checked; if(c.length<3||!st||!ok) return;
     var t=document.getElementById('toast'); t.textContent='Credit request submitted · '+c+' · '+st;
     t.className='show'; clearTimeout(window.__t); window.__t=setTimeout(function(){ t.className=''; },3500);
     var b=document.getElementById('rev-submit'); b.disabled=true; b.textContent='Submitted';
