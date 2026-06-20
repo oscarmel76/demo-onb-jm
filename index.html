@@ -46,8 +46,15 @@
     function show(which) {
       var on  = which === 'hp' ? hp : search;
       var off = which === 'hp' ? search : hp;
-      off.classList.remove('active');
+      // Bring the incoming frame in fully opaque and on top BEFORE removing the
+      // outgoing one, so the two never cross-fade (which looked like a flash).
+      on.style.zIndex = '2';
+      off.style.zIndex = '1';
+      on.style.transition = 'none';
       on.classList.add('active');
+      void on.offsetWidth;
+      on.style.transition = '';
+      off.classList.remove('active');
     }
 
     window.addEventListener('message', function (e) {
