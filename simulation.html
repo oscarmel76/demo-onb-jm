@@ -543,7 +543,7 @@
     if(where==='search'){ msg.action='back'; msg.reset=true; }
     else if(where==='customer'){ msg.action='back'; }
     else if(where==='carts'){ msg.action='back-to-carts'; }
-    try{ window.parent.postMessage(msg,'*'); }catch(e){} };
+    if(window.parent&&window.parent!==window){ try{ window.parent.postMessage(msg,'*'); return; }catch(e){} } window.location.href='01-customer-search.html'; };
   window.showReview=function(){
     var p=PROMOS[pi], inst=instFor(term);
     var rows=[['Product · cart','Hired Purchase · '+acct],['Amount to finance',money(financed())],
