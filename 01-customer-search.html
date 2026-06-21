@@ -5190,7 +5190,9 @@ document.addEventListener('click', function(e){
 })();
 
 </script>
-<style id="rp-pack">
+<style id="app-overrides">
+
+/* ===================== rp-pack ===================== */
 .jada-hd .hd-name{ flex:1 1 100%; }
 .jada-hd .hd-chip.rating{ background:transparent; border:0; padding:0; color:#fff; font-weight:600; }
 .jada-hd .hd-chip.ok{ background:transparent; border:0; padding:0; color:#9CF2C6; }
@@ -5220,8 +5222,126 @@ document.addEventListener('click', function(e){
  .jada-hd.meta-open .hd-meta{ display:flex; }
  .hd-meta-toggle{ display:inline-flex; align-items:center; gap:6px; margin-top:10px; font-size:12px; font-weight:600; color:#C7CBF0; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.22); border-radius:8px; padding:5px 11px; cursor:pointer; }
 }
+
+/* ===================== carts-pack-css ===================== */
+.carts-view .cart-empty{ background:#fff;border:1px dashed var(--line);border-radius:14px;padding:34px 22px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px;box-shadow:var(--shadow); }
+.carts-view .cart-empty-ic{ width:46px;height:46px;border-radius:12px;background:rgba(23,28,143,.06);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:2px; }
+.carts-view .cart-empty-title{ font-size:16px;font-weight:800;color:var(--ink); }
+.carts-view .cart-empty-sub{ font-size:13px;color:var(--muted);max-width:460px;line-height:1.55; }
+.carts-view .cart-empty-sub b{ color:var(--navy); }
+.carts-view .cart-empty-tag{ margin-top:6px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#946F00;background:rgba(246,190,0,.16);padding:6px 13px;border-radius:9999px; }
+
+/* ===================== fix2-pack ===================== */
+/* ---- desktop header: align View full profile top-right of the name ---- */
+.jada-hd .hd-name-row:has(> button){ position:relative; }
+.jada-hd .hd-name-row:has(> button) > button{ position:absolute !important; top:3px; right:0; margin:0 !important; }
+.jada-hd .hd-name-row:has(> button) .hd-name{ padding-right:182px; }
+/* ---- mobile fixes (search overflow + header) ---- */
+@media (max-width:640px){
+  .main{ margin-left:0 !important; }
+  .form-row{ grid-template-columns:1fr !important; }
+  .content-inner{ max-width:100% !important; }
+  .tabs{ margin-left:0 !important; margin-right:0 !important; padding-left:2px !important; padding-right:2px !important; }
+  .jada-hd .hd-name-row:has(> button) > button{ position:static !important; top:auto; margin-top:10px !important; align-self:flex-start; }
+  .jada-hd .hd-name-row:has(> button) .hd-name{ padding-right:0 !important; }
+}
+
+/* ===================== hdbtn-pack ===================== */
+.jada-hd{ position:relative; }
+.jada-hd .hd-name-row:has(> button){ position:static !important; padding-right:0 !important; }
+.jada-hd .hd-name-row:has(> button) .hd-name{ padding-right:0 !important; }
+.jada-hd .hd-name-row:has(> button) > button{
+  position:absolute !important; top:30px !important; right:48px !important; left:auto !important; bottom:auto !important; margin:0 !important;
+  border-radius:8px !important;
+  transition:transform 160ms cubic-bezier(0.23,1,0.32,1), background .15s ease, border-color .15s ease !important;
+}
+.jada-hd .hd-name-row:has(> button) > button:active{ transform:scale(0.97) !important; }
+@media (hover:hover){
+  .jada-hd .hd-name-row:has(> button) > button:hover{ background:rgba(255,255,255,.16) !important; border-color:rgba(255,255,255,.5) !important; }
+}
+@media (max-width:640px){
+  .jada-hd .hd-name-row:has(> button) > button{ position:static !important; top:auto !important; right:auto !important; left:auto !important; margin:10px 0 0 !important; align-self:flex-start; }
+}
+
+/* ===================== nav2-pack ===================== */
+.topbar{ display:none !important; }
+.jada-hd .hd-top .flag-jamaica{ display:none !important; }
+.sidebar-footer .sb-flag{ display:flex; align-items:center; gap:12px; padding:9px 14px; margin-bottom:2px; color:#8A8F9E; cursor:default; }
+.sidebar-footer .sb-flag .flag-jamaica{ width:22px; height:22px; flex:none; }
+.sidebar-footer .sb-flag .nav-item-label{ font-size:13px; color:#8A8F9E; }
+.jada-hd .hd-toggle{ display:none !important; }
+.jada-hd .hd-meta-toggle{ display:none; }
+.bottom-nav{ background:#fff !important; }
+.bottom-nav a{ border-radius:0 !important; border-top:2px solid transparent; padding-top:9px !important; }
+.bottom-nav a.active{ background:transparent !important; color:#171C8F !important; border-top-color:#171C8F !important; }
+@media (max-width:640px){
+  .jada-hd .hd-meta-toggle{ display:inline-flex; margin-top:12px !important; }
+  .jada-hd .hd-name-row:has(> button) > button{
+    position:static !important; background:transparent !important; border:0 !important; box-shadow:none !important;
+    padding:0 !important; height:auto !important; min-height:0 !important; border-radius:0 !important;
+    color:#C7CBFF !important; text-decoration:underline !important; text-underline-offset:3px;
+    font-size:13px !important; font-weight:500 !important; margin:12px 0 0 !important; align-self:flex-start;
+  }
+}
+
+/* ===================== hdr3-pack ===================== */
+@media (max-width:700px){
+  .jada-hd .hd-meta{ max-height:none !important; overflow:visible !important; opacity:1 !important; }
+}
+@media (max-width:640px){
+  .jada-hd .hd-meta, .jada-hd.meta-open .hd-meta, .jada-hd.open .hd-meta{
+    display:grid !important; grid-template-columns:1fr 1fr; gap:13px 18px;
+    max-height:none !important; overflow:visible !important; opacity:1 !important;
+    margin-top:14px !important; padding-top:14px; border-top:1px solid rgba(255,255,255,.12); }
+  .jada-hd .hd-meta span{ display:flex !important; flex-direction:column; gap:3px; color:#DDE0FF; }
+  .jada-hd .hd-meta span b{ margin-right:0 !important; }
+  .jada-hd .hd-meta-toggle{ display:none !important; }
+  .jada-hd .hd-name-row:has(> button) > button{
+    position:absolute !important; top:16px !important; right:16px !important; left:auto !important; bottom:auto !important; margin:0 !important;
+    background:transparent !important; border:0 !important; box-shadow:none !important; padding:0 !important;
+    height:auto !important; min-height:0 !important; border-radius:0 !important;
+    color:#C7CBFF !important; text-decoration:underline !important; text-underline-offset:3px;
+    font-size:12.5px !important; font-weight:500 !important; white-space:nowrap; }
+}
+
+/* ===================== tabs-pack ===================== */
+@media (max-width:640px){
+  .tabs .tab svg{ display:none !important; }
+  .tabs .tab{ gap:0 !important; font-size:14px; padding-left:4px; padding-right:4px; }
+}
+
+/* ===================== carts-noprofile ===================== */
+#screen-carts .hd-name-row > button{ display:none !important; }
+
+/* ===================== hdr-scale ===================== */
+.jada-hd .hd-name, .jada-hd .hd-name.customer-name{ font-size:24px !important; font-weight:600 !important; }
+#screen-profile h1{ font-size:24px !important; font-weight:600 !important; }
+#screen-carts .hd-meta, #screen-carts .hd-toggle, #screen-carts .hd-meta-toggle{ display:none !important; }
+#screen-carts .hd-main{ padding-bottom:2px; }
+
+/* ===================== mtopbar-css ===================== */
+.m-topbar{ display:none; }
+@media (max-width:640px){
+  body{ padding-top:48px !important; }
+  .m-topbar{ display:flex !important; position:fixed; top:0; left:0; right:0; z-index:70; height:48px; align-items:center; justify-content:space-between; padding:0 16px; background:#fff; border-bottom:1px solid #E8E8F4; box-shadow:0 1px 10px rgba(23,28,143,.06); }
+  .m-topbar .m-logo{ font-size:15px; font-weight:700; color:#171C8F; letter-spacing:.3px; }
+  .m-topbar .m-right{ display:flex; align-items:center; gap:15px; }
+  .m-topbar .flag-jamaica{ width:22px; height:22px; display:inline-flex; }
+  .m-topbar .m-logout{ background:transparent; border:0; color:#5a6072; cursor:pointer; display:inline-flex; align-items:center; gap:6px; padding:5px; font-family:inherit; font-size:13px; font-weight:600; }
+  .m-topbar .m-logout svg{ width:20px; height:20px; }
+  .m-topbar .m-logout span{ display:none; }
+}
+
+/* ===================== nobc-pack ===================== */
+#screen-jada-home .hd-top, #screen-register-success .hd-top{ display:none !important; }
+
+/* ===================== nofooter-pack ===================== */
+.footer{ display:none !important; }
+
 </style>
-<script>
+<script id="app-logic">
+
+/* ===================== bottom-nav-inject ===================== */
 (function(){
  function init(){
   if(!document.querySelector(".bottom-nav")){
@@ -5244,15 +5364,8 @@ document.addEventListener('click', function(e){
  if(document.readyState!=="loading") init(); else document.addEventListener("DOMContentLoaded",init);
  setTimeout(init,800);
 })();
-</script><style id="carts-pack-css">
-.carts-view .cart-empty{ background:#fff;border:1px dashed var(--line);border-radius:14px;padding:34px 22px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px;box-shadow:var(--shadow); }
-.carts-view .cart-empty-ic{ width:46px;height:46px;border-radius:12px;background:rgba(23,28,143,.06);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:2px; }
-.carts-view .cart-empty-title{ font-size:16px;font-weight:800;color:var(--ink); }
-.carts-view .cart-empty-sub{ font-size:13px;color:var(--muted);max-width:460px;line-height:1.55; }
-.carts-view .cart-empty-sub b{ color:var(--navy); }
-.carts-view .cart-empty-tag{ margin-top:6px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#946F00;background:rgba(246,190,0,.16);padding:6px 13px;border-radius:9999px; }
-</style>
-<script id="carts-pack">
+
+/* ===================== carts-pack ===================== */
 (function(){
   function money(n){ return "$"+Number(n||0).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}); }
   var F48=16.5393;
@@ -5321,58 +5434,8 @@ document.addEventListener('click', function(e){
     if(window.showScreen) window.showScreen("carts");
   };
 })();
-</script><style id="fix2-pack">
-/* ---- desktop header: align View full profile top-right of the name ---- */
-.jada-hd .hd-name-row:has(> button){ position:relative; }
-.jada-hd .hd-name-row:has(> button) > button{ position:absolute !important; top:3px; right:0; margin:0 !important; }
-.jada-hd .hd-name-row:has(> button) .hd-name{ padding-right:182px; }
-/* ---- mobile fixes (search overflow + header) ---- */
-@media (max-width:640px){
-  .main{ margin-left:0 !important; }
-  .form-row{ grid-template-columns:1fr !important; }
-  .content-inner{ max-width:100% !important; }
-  .tabs{ margin-left:0 !important; margin-right:0 !important; padding-left:2px !important; padding-right:2px !important; }
-  .jada-hd .hd-name-row:has(> button) > button{ position:static !important; top:auto; margin-top:10px !important; align-self:flex-start; }
-  .jada-hd .hd-name-row:has(> button) .hd-name{ padding-right:0 !important; }
-}
-</style><style id="hdbtn-pack">
-.jada-hd{ position:relative; }
-.jada-hd .hd-name-row:has(> button){ position:static !important; padding-right:0 !important; }
-.jada-hd .hd-name-row:has(> button) .hd-name{ padding-right:0 !important; }
-.jada-hd .hd-name-row:has(> button) > button{
-  position:absolute !important; top:30px !important; right:48px !important; left:auto !important; bottom:auto !important; margin:0 !important;
-  border-radius:8px !important;
-  transition:transform 160ms cubic-bezier(0.23,1,0.32,1), background .15s ease, border-color .15s ease !important;
-}
-.jada-hd .hd-name-row:has(> button) > button:active{ transform:scale(0.97) !important; }
-@media (hover:hover){
-  .jada-hd .hd-name-row:has(> button) > button:hover{ background:rgba(255,255,255,.16) !important; border-color:rgba(255,255,255,.5) !important; }
-}
-@media (max-width:640px){
-  .jada-hd .hd-name-row:has(> button) > button{ position:static !important; top:auto !important; right:auto !important; left:auto !important; margin:10px 0 0 !important; align-self:flex-start; }
-}
-</style><style id="nav2-pack">
-.topbar{ display:none !important; }
-.jada-hd .hd-top .flag-jamaica{ display:none !important; }
-.sidebar-footer .sb-flag{ display:flex; align-items:center; gap:12px; padding:9px 14px; margin-bottom:2px; color:#8A8F9E; cursor:default; }
-.sidebar-footer .sb-flag .flag-jamaica{ width:22px; height:22px; flex:none; }
-.sidebar-footer .sb-flag .nav-item-label{ font-size:13px; color:#8A8F9E; }
-.jada-hd .hd-toggle{ display:none !important; }
-.jada-hd .hd-meta-toggle{ display:none; }
-.bottom-nav{ background:#fff !important; }
-.bottom-nav a{ border-radius:0 !important; border-top:2px solid transparent; padding-top:9px !important; }
-.bottom-nav a.active{ background:transparent !important; color:#171C8F !important; border-top-color:#171C8F !important; }
-@media (max-width:640px){
-  .jada-hd .hd-meta-toggle{ display:inline-flex; margin-top:12px !important; }
-  .jada-hd .hd-name-row:has(> button) > button{
-    position:static !important; background:transparent !important; border:0 !important; box-shadow:none !important;
-    padding:0 !important; height:auto !important; min-height:0 !important; border-radius:0 !important;
-    color:#C7CBFF !important; text-decoration:underline !important; text-underline-offset:3px;
-    font-size:13px !important; font-weight:500 !important; margin:12px 0 0 !important; align-self:flex-start;
-  }
-}
-</style>
-<script id="nav2-js">
+
+/* ===================== nav2-js ===================== */
 (function(){
   function inject(){
     var src=document.querySelector(".flag-jamaica"); if(!src) return;
@@ -5390,26 +5453,8 @@ document.addEventListener('click', function(e){
   if(document.readyState!=="loading") inject(); else document.addEventListener("DOMContentLoaded", inject);
   setTimeout(inject,900);
 })();
-</script><style id="hdr3-pack">
-@media (max-width:700px){
-  .jada-hd .hd-meta{ max-height:none !important; overflow:visible !important; opacity:1 !important; }
-}
-@media (max-width:640px){
-  .jada-hd .hd-meta, .jada-hd.meta-open .hd-meta, .jada-hd.open .hd-meta{
-    display:grid !important; grid-template-columns:1fr 1fr; gap:13px 18px;
-    max-height:none !important; overflow:visible !important; opacity:1 !important;
-    margin-top:14px !important; padding-top:14px; border-top:1px solid rgba(255,255,255,.12); }
-  .jada-hd .hd-meta span{ display:flex !important; flex-direction:column; gap:3px; color:#DDE0FF; }
-  .jada-hd .hd-meta span b{ margin-right:0 !important; }
-  .jada-hd .hd-meta-toggle{ display:none !important; }
-  .jada-hd .hd-name-row:has(> button) > button{
-    position:absolute !important; top:16px !important; right:16px !important; left:auto !important; bottom:auto !important; margin:0 !important;
-    background:transparent !important; border:0 !important; box-shadow:none !important; padding:0 !important;
-    height:auto !important; min-height:0 !important; border-radius:0 !important;
-    color:#C7CBFF !important; text-decoration:underline !important; text-underline-offset:3px;
-    font-size:12.5px !important; font-weight:500 !important; white-space:nowrap; }
-}
-</style><script id="cash-pack">
+
+/* ===================== cash-pack ===================== */
 (function(){
   window.openCashLoan=function(id){
     var C=window.CUSTOMER_FULL||{}; if(!id||!C[id]) id="jada"; var c=C[id];
@@ -5420,12 +5465,8 @@ document.addEventListener('click', function(e){
     window.location.href=qs;
   };
 })();
-</script><style id="tabs-pack">
-@media (max-width:640px){
-  .tabs .tab svg{ display:none !important; }
-  .tabs .tab{ gap:0 !important; font-size:14px; padding-left:4px; padding-right:4px; }
-}
-</style><script id="profile-pack">
+
+/* ===================== profile-pack ===================== */
 (function(){
   function money(n){ return "$"+Number(n||0).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}); }
   function todayStr(){ var d=new Date(); return d.toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}); }
@@ -5600,7 +5641,7 @@ document.addEventListener('click', function(e){
   };
 })();
 
-</script><style id="carts-noprofile">#screen-carts .hd-name-row > button{ display:none !important; }</style><script id="custheader-pack">
+/* ===================== custheader-pack ===================== */
 (function(){
   var ICK="<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round' style='width:13px;height:13px;'><polyline points='20 6 9 17 4 12'></polyline></svg>";
   var IX="<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round' style='width:13px;height:13px;'><line x1='18' y1='6' x2='6' y2='18'></line><line x1='6' y1='6' x2='18' y2='18'></line></svg>";
@@ -5628,12 +5669,7 @@ document.addEventListener('click', function(e){
   }
 })();
 
-</script><style id="hdr-scale">
-.jada-hd .hd-name, .jada-hd .hd-name.customer-name{ font-size:24px !important; font-weight:600 !important; }
-#screen-profile h1{ font-size:24px !important; font-weight:600 !important; }
-#screen-carts .hd-meta, #screen-carts .hd-toggle, #screen-carts .hd-meta-toggle{ display:none !important; }
-#screen-carts .hd-main{ padding-bottom:2px; }
-</style><script id="nav-pack">
+/* ===================== nav-pack ===================== */
 (function(){
   window.gotoCustomerScreen=function(id){
     id=id||window.__activeCustId||((window.__curCust||{}).id)||"jada";
@@ -5654,20 +5690,8 @@ document.addEventListener('click', function(e){
     if(d.action==="goto-customer"){ try{ if(window.gotoCustomerScreen) window.gotoCustomerScreen(d.id||window.__activeCustId); }catch(_){} }
   });
 })();
-</script><style id="mtopbar-css">
-.m-topbar{ display:none; }
-@media (max-width:640px){
-  body{ padding-top:48px !important; }
-  .m-topbar{ display:flex !important; position:fixed; top:0; left:0; right:0; z-index:70; height:48px; align-items:center; justify-content:space-between; padding:0 16px; background:#fff; border-bottom:1px solid #E8E8F4; box-shadow:0 1px 10px rgba(23,28,143,.06); }
-  .m-topbar .m-logo{ font-size:15px; font-weight:700; color:#171C8F; letter-spacing:.3px; }
-  .m-topbar .m-right{ display:flex; align-items:center; gap:15px; }
-  .m-topbar .flag-jamaica{ width:22px; height:22px; display:inline-flex; }
-  .m-topbar .m-logout{ background:transparent; border:0; color:#5a6072; cursor:pointer; display:inline-flex; align-items:center; gap:6px; padding:5px; font-family:inherit; font-size:13px; font-weight:600; }
-  .m-topbar .m-logout svg{ width:20px; height:20px; }
-  .m-topbar .m-logout span{ display:none; }
-}
-</style>
-<script id="mtopbar-js">
+
+/* ===================== mtopbar-js ===================== */
 (function(){
   function init(){
     if(document.querySelector(".m-topbar")) return;
@@ -5684,4 +5708,6 @@ document.addEventListener('click', function(e){
   if(document.readyState!=="loading") init(); else document.addEventListener("DOMContentLoaded", init);
   setTimeout(init,900);
 })();
-</script><style id="nobc-pack">#screen-jada-home .hd-top, #screen-register-success .hd-top{ display:none !important; }</style><style id="nofooter-pack">.footer{ display:none !important; }</style></body></html>
+
+</script>
+</body></html>
