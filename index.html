@@ -2917,7 +2917,7 @@ a {
                     <span class="select-value" id="doctype-value"></span>
                   </div>
                   <label class="field-label">Document type</label>
-                  <span class="field-icon select-chevron" style="top:50%;transform:translateY(-50%);">
+                  <span class="field-icon select-chevron" style="top:24px;transform:translateY(-50%);">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
                   </span>
                   <div class="select-menu" id="doctype-menu" role="listbox">
@@ -3114,9 +3114,9 @@ a {
         </button>
         <div class="hd-meta">
           <span><b>ID</b> <span id="rc-id">—</span></span>
-          <span><b>COSCACS</b> <span id="rc-cosacs">—</span></span>
+          <span><b>COSACS</b> <span id="rc-cosacs">—</span></span>
           <span><b>Phone</b> <span id="rc-phone">—</span></span>
-          <span><b>Address</b> <span id="rc-addr">—</span></span>
+          <span><b>Updated</b> <span id="rc-addr">—</span></span>
           
         </div>
       </div>
@@ -3318,7 +3318,7 @@ a {
         </button>
         <div class="hd-meta">
           <span><b>ID</b>998887776</span>
-          <span><b>COSCACS</b>JMJS000543</span>
+          <span><b>COSACS</b>JMJS000543</span>
           <span><b>Phone</b>+1 876 978 4128</span>
           <span><b>Updated</b>Jun 18, 2026</span>
         </div>
@@ -3547,7 +3547,7 @@ a {
         </button>
         <div class="hd-meta">
           <span><b>ID</b> 998887776</span>
-          <span><b>COSCACS</b> JMJS000543</span>
+          <span><b>COSACS</b> JMJS000543</span>
           <span><b>Phone</b> +1 876 978 4128</span>
           <span><b>Updated</b> Jun 18, 2026</span>
         </div>
@@ -5117,7 +5117,7 @@ document.addEventListener('click', function(e){
     var hpAvail=slAvail, cashAvail=availMmi*F36;
     var usedPct=(slTotal>0?Math.round(slUsed/slTotal*100):0);
     function set(id,v){ var e=document.getElementById(id); if(e) e.textContent=v; }
-    set('rc-name', c.full); set('rc-id', c.trn); set('rc-cosacs', c.cosacs); set('rc-phone', c.phone); set('rc-addr', c.addr||'—'); set('rc-updated', c.updated||'—');
+    set('rc-name', c.full); set('rc-id', c.trn); set('rc-cosacs', c.cosacs); set('rc-phone', c.phone); set('rc-addr', c.updated||'—'); set('rc-updated', c.updated||'—');
     set('rc-rating', 'Rating '+c.rating);
     var pay=document.getElementById('rc-pay');
     if(pay){ if(arr){ pay.className='hd-chip arrears'; pay.innerHTML=ICON_X+' In arrears'; } else { pay.className='hd-chip ok'; pay.innerHTML=ICON_CHK+' Up to date'; } }
@@ -5219,7 +5219,7 @@ document.addEventListener('click', function(e){
     </div>
     <div class="hd-meta">
       <span><b>ID</b> 998887776</span>
-      <span><b>COSCACS</b> JMJS000543</span>
+      <span><b>COSACS</b> JMJS000543</span>
     </div>
   </header>
 
@@ -5494,6 +5494,10 @@ body.sim-active{ padding-top:0 !important; }
 .sidebar-footer .sb-flag{ display:flex; align-items:center; gap:12px; padding:9px 14px; margin-bottom:2px; color:#8A8F9E; cursor:default; }
 .sidebar-footer .sb-flag .flag-jamaica{ width:22px; height:22px; flex:none; }
 .sidebar-footer .sb-flag .nav-item-label{ font-size:13px; color:#8A8F9E; }
+.sidebar-footer .sb-flag .flag-jamaica{ border-radius:50%; overflow:hidden; border:1.5px solid rgba(23,28,143,.25); box-sizing:border-box; }
+.sidebar-footer .nav-item .nav-item-label{ color:#8A8F9E !important; font-weight:500 !important; }
+.sidebar-footer .nav-item .nav-item-icon{ color:#9DA2B5 !important; }
+.sidebar-footer .nav-item .nav-item-icon svg{ width:18px; height:18px; }
 .jada-hd .hd-toggle{ display:none !important; }
 .jada-hd .hd-meta-toggle{ display:none; }
 .bottom-nav{ background:#fff !important; }
@@ -5551,7 +5555,7 @@ body.sim-active{ padding-top:0 !important; }
   .m-topbar{ display:flex !important; position:fixed; top:0; left:0; right:0; z-index:70; height:48px; align-items:center; justify-content:space-between; padding:0 16px; background:#fff; border-bottom:1px solid #E8E8F4; box-shadow:0 1px 10px rgba(23,28,143,.06); }
   .m-topbar .m-logo{ font-size:15px; font-weight:700; color:#171C8F; letter-spacing:.3px; }
   .m-topbar .m-right{ display:flex; align-items:center; gap:15px; }
-  .m-topbar .flag-jamaica{ width:22px; height:22px; display:inline-flex; }
+  .m-topbar .flag-jamaica{ width:22px; height:22px; display:inline-flex; border-radius:50%; overflow:hidden; border:1.5px solid rgba(23,28,143,.25); box-sizing:border-box; }
   .m-topbar .m-logout{ background:transparent; border:0; color:#5a6072; cursor:pointer; display:inline-flex; align-items:center; gap:6px; padding:5px; font-family:inherit; font-size:13px; font-weight:600; }
   .m-topbar .m-logout svg{ width:20px; height:20px; }
   .m-topbar .m-logout span{ display:none; }
