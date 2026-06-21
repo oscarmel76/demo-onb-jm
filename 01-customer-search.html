@@ -3937,10 +3937,6 @@ function runCosacsSearch(idx) {
 function showScreen(name) {
   /* 'customer-details' is an alias for the imported details screen. */
   if (name === 'customer-details') name = 'register-success';
-  if (name === 'new-hp-purchase' || name === 'simulation') {
-    try { window.parent.postMessage({ __unicredit: true, action: 'open-hp' }, '*'); } catch (e) {}
-    return;
-  }
   const target = document.getElementById('screen-' + name);
   /* Destinations that are out of scope this round (e.g. 'details') are
      no-ops — the placeholder click is intentionally inert for now. */
@@ -4998,8 +4994,8 @@ function closeCart(){ var m=document.getElementById('cart-modal'); if(m){ m.clas
 function newCart(){ ucToast('Add items in Cosacs to start a new cart.'); }
 window.openCart=openCart; window.closeCart=closeCart; window.newCart=newCart;
 function simulateCart(id){ var c=CART_DATA[id]; if(!c) return;
-  if(window.parent&&window.parent!==window){ try{ window.parent.postMessage({__unicredit:true,action:'open-hp',amount:c.total,down:c.deposit,acct:c.acct,fromCarts:true,id:window.__cartsCust||window.__activeCustId||"jada"},'*'); return; }catch(e){} } window.location.href='simulation.html?amount='+encodeURIComponent(c.total)+'&down='+encodeURIComponent(c.deposit)+'&cart='+encodeURIComponent(c.acct||'')+'&fromCarts=1'; }
-function simulateCartFromModal(){ var id=window.__currentCart; closeCart(); if(id) simulateCart(id); }
+  if(window.initSimulation){ window.initSimulation({mode:"hp",amount:c.total,down:c.deposit,cart:c.acct,fromCarts:"1",id:(window.__cartsCust||window.__activeCustId||"jada")}); if(window.showScreen) window.showScreen("simulation"); return; }
+} function simulateCartFromModal(){ var id=window.__currentCart; closeCart(); if(id) simulateCart(id); }
 window.simulateCart=simulateCart; window.simulateCartFromModal=simulateCartFromModal;
 var pendingDelete=null;
 function confirmDeleteCart(id){ var c=CART_DATA[id]; if(!c) return; pendingDelete=id;
@@ -5190,6 +5186,230 @@ document.addEventListener('click', function(e){
 })();
 
 </script>
+<div class="screen" id="screen-simulation" data-screen-label="Simulation"><div class="app">
+
+  <header class="hd">
+    <div class="hd-top">
+      <nav class="crumb">
+        <a onclick="nav('search')">New customer search</a>
+        <span class="sep">/</span>
+        <a onclick="nav('customer')">Customer details</a>
+        <span class="sep" id="crumb-carts-sep">/</span>
+        <a onclick="nav('carts')" id="crumb-carts">Shopping carts</a>
+        <span class="sep">/</span>
+        <span class="cur">Simulate financing</span>
+      </nav>
+      <span class="flag">
+        <svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <mask id="fm" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24"><circle cx="12" cy="12" r="12" fill="#276B84"></circle></mask>
+          <g mask="url(#fm)"><path fill-rule="evenodd" clip-rule="evenodd" d="M0 0L12 12L0 24V0ZM24 0L12 12L24 24V0Z" fill="black"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M0 0L12 12L24 0H0ZM0 24L12 12L24 24H0Z" fill="#009900"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M24 0H21.7641L0 21.7641V24H2.23594L24 2.23594V0Z" fill="#FFCC00"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M0 0V2.23594L21.7641 24H24V21.7641L2.23594 0H0Z" fill="#FFCC00"></path></g>
+        </svg>
+      </span>
+    </div>
+    <div class="hd-name-row">
+      <span class="hd-name">Jada Marcia Smith Thompson</span>
+      <span class="chip rating">Rating A</span>
+      <span class="chip ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Up to date</span>
+    </div>
+    <div class="hd-meta">
+      <span><b>ID</b> 998887776</span>
+      <span><b>COSCACS</b> JMJS000543</span>
+      <span><b>Net income</b> $54,000.00 / mo</span>
+    </div>
+  </header>
+
+  <div id="sim-view">
+  <div class="wrap">
+
+    <section class="card cartbar">
+      <div class="cb-id">
+        <div class="cb-acct" id="cb-acct">Cart · HP-00471</div>
+        <div class="cb-items" id="cb-items">3 items</div>
+      </div>
+      <div class="cb-figs">
+        <div class="cb-fig"><span class="k">Purchase amount</span><span class="v" id="v-purchase">$227,000.00</span></div>
+        <div class="cb-fig"><span class="k">Down payment</span>
+          <span class="dep-wrap"><span class="cur">$</span><input class="dep-input" id="dep" inputmode="decimal" value="57,000.00"></span>
+        </div>
+        <div class="cb-fig fin"><span class="k">Amount to finance</span><span class="v" id="v-financed">$170,000.00</span></div>
+      </div>
+      <button class="cb-see" onclick="openDetail()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.7" y2="16.7"></line></svg>
+        See cart detail
+      </button>
+    </section>
+
+    <div class="grid">
+      <div class="col">
+        <section class="card pad">
+          <div class="label">Promotion</div>
+          <div class="hint" style="margin-top:4px;">Sets the rate, term range and grace period.</div>
+          <div class="promo-dd" id="promo-dd">
+            <button class="promo-head" onclick="togglePromo()">
+              <div><div class="ph-name" id="ph-name">Default</div><div class="ph-cond" id="ph-cond"></div></div>
+              <span class="ph-chev"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></span>
+            </button>
+            <div class="promo-list" id="promo-list"></div>
+          </div>
+        </section>
+
+        <section class="card pad">
+          <div class="label">Term &middot; pick the installment that fits</div>
+          <div class="terms" id="terms"></div>
+          <div class="hint">The spending limit is set at the <b>maximum term</b>, so the loan defaults there. Shorter terms raise the monthly payment.</div>
+        </section>
+      </div>
+
+      <div class="col">
+        <section class="dec">
+          <span class="dec-status ok" id="status"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M9 12l2 2 4-4"></path></svg> <span id="status-txt">Approved</span></span>
+          <div class="dec-lbl">Monthly installment <span class="dec-term" id="dec-term"></span></div>
+          <div class="dec-inst" id="inst">$0.00</div>
+          <div class="dec-rows">
+            <div class="dec-row"><span>First installment due</span><span id="firstpay">—</span></div>
+            <div class="dec-row"><span>Term &middot; rate</span><span id="termrate">—</span></div>
+            <div class="dec-row"><span>Grace period</span><span id="grace">—</span></div>
+            <div class="dec-row"><span>CPI protection insurance</span><span id="cpi">—</span></div>
+            <div class="dec-row"><span>Total financed incl. CPI</span><span id="totfin">—</span></div>
+            <div class="dec-row"><span>Total to pay</span><span id="total">—</span></div>
+          </div>
+          <div class="lim">
+            <div class="lim-row"><span>Monthly installment vs MMI</span><b id="mmi-txt">—</b></div>
+            <div class="bar"><i class="mmi" id="mmi-bar" style="width:0%"></i></div>
+            <div class="lim-row"><span>Financed vs spending limit</span><b id="sl-txt">—</b></div>
+            <div class="bar"><i class="sl" id="sl-bar" style="width:0%"></i></div>
+            <div class="lim-note">Limits shown are the customer's approved capacity. A request above the limit can still be submitted for review.</div>
+          </div>
+        </section>
+
+        <div class="alert over" id="alert">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          <div class="at" id="alert-text"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="actionbar">
+    <div class="actionbar-inner">
+      <div class="ab-summary" id="ab-summary"></div>
+      <div class="ab-btns">
+        <button class="btn-ghost" onclick="nav('carts')">Back to carts</button>
+        <button class="btn-primary" id="review" onclick="showReview()">Continue to review
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+  </div><!-- /#sim-view -->
+
+  <div id="review-view" style="display:none">
+    <div class="wrap">
+      <h2 class="rev-title">Review &amp; confirm</h2>
+
+      <section class="card pad rev-sec">
+        <div class="label">Credit to confirm</div>
+        <div class="rev-list" id="rev-credit"></div>
+      </section>
+
+      <section class="card pad rev-sec">
+        <div class="label">Verify customer identity &amp; contact</div>
+        <div class="rev-contact">
+          <div class="rev-crow">
+            <span class="rev-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"></rect><circle cx="9" cy="10" r="2"></circle><path d="M15 8h3M15 12h3M5 16h14"></path></svg></span>
+            <div class="rev-ctext"><div class="rev-clabel">TRN <span id="trn-status"></span></div>
+              <div class="rev-cval" id="rev-trn">&mdash;</div>
+              <input class="rev-cinput" id="rev-trn-input" placeholder="Enter TRN (e.g. 123-456-789)" inputmode="numeric" style="display:none"></div>
+            <button class="rev-update" id="trn-update" onclick="toggleUpdate('trn')">Update</button>
+          </div>
+          <div class="rev-crow">
+            <span class="rev-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.81.36 1.6.7 2.34a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.74-1.27a2 2 0 0 1 2.11-.45c.74.34 1.53.57 2.34.7A2 2 0 0 1 22 16.92z"></path></svg></span>
+            <div class="rev-ctext"><div class="rev-clabel">Phone on file</div><div class="rev-cval" id="rev-phone">+1 876 978 4128</div>
+              <input class="rev-cinput" id="rev-phone-input" placeholder="New phone number" style="display:none"></div>
+            
+            <button class="rev-update" onclick="toggleUpdate('phone')">Update</button>
+          </div>
+          <div class="rev-crow">
+            <span class="rev-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></span>
+            <div class="rev-ctext"><div class="rev-clabel">Address on file</div><div class="rev-cval" id="rev-addr">12 Hopefield Avenue, Kingston 6, St. Andrew</div>
+              <div class="rev-addr-edit" id="rev-addr-input" style="display:none;width:100%;margin-top:8px"><input id="addr-street" placeholder="Street address (house no. + street)" style="width:100%;height:38px;border:1.5px solid #C7CBF0;border-radius:8px;padding:0 11px;font-family:inherit;font-size:14px;color:#1A1B1E;outline:none;margin-bottom:8px;box-sizing:border-box"><div style="display:flex;gap:8px;flex-wrap:wrap"><select id="addr-parish" style="flex:1;min-width:150px;height:38px;border:1.5px solid #E8E8F4;border-radius:8px;padding:0 8px;font-family:inherit;font-size:14px;color:#1A1B1E;background:#fff;outline:none;box-sizing:border-box"></select><input id="addr-city" placeholder="City / Town" style="flex:1;min-width:150px;height:38px;border:1.5px solid #E8E8F4;border-radius:8px;padding:0 11px;font-family:inherit;font-size:14px;color:#1A1B1E;outline:none;box-sizing:border-box"><select id="addr-zone" style="display:none;flex:1;min-width:150px;height:38px;border:1.5px solid #E8E8F4;border-radius:8px;padding:0 8px;font-family:inherit;font-size:14px;color:#1A1B1E;background:#fff;outline:none;box-sizing:border-box"></select></div></div></div>
+            
+            <button class="rev-update" onclick="toggleUpdate('addr')">Update</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="card pad rev-sec">
+        <div class="label">Sales representative authorization</div>
+        <div class="rev-csr">
+          <div class="rev-csr-field">
+            <div class="rev-clabel">CSR number</div>
+            <input class="rev-cinput2" id="rev-csr" placeholder="e.g. CSR-04821" oninput="updateSubmit()">
+          </div>
+          <div class="rev-csr-field"><div class="rev-clabel">Store / branch</div><select class="rev-cinput2" id="rev-store" onchange="updateSubmit()" style="background:#fff;cursor:pointer"><option value="">Select store…</option><option>Kingston · Half Way Tree</option><option>Kingston · Constant Spring Road</option><option>Portmore · Portmore Pines Plaza</option><option>Spanish Town · Spanish Town Plaza</option><option>Montego Bay · Fairview, St. James</option><option>Mandeville · Manchester Shopping Centre</option><option>Ocho Rios · St. Ann</option><option>May Pen · Clarendon</option></select></div>
+          <label class="rev-confirm big"><input type="checkbox" id="rev-confirmchk" onchange="updateSubmit()"> I confirm the credit details with the customer</label>
+        </div>
+      </section>
+    </div>
+
+    <div class="actionbar">
+      <div class="actionbar-inner">
+        <div class="ab-summary" id="rev-summary"></div>
+        <div class="ab-btns">
+          <button class="btn-ghost" onclick="showSim()">Back to simulation</button>
+          <button class="btn-primary" id="rev-submit" onclick="submitReview()" disabled>Confirm &amp; submit credit request
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="detail" aria-hidden="true">
+  <div class="modal-bg" onclick="closeDetail()"></div>
+  <div class="modal-card" role="dialog" aria-modal="true">
+    <div class="mh">
+      <div><div class="mt" id="d-acct">Cart</div><div class="ms" id="d-items"></div></div>
+      <button class="mx" onclick="closeDetail()" aria-label="Close">&times;</button>
+    </div>
+    <div class="mb">
+      <div class="msl">Items</div>
+      <div id="d-itemlist"></div>
+      <div class="msl">Additional charges</div>
+      <div class="mr"><span>Delivery</span><span id="d-delivery"></span></div>
+      <div class="mr"><span>Extended warranty</span><span id="d-warranty"></span></div>
+      <div class="mdiv"></div>
+      <div class="mr strong"><span>Cart total</span><span id="d-total"></span></div>
+      <div class="mr"><span>Down payment</span><span id="d-deposit"></span></div>
+      <div class="mr big"><span>Amount to finance</span><span id="d-financed"></span></div>
+    </div>
+    <div class="mf"><button class="btn-primary" style="width:100%;box-shadow:none;justify-content:center;" onclick="closeDetail()">Close</button></div>
+  </div>
+</div>
+
+<div id="toast"></div></div>
+<style id="sim-styles">#screen-simulation{
+    --navy:#171C8F; --green:#26D07C; --green-d:#1fb869; --ink:#1A1B1E;
+    --muted:#7C878E; --muted2:#8A8AA0; --line:#E8E8F4; --bg:#F5F5F5; --bg2:#F7F8FF;
+    --amber:#F6BE00; --amber-d:#946F00; --red:#F4364C; --red-d:#D32F45;
+    --shadow:0 2px 12px rgba(23,28,143,.10); --shadow-h:0 10px 30px rgba(23,28,143,.16);
+  }#screen-simulation *{ margin:0; padding:0; box-sizing:border-box; }#screen-simulation{ background:var(--bg); font-family:'Roboto',-apple-system,BlinkMacSystemFont,sans-serif; color:var(--ink); }#screen-simulation .app{ min-height:100vh; display:flex; flex-direction:column; }#screen-simulation .hd{ background:var(--navy); color:#fff; padding:clamp(20px,2.4vw,28px) clamp(20px,4vw,48px) clamp(20px,2.4vw,26px);
+    border-bottom-left-radius:24px; border-bottom-right-radius:24px; }#screen-simulation .hd-top{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding-bottom:14px; }#screen-simulation .crumb{ display:flex; align-items:center; gap:7px; font-size:13.5px; flex-wrap:wrap; }#screen-simulation .crumb a{ color:#fff; font-weight:500; text-decoration:underline; cursor:pointer; }#screen-simulation .crumb .sep{ opacity:.6; }#screen-simulation .crumb .cur{ color:#9799CD; }#screen-simulation .flag{ display:none; }#screen-simulation .hd-name-row{ display:flex; align-items:center; gap:11px; flex-wrap:wrap; }#screen-simulation .hd-name{ font-size:24px; font-weight:600; letter-spacing:-.01em; }#screen-simulation .chip{ display:inline-flex; align-items:center; gap:5px; font-size:11.5px; font-weight:600; padding:4px 10px;
+    border-radius:9999px; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.16); color:#EAF0FF; }#screen-simulation .chip.rating{ background:#fff; color:var(--navy); border-color:transparent; }#screen-simulation .chip.ok{ background:rgba(38,208,124,.18); border-color:rgba(38,208,124,.4); color:#9CF2C6; }#screen-simulation .chip.ok svg{ width:13px; height:13px; }#screen-simulation .hd-meta{ display:none; flex-wrap:wrap; gap:8px 26px; margin-top:11px; font-size:12.5px; color:#AEB3EC; }#screen-simulation .hd-meta b{ color:#7E84C8; font-weight:600; text-transform:uppercase; font-size:10.5px; letter-spacing:.06em; margin-right:5px; }#screen-simulation .wrap{ flex:1; padding:clamp(16px,2.2vw,26px) clamp(20px,4vw,48px) 14px; max-width:1240px; width:100%; margin:0 auto; }#screen-simulation .card{ background:#fff; border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow); }#screen-simulation .label{ font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); }#screen-simulation .cartbar{ display:flex; align-items:center; gap:18px 24px; padding:16px 20px; flex-wrap:wrap; }#screen-simulation .cb-id{ display:flex; flex-direction:column; gap:2px; padding-right:24px; border-right:1px solid var(--line); flex:none; }#screen-simulation .cb-acct{ font-size:15px; font-weight:700; color:var(--ink); }#screen-simulation .cb-items{ font-size:12px; color:var(--muted); }#screen-simulation .cb-figs{ display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:14px 26px; flex:1; min-width:0; align-items:start; }#screen-simulation .cb-fig{ display:flex; flex-direction:column; gap:7px; min-width:0; }#screen-simulation .cb-fig .k{ font-size:10.5px; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); font-weight:600; line-height:1; }#screen-simulation .cb-fig .v{ font-size:16px; font-weight:700; color:var(--ink); font-variant-numeric:tabular-nums; min-height:42px; display:flex; align-items:center; }#screen-simulation .cb-fig.fin .v{ color:var(--navy); font-size:18px; }#screen-simulation .cb-fig .dep-wrap{ min-height:42px; display:flex; align-items:center; }#screen-simulation .dep-wrap{ position:relative; }#screen-simulation .dep-wrap .cur{ position:absolute; left:11px; top:50%; transform:translateY(-50%); color:var(--muted); font-size:14px; font-weight:600; }#screen-simulation .dep-input{ width:150px; height:40px; border:1.5px solid var(--line); border-radius:9px; padding:0 11px 0 23px;
+    font-family:inherit; font-size:15px; font-weight:700; color:var(--ink); outline:none; transition:border-color .15s; }#screen-simulation .dep-input:focus{ border-color:var(--navy); }#screen-simulation .mindown{ font-size:11px; margin-top:4px; color:var(--muted); }#screen-simulation .mindown.warn{ color:var(--amber-d); font-weight:600; }#screen-simulation .cb-see{ display:inline-flex; align-items:center; justify-content:center; gap:7px; background:transparent; border:1.5px solid var(--navy); color:var(--navy);
+    border-radius:9999px; padding:9px 16px; font-size:13px; font-weight:700; cursor:pointer; font-family:inherit; white-space:nowrap; margin-left:auto; flex:none; }#screen-simulation .cb-see:hover{ background:var(--bg2); }#screen-simulation .cb-see svg{ width:15px; height:15px; }@media (max-width:760px){#screen-simulation .cartbar{ flex-direction:column; align-items:stretch; gap:14px; }#screen-simulation .cb-id{ border-right:0; border-bottom:1px solid var(--line); padding-right:0; padding-bottom:12px; }#screen-simulation .cb-figs{ grid-template-columns:1fr 1fr; }#screen-simulation .cb-see{ margin-left:0; width:100%; }}@media (max-width:430px){#screen-simulation .cb-figs{ grid-template-columns:1fr; }}#screen-simulation .grid{ display:grid; grid-template-columns:1.15fr 1fr; gap:16px; margin-top:16px; align-items:start; }@media (max-width:900px){#screen-simulation .grid{ grid-template-columns:1fr; }}#screen-simulation .col{ display:flex; flex-direction:column; gap:16px; }#screen-simulation .pad{ padding:18px 20px; }#screen-simulation .promo-dd{ border:1px solid var(--line); border-radius:14px; margin-top:10px; overflow:hidden; }#screen-simulation .promo-head{ width:100%; display:flex; align-items:center; justify-content:space-between; gap:12px; background:#fff; border:0;
+    padding:14px 16px; cursor:pointer; font-family:inherit; text-align:left; }#screen-simulation .promo-head:hover{ background:var(--bg2); }#screen-simulation .ph-name{ font-size:15px; font-weight:700; color:var(--ink); display:flex; align-items:center; gap:9px; }#screen-simulation .ph-cond{ font-size:12px; color:var(--muted); margin-top:3px; }#screen-simulation .ph-chev{ width:32px; height:32px; flex:none; border-radius:50%; background:var(--bg2); display:flex; align-items:center; justify-content:center; color:var(--navy); transition:transform .2s; }#screen-simulation .promo-dd.open .ph-chev{ transform:rotate(180deg); }#screen-simulation .promo-list{ display:none; border-top:1px solid var(--line); }#screen-simulation .promo-dd.open .promo-list{ display:block; }#screen-simulation .promo-opt{ width:100%; display:flex; align-items:flex-start; gap:13px; background:#fff; border:0; border-top:1px solid var(--line);
+    padding:14px 16px; cursor:pointer; font-family:inherit; text-align:left; transition:background .15s; }#screen-simulation .promo-opt:first-child{ border-top:0; }#screen-simulation .promo-opt:hover{ background:var(--bg2); }#screen-simulation .promo-opt.sel{ background:var(--bg2); }#screen-simulation .radio{ width:20px; height:20px; flex:none; border-radius:50%; border:2px solid #C7CBF0; margin-top:1px; position:relative; }#screen-simulation .promo-opt.sel .radio{ border-color:var(--navy); }#screen-simulation .promo-opt.sel .radio::after{ content:""; position:absolute; inset:3px; border-radius:50%; background:var(--navy); }#screen-simulation .po-name{ font-size:14.5px; font-weight:700; color:var(--ink); display:flex; align-items:center; gap:9px; }#screen-simulation .po-cond{ font-size:12px; color:var(--muted); margin-top:3px; }#screen-simulation .badge{ font-size:10px; font-weight:700; letter-spacing:.04em; padding:2px 8px; border-radius:6px; background:#FCEAE0; color:#C0561F; }#screen-simulation .terms{ display:flex; flex-direction:column; gap:7px; margin-top:10px; }#screen-simulation .term{ display:flex; align-items:center; justify-content:space-between; gap:12px; background:#fff; border:1.5px solid var(--line);
+    border-radius:11px; padding:11px 14px; cursor:pointer; font-family:inherit; transition:border-color .15s, background .15s; width:100%; }#screen-simulation .term:hover{ border-color:#C7CBF0; }#screen-simulation .term.sel{ border-color:var(--navy); border-width:2px; background:var(--bg2); }#screen-simulation .term-sel{ font-size:9.5px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--navy); background:#fff; border:1px solid var(--navy); padding:2px 7px; border-radius:9999px; margin-left:8px; }#screen-simulation .dec-term{ display:inline-block; font-size:11px; font-weight:700; color:#fff; background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.24); padding:2px 9px; border-radius:9999px; margin-left:7px; vertical-align:1px; }#screen-simulation .term-l{ display:flex; align-items:center; gap:9px; }#screen-simulation .term-t{ font-size:14px; font-weight:700; color:var(--ink); }#screen-simulation .term-tag{ font-size:10px; font-weight:700; padding:2px 8px; border-radius:9999px; background:#EEF0FF; color:var(--navy); }#screen-simulation .term-r{ display:flex; align-items:center; gap:10px; }#screen-simulation .term-inst{ font-size:14.5px; font-weight:700; color:var(--ink); font-variant-numeric:tabular-nums; }#screen-simulation .dot{ width:9px; height:9px; border-radius:50%; flex:none; }#screen-simulation .dot.ok{ background:var(--green); }#screen-simulation .dot.tol{ background:var(--amber); }#screen-simulation .dot.over{ background:var(--red); }#screen-simulation .hint{ font-size:11.5px; color:var(--muted); margin-top:10px; line-height:1.5; }#screen-simulation .dec{ background:var(--navy); color:#fff; border-radius:16px; padding:18px 20px; box-shadow:var(--shadow); }#screen-simulation .dec-status{ display:inline-flex; align-items:center; gap:7px; font-size:12.5px; font-weight:600; padding:6px 12px; border-radius:9999px; margin-bottom:12px; transition:background-color .2s ease, color .2s ease; }#screen-simulation .dec-status svg{ width:15px; height:15px; }#screen-simulation .dec-status.ok{ background:rgba(38,208,124,.18); color:#9CF2C6; }#screen-simulation .dec-status.tol{ background:rgba(246,190,0,.2); color:#FFD86B; }#screen-simulation .dec-status.over{ background:rgba(244,54,76,.2); color:#FF9AA6; }#screen-simulation .dec-lbl{ font-size:12.5px; color:#B9BEF2; }#screen-simulation .dec-inst{ font-size:clamp(24px,3vw,30px); font-weight:800; color:var(--green); letter-spacing:-.02em; line-height:1.05; margin-top:3px; transition:color .25s ease; }#screen-simulation .dec-inst.over{ color:#FF9AA6; }#screen-simulation .dec-rows{ margin-top:14px; border-top:1px solid rgba(255,255,255,.16); padding-top:13px; display:flex; flex-direction:column; gap:9px; }#screen-simulation .dec-row{ display:flex; align-items:center; justify-content:space-between; font-size:12.5px; color:#C9CDF4; }#screen-simulation .dec-row span:last-child{ color:#fff; font-weight:600; font-variant-numeric:tabular-nums; }#screen-simulation .lim{ margin-top:16px; }#screen-simulation .lim-row{ font-size:12.5px; display:flex; justify-content:space-between; color:#C9CDF4; }#screen-simulation .lim-row b{ color:#fff; font-weight:700; font-variant-numeric:tabular-nums; }#screen-simulation .bar{ height:9px; border-radius:9999px; background:rgba(255,255,255,.2); margin:7px 0 14px; overflow:hidden; }#screen-simulation .bar > i{ display:block; height:100%; border-radius:9999px; transition:width .45s cubic-bezier(.4,0,.2,1), background-color .25s ease; }#screen-simulation .bar .mmi{ background:#C7CBFF; }#screen-simulation .bar .sl{ background:var(--green); }#screen-simulation .bar .mmi.over, #screen-simulation .bar .sl.over{ background:#FF8896; }#screen-simulation .lim-note{ font-size:11px; color:#9BA0D9; line-height:1.5; margin-top:2px; }#screen-simulation .alert{ display:none; margin-top:12px; gap:11px; align-items:flex-start; padding:13px 15px; border-radius:13px; }#screen-simulation .alert.show{ display:flex; }#screen-simulation .alert.over{ background:rgba(244,54,76,.09); border:1px solid rgba(244,54,76,.3); }#screen-simulation .alert.tol{ background:rgba(246,190,0,.12); border:1px solid rgba(246,190,0,.35); }#screen-simulation .alert svg{ width:19px; height:19px; flex:none; margin-top:1px; }#screen-simulation .alert.over svg{ color:var(--red-d); }#screen-simulation .alert.tol svg{ color:var(--amber-d); }#screen-simulation .alert .at{ font-size:13px; line-height:1.5; }#screen-simulation .alert.over .at{ color:var(--red-d); }#screen-simulation .alert.tol .at{ color:var(--amber-d); }#screen-simulation .alert .at b{ font-weight:700; }#screen-simulation .actionbar{ position:sticky; bottom:0; background:rgba(255,255,255,.92); backdrop-filter:saturate(1.4) blur(6px);
+    border-top:1px solid var(--line); box-shadow:0 -6px 24px rgba(23,28,143,.07); }#screen-simulation .actionbar-inner{ max-width:1240px; margin:0 auto; padding:13px clamp(20px,4vw,48px); display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; }#screen-simulation .ab-summary{ font-size:13px; color:var(--muted); }#screen-simulation .ab-summary b{ color:var(--navy); font-weight:700; }#screen-simulation .ab-btns{ display:flex; gap:12px; }#screen-simulation .btn-ghost{ background:transparent; border:1.5px solid var(--navy); color:var(--navy); border-radius:9999px; padding:12px 22px;
+    font-size:14px; font-weight:700; cursor:pointer; font-family:inherit; }#screen-simulation .btn-ghost:hover{ background:var(--bg2); }#screen-simulation .btn-primary{ display:inline-flex; align-items:center; gap:8px; background:var(--green); color:var(--navy); border:0; border-radius:9999px;
+    padding:13px 28px; font-size:14px; font-weight:700; cursor:pointer; font-family:inherit; transition:background .15s; box-shadow:0 6px 18px rgba(38,208,124,.35); }#screen-simulation .btn-primary:hover{ background:var(--green-d); }#screen-simulation .btn-primary:disabled{ background:#C9CBE6; color:#fff; cursor:not-allowed; box-shadow:none; }#screen-simulation .btn-primary svg{ width:17px; height:17px; }#screen-simulation .modal{ position:fixed; inset:0; z-index:50; display:none; align-items:center; justify-content:center; padding:20px; }#screen-simulation .modal.open{ display:flex; }#screen-simulation .modal-bg{ position:absolute; inset:0; background:rgba(13,16,80,.5); }#screen-simulation .modal-card{ position:relative; z-index:1; width:100%; max-width:500px; max-height:88vh; overflow:auto; background:#fff; border-radius:18px; box-shadow:0 24px 70px rgba(13,16,80,.4); }#screen-simulation .mh{ display:flex; align-items:flex-start; justify-content:space-between; gap:12px; padding:20px 22px 12px; position:sticky; top:0; background:#fff; }#screen-simulation .mh .mt{ font-size:16px; font-weight:700; }#screen-simulation .mh .ms{ font-size:12px; color:var(--muted); margin-top:2px; }#screen-simulation .mx{ background:#F1EFF8; border:0; width:32px; height:32px; border-radius:50%; cursor:pointer; font-size:19px; color:var(--muted); flex:none; }#screen-simulation .mb{ padding:0 22px 8px; }#screen-simulation .msl{ font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin:14px 0 4px; }#screen-simulation .mr{ display:flex; justify-content:space-between; gap:12px; font-size:13.5px; padding:7px 0; }#screen-simulation .mr span:first-child{ color:var(--muted); }#screen-simulation .mr span:last-child{ font-weight:600; font-variant-numeric:tabular-nums; }#screen-simulation .mr.strong span:last-child{ color:var(--navy); font-weight:700; }#screen-simulation .mr.big span:last-child{ font-size:17px; font-weight:800; color:var(--navy); }#screen-simulation .mdiv{ height:1px; background:var(--line); margin:8px 0; }#screen-simulation .mf{ padding:14px 22px 20px; }#screen-simulation #toast{ position:fixed; left:50%; bottom:78px; transform:translateX(-50%) translateY(12px); background:var(--navy); color:#fff;
+    font-size:13.5px; font-weight:500; padding:13px 20px; border-radius:9999px; box-shadow:0 12px 34px rgba(13,16,80,.32);
+    opacity:0; pointer-events:none; transition:opacity .2s, transform .2s; z-index:999; max-width:92vw; text-align:center; }#screen-simulation #toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }#screen-simulation .rev-title{ font-size:19px; font-weight:700; color:var(--ink); margin-bottom:14px; }#screen-simulation .rev-sec{ margin-bottom:14px; }#screen-simulation .rev-list{ border:1px solid var(--line); border-radius:10px; overflow:hidden; margin-top:10px; }#screen-simulation .rev-row{ display:flex; justify-content:space-between; gap:12px; padding:10px 14px; font-size:13.5px; border-bottom:1px solid var(--line); }#screen-simulation .rev-row:last-child{ border-bottom:0; }#screen-simulation .rev-row span:first-child{ color:var(--muted); }#screen-simulation .rev-row span:last-child{ font-weight:600; color:var(--ink); font-variant-numeric:tabular-nums; }#screen-simulation .rev-row.hi{ background:var(--bg2); }#screen-simulation .rev-row.hi span{ color:var(--navy); font-weight:700; font-size:15px; }#screen-simulation .rev-contact{ display:flex; flex-direction:column; gap:10px; margin-top:10px; }#screen-simulation .rev-crow{ display:flex; align-items:center; gap:13px; border:1px solid var(--line); border-radius:10px; padding:12px 14px; flex-wrap:wrap; }#screen-simulation .rev-ic{ color:var(--navy); display:flex; flex:none; }#screen-simulation .rev-ic svg{ width:18px; height:18px; }#screen-simulation .rev-ctext{ flex:1; min-width:170px; }#screen-simulation .rev-clabel{ font-size:11px; color:var(--muted); letter-spacing:.02em; }#screen-simulation .rev-cval{ font-size:14px; font-weight:600; color:var(--ink); margin-top:1px; }#screen-simulation .rev-cinput{ width:100%; height:36px; border:1.5px solid var(--line); border-radius:8px; padding:0 10px; font-family:inherit; font-size:13.5px; margin-top:6px; outline:none; }#screen-simulation .rev-cinput:focus, #screen-simulation .rev-cinput2:focus{ border-color:var(--navy); }#screen-simulation .rev-confirm{ display:inline-flex; align-items:center; gap:7px; font-size:13px; color:var(--ink); cursor:pointer; }#screen-simulation .rev-confirm input{ width:16px; height:16px; accent-color:var(--navy); }#screen-simulation .rev-confirm.big{ width:100%; margin-top:6px; }#screen-simulation .rev-update{ background:transparent; border:0; color:var(--navy); font-family:inherit; font-size:13px; font-weight:600; text-decoration:underline; cursor:pointer; }#screen-simulation .rev-csr{ display:flex; gap:18px; align-items:flex-start; flex-wrap:wrap; margin-top:10px; }#screen-simulation .rev-csr-field{ flex:1; min-width:220px; }#screen-simulation .rev-cinput2{ width:100%; height:42px; border:1.5px solid var(--line); border-radius:9px; padding:0 12px; font-family:inherit; font-size:14px; font-weight:600; margin-top:6px; outline:none; }
+body.sim-active .bottom-nav, body.sim-active .m-topbar{ display:none !important; }
+body.sim-active{ padding-top:0 !important; }
+#screen-simulation .app{ min-height:auto; }</style>
 <style id="app-overrides">
 
 /* ===================== rp-pack ===================== */
@@ -5459,10 +5679,7 @@ document.addEventListener('click', function(e){
   window.openCashLoan=function(id){
     var C=window.CUSTOMER_FULL||{}; if(!id||!C[id]) id="jada"; var c=C[id];
     window.__activeCustId=id; var arr=(c.status==="arrears");
-    var msg={__unicredit:true,action:"open-hp",mode:"cash",name:c.name,rating:c.rating,cosacs:c.cosacs,income:c.income,committed:c.committed,dsr:c.dsr,trn:c.trn,trnOnFile:!!c.trnOnFile,arrears:arr,id:id};
-    if(window.parent&&window.parent!==window){ try{ window.parent.postMessage(msg,"*"); return; }catch(e){} }
-    var qs="simulation.html?mode=cash&name="+encodeURIComponent(c.name)+"&rating="+encodeURIComponent(c.rating)+"&cosacs="+encodeURIComponent(c.cosacs)+"&income="+c.income+"&committed="+c.committed+"&dsr="+c.dsr+"&trn="+encodeURIComponent(c.trn)+"&trnOnFile="+(c.trnOnFile?"1":"0")+"&arrears="+(arr?"1":"0")+"&id="+id;
-    window.location.href=qs;
+    if(window.initSimulation){ window.initSimulation({mode:"cash",name:c.name,rating:c.rating,cosacs:c.cosacs,income:c.income,committed:c.committed,dsr:c.dsr,trn:c.trn,trnOnFile:c.trnOnFile?"1":"0",arrears:arr?"1":"0",id:id}); if(window.showScreen) window.showScreen("simulation"); }
   };
 })();
 
@@ -5708,6 +5925,286 @@ document.addEventListener('click', function(e){
   if(document.readyState!=="loading") init(); else document.addEventListener("DOMContentLoaded", init);
   setTimeout(init,900);
 })();
+
+
+/* ===================== simulation (merged) ===================== */
+window.__SIM_HTML=(document.getElementById("screen-simulation")||{}).innerHTML;
+window.initSimulation=function(params){
+  var root=document.getElementById("screen-simulation"); if(!root) return;
+  if(window.__SIM_HTML!=null) root.innerHTML=window.__SIM_HTML;
+  document.body.classList.add("sim-active");
+  var __id=(params&&params.id!=null)?String(params.id):"jada";
+  (function(){
+  "use strict";
+  var P={get:function(k){return params[k]!=null?String(params[k]):null;}};
+  var purchase=parseFloat(P.get('amount'));
+  var deposit=parseFloat(P.get('down')); if(isNaN(deposit)) deposit=57000;
+  var acct=P.get('cart')||'HP-00471';
+  if(P.get('mode')==='cash'){ deposit=0; }
+  else if(isNaN(purchase)){ purchase=227000; }
+  var fromCarts=P.get('fromCarts')==='1';
+  var isCash=P.get('mode')==='cash';
+  var cName=P.get('name'), cRating=P.get('rating')||'A', cCosacs=P.get('cosacs')||'';
+  var cTrn=P.get('trn')||'', trnOnFile=P.get('trnOnFile')==='1', cArrears=P.get('arrears')==='1', cId=P.get('id')||'';
+
+  var income=parseFloat(P.get('income')); if(isNaN(income)) income=54000;
+  var committed=parseFloat(P.get('committed')); if(isNaN(committed)) committed=7557.74;
+  var dsr=parseFloat(P.get('dsr')); if(isNaN(dsr)) dsr=0.40;
+  var availMmiBase=dsr*income-committed;
+  var ICON_OK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M9 12l2 2 4-4"></path></svg>';
+  var ICON_WARN='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>';
+
+  var PROMOS=[
+    {id:'default',name:'Default',      badge:'', rate:0.05605, min:6,  max:48, grace:1},
+    {id:'bf',     name:'Black Friday', badge:'', rate:0.04920, min:12, max:60, grace:3},
+    {id:'staff',  name:'Staff',        badge:'', rate:0.05250, min:6,  max:54, grace:0}
+  ];
+  if(isCash){ for(var _i=0;_i<PROMOS.length;_i++){ if(PROMOS[_i].max>36) PROMOS[_i].max=36; if(PROMOS[_i].min>PROMOS[_i].max) PROMOS[_i].min=PROMOS[_i].max; } }
+  var pi=0, term=PROMOS[0].max, promoOpen=false;
+
+  var CART_DETAILS={
+    'HP-00471':{count:'3 items',items:[['Living room set · 3-piece',120000],['Refrigerator · side-by-side',55000],['Smart TV 65"',40000]],delivery:3500,warranty:8500},
+    'HP-00488':{count:'4 items',items:[['Sectional sofa · L-shape',110000],['French-door refrigerator',90000],['Washer & dryer set',65000],['OLED TV 75"',35000]],delivery:5000,warranty:15000},
+    'HP-00502':{count:'5 items',items:[['Kitchen appliance suite',150000],['Living room set',110000],['Dining set · 6-seat',70000],['Master bedroom set',90000],['Home theatre system',50000]],delivery:8000,warranty:22000}
+  };
+  function detail(){ return CART_DETAILS[acct]||CART_DETAILS['HP-00471']; }
+
+  function money(n){ return '$'+Number(n||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+  function money0(n){ return '$'+Math.round(Number(n||0)).toLocaleString('en-US'); }
+  function pct(n){ return (n*100).toLocaleString('en-US',{maximumFractionDigits:0}); }
+  function mrate(p){ return p.rate; }
+  function rateStr(p){ return (p.rate*100).toFixed(1)+'%/mo'; }
+  function ann(n,r){ return r>0 ? (1-Math.pow(1+r,-n))/r : n; }
+  var CPI_RATE=0.036, GCT=0.15;   // HP "To-be": 3.6%/yr + 15% GCT, capitalized
+  function financed(){ return Math.max(0, purchase-deposit); }
+  function cpiFor(t){ return financed()*(CPI_RATE/12*t)*(1+GCT); }
+  function principalFor(t){ return financed()+cpiFor(t); }
+  function instFor(t){ var p=PROMOS[pi], r=mrate(p); var F=principalFor(t)*Math.pow(1+r,p.grace); return t>0 ? F*r/(1-Math.pow(1+r,-t)) : F; }
+  function slBase(){ var p=PROMOS[pi]; return availMmiBase*ann(p.max,mrate(p)); }
+  function statusOf(t){ return instFor(t)<=availMmiBase ? 'ok' : 'over'; }
+  function termsList(){ var p=PROMOS[pi],a=[]; for(var t=p.min;t<=p.max;t+=6) a.push(t); if(a[a.length-1]!==p.max) a.push(p.max); return a; }
+  function condStr(p){ return rateStr(p)+' · '+p.min+'–'+p.max+'m · grace '+p.grace+'m'; }
+  function firstPay(){ var p=PROMOS[pi]; var d=new Date(); d.setDate(d.getDate()+30); if(p.grace>0) d.setMonth(d.getMonth()+p.grace);
+    return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); }
+
+  function renderPromos(){
+    var p=PROMOS[pi];
+    document.getElementById('ph-name').innerHTML=p.name+(p.badge?' <span class="badge">'+p.badge+'</span>':'');
+    document.getElementById('ph-cond').textContent=condStr(p);
+    var h='';
+    for(var i=0;i<PROMOS.length;i++){ var q=PROMOS[i];
+      h+='<button class="promo-opt'+(i===pi?' sel':'')+'" onclick="__pp('+i+')"><span class="radio"></span>'+
+         '<div><div class="po-name">'+q.name+(q.badge?' <span class="badge">'+q.badge+'</span>':'')+'</div>'+
+         '<div class="po-cond">'+condStr(q)+'</div></div></button>';
+    }
+    document.getElementById('promo-list').innerHTML=h;
+    document.getElementById('promo-dd').className='promo-dd'+(promoOpen?' open':'');
+  }
+  function renderTerms(){
+    var p=PROMOS[pi], list=termsList(), h='';
+    for(var k=0;k<list.length;k++){ var t=list[k], st=statusOf(t), mx=(t===p.max);
+      h+='<button class="term'+(t===term?' sel':'')+'" onclick="__pt('+t+')"><span class="term-l"><span class="term-t">'+t+' months</span>'+
+         (mx?'<span class="term-tag">Max</span>':'')+(t===term?'<span class="term-sel">Selected</span>':'')+'</span><span class="term-r"><span class="term-inst">'+money(instFor(t))+'/mo</span><span class="dot '+st+'"></span></span></button>';
+    }
+    document.getElementById('terms').innerHTML=h;
+  }
+  function render(){
+    var p=PROMOS[pi];
+    var _a=document.getElementById('cb-acct'); if(_a) _a.textContent='Cart · '+acct;
+    var _it=document.getElementById('cb-items'); if(_it) _it.textContent=detail().count;
+    var _vp=document.getElementById('v-purchase'); if(_vp) _vp.textContent=money(purchase);
+    var _vf=document.getElementById('v-financed'); if(_vf) _vf.textContent=money(financed());
+    var _dm=document.getElementById('disb-max'); if(_dm) _dm.textContent='Max available to disburse: '+money(slBase());
+    document.getElementById('crumb-carts').style.display=fromCarts?'':'none';
+    document.getElementById('crumb-carts-sep').style.display=fromCarts?'':'none';
+
+    renderPromos(); renderTerms();
+
+    var inst=instFor(term), st=statusOf(term);
+    document.getElementById('inst').textContent=money(inst);
+    document.getElementById('inst').className='dec-inst'+(st==='over'?' over':'');
+    document.getElementById('firstpay').textContent=firstPay();
+    document.getElementById('termrate').textContent=term+'m · '+rateStr(p);
+    document.getElementById('dec-term').textContent=term+' months';
+    document.getElementById('grace').textContent=p.grace+(p.grace===1?' month':' months');
+    document.getElementById('cpi').textContent=money(cpiFor(term));
+    document.getElementById('totfin').textContent=money(principalFor(term));
+    document.getElementById('total').textContent=money(inst*term);
+
+    var sEl=document.getElementById('status');
+    if(st==='ok'){ sEl.className='dec-status ok'; sEl.innerHTML=ICON_OK+' Within approved limit'; }
+    else { sEl.className='dec-status over'; sEl.innerHTML=ICON_WARN+' Exceeds approved limit'; }
+
+    var mmiPct=Math.min(100, inst/availMmiBase*100), slPct=Math.min(100, financed()/slBase()*100);
+    document.getElementById('mmi-txt').textContent=money0(inst)+' / '+money0(availMmiBase);
+    document.getElementById('sl-txt').textContent=money0(financed())+' / '+money0(slBase());
+    document.getElementById('mmi-bar').style.width=mmiPct+'%';
+    document.getElementById('sl-bar').style.width=slPct+'%';
+    document.getElementById('mmi-bar').className='mmi'+(st==='over'?' over':'');
+    document.getElementById('sl-bar').className='sl'+(financed()>slBase()?' over':'');
+
+    var al=document.getElementById('alert'), at=document.getElementById('alert-text');
+    if(st==='over'){ al.className='alert over show';
+      at.innerHTML='<b>At '+term+' months</b> the monthly installment is '+money(inst)+', above the customer’s approved limit ('+money(availMmiBase)+'). You can submit the request for review, or choose a <b>longer term</b> or increase the <b>down payment</b> to bring it within the limit.';
+    } else { al.className='alert'; }
+    document.getElementById('ab-summary').innerHTML=acct+' · finance <b>'+money0(financed())+'</b> over <b>'+term+'m</b> · <b>'+money0(inst)+'/mo</b>';
+  }
+
+  window.__pp=function(i){ pi=i; var p=PROMOS[i]; if(term>p.max||term<p.min) term=p.max; promoOpen=false; render(); };
+  window.__pt=function(t){ term=t; render(); };
+  window.togglePromo=function(){ promoOpen=!promoOpen; document.getElementById('promo-dd').className='promo-dd'+(promoOpen?' open':''); };
+
+  var dep=document.getElementById('dep');
+  function setDep(v){ if(isNaN(v)) v=0; deposit=Math.min(Math.max(0,v), purchase); render(); }
+  if(dep){
+    dep.addEventListener('input', function(){ setDep(parseFloat((dep.value||'').replace(/[^0-9.]/g,''))); });
+    dep.addEventListener('change', function(){ dep.value=Number(deposit).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); });
+    dep.addEventListener('blur', function(){ dep.value=Number(deposit).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); });
+  }
+
+  window.openDetail=function(){
+    var d=detail();
+    document.getElementById('d-acct').textContent='Cart · '+acct;
+    document.getElementById('d-items').textContent=d.count;
+    var ih=''; for(var i=0;i<d.items.length;i++){ ih+='<div class="mr"><span>'+d.items[i][0]+'</span><span>'+money(d.items[i][1])+'</span></div>'; }
+    document.getElementById('d-itemlist').innerHTML=ih;
+    document.getElementById('d-delivery').textContent=money(d.delivery);
+    document.getElementById('d-warranty').textContent=money(d.warranty);
+    document.getElementById('d-total').textContent=money(purchase);
+    document.getElementById('d-deposit').textContent=money(deposit);
+    document.getElementById('d-financed').textContent=money(financed());
+    var m=document.getElementById('detail'); m.classList.add('open'); m.setAttribute('aria-hidden','false');
+  };
+  window.closeDetail=function(){ var m=document.getElementById('detail'); m.classList.remove('open'); m.setAttribute('aria-hidden','true'); };
+
+  window.nav=function(where){ var msg={__unicredit:true};
+    if(where==='search'){ msg.action='back'; msg.reset=true; }
+    else if(where==='customer'){ msg.action='goto-customer'; }
+    else if(where==='carts'){ msg.action='back-to-carts'; }
+    msg.id = cId || '';
+    if(window.parent&&window.parent!==window){ try{ window.parent.postMessage(msg,'*'); return; }catch(e){} } window.location.href='01-customer-search.html'; };
+  var trnVal = (trnOnFile && cTrn) ? cTrn : '';
+  function trnOk(){ if(!isCash) return true; return (trnVal||'').replace(/[^0-9]/g,'').length>=9; }
+  function setupTrn(){
+    var lbl=document.getElementById('trn-status'), val=document.getElementById('rev-trn'),
+        inp=document.getElementById('rev-trn-input'), btn=document.getElementById('trn-update');
+    if(!val) return;
+    var row=val.closest('.rev-crow'); if(row) row.style.display=isCash?'':'none';
+    if(!isCash){ updateSubmit(); return; }
+    inp.oninput=function(){ trnVal=inp.value; if(inp.value.trim()) val.textContent=inp.value; updateSubmit(); };
+    if(trnOnFile && cTrn){
+      trnVal=cTrn; val.textContent=cTrn; val.style.display=''; inp.style.display='none';
+      lbl.innerHTML='<span style="color:#15A35B;font-weight:600">&middot; on file</span>'; if(btn) btn.style.display='none';
+    } else {
+      trnVal=''; val.style.display='none'; inp.style.display='block'; inp.value='';
+      lbl.innerHTML='<span style="color:#D32F45;font-weight:600">&middot; required</span>'; if(btn) btn.style.display='none';
+    }
+    updateSubmit();
+  }
+  window.showReview=function(){
+    var p=PROMOS[pi], inst=instFor(term);
+    var rows = isCash
+      ? [['Product','Cash Loan'],['Amount to disburse',money(financed())],
+         ['Term · promotion',term+' months · '+p.name+' · '+rateStr(p)],
+         ['CPI insurance',money(cpiFor(term))],['First installment due',firstPay()]]
+      : [['Product · cart','Hired Purchase · '+acct],['Amount to finance',money(financed())],
+         ['Down payment',money(deposit)],['Term · promotion',term+' months · '+p.name+' · '+rateStr(p)],
+         ['CPI insurance',money(cpiFor(term))],['First installment due',firstPay()]];
+    var h=''; for(var i=0;i<rows.length;i++) h+='<div class="rev-row"><span>'+rows[i][0]+'</span><span>'+rows[i][1]+'</span></div>';
+    h+='<div class="rev-row hi"><span>Monthly installment</span><span>'+money(inst)+'</span></div>';
+    document.getElementById('rev-credit').innerHTML=h;
+    document.getElementById('rev-summary').innerHTML=(isCash?'Cash loan':acct)+' · <b>'+money0(inst)+'/mo</b> over '+term+'m';
+    setupTrn();
+    document.getElementById('sim-view').style.display='none';
+    document.getElementById('review-view').style.display='block';
+    window.scrollTo(0,0);
+  };
+  window.showSim=function(){ document.getElementById('review-view').style.display='none';
+    document.getElementById('sim-view').style.display=''; window.scrollTo(0,0); };
+  var JA_PARISHES=['Kingston','St. Andrew','St. Catherine','Clarendon','Manchester','St. Elizabeth','Westmoreland','Hanover','St. James','Trelawny','St. Ann','St. Mary','Portland','St. Thomas'];
+  function _el(id){ return document.getElementById(id); }
+  function _isKingston(p){ return p==='Kingston'||p==='St. Andrew'; }
+  function _fillAddrSelects(){ var ps=_el('addr-parish'), zn=_el('addr-zone');
+    if(ps&&!ps.options.length){ var o0=document.createElement('option'); o0.value=''; o0.textContent='Select parish\u2026'; ps.appendChild(o0); JA_PARISHES.forEach(function(x){ var o=document.createElement('option'); o.value=x; o.textContent=x; ps.appendChild(o); }); }
+    if(zn&&!zn.options.length){ var z0=document.createElement('option'); z0.value=''; z0.textContent='Select zone\u2026'; zn.appendChild(z0); for(var i=1;i<=20;i++){ var o=document.createElement('option'); o.value='Kingston '+i; o.textContent='Kingston '+i; zn.appendChild(o); } } }
+  function _addrMode(){ var p=_el('addr-parish').value, city=_el('addr-city'), zone=_el('addr-zone');
+    if(_isKingston(p)){ zone.style.display=''; city.style.display='none'; } else { zone.style.display='none'; city.style.display=''; } }
+  function _addrRecompute(){ var st=_el('addr-street').value.trim(), p=_el('addr-parish').value, loc=_isKingston(p)?_el('addr-zone').value:_el('addr-city').value.trim();
+    var bits=[]; if(st) bits.push(st); if(loc) bits.push(loc); if(p) bits.push(p); _el('rev-addr').textContent=bits.join(', ')||'\u2014'; }
+  function _addrInit(current){ var parts=(current||'').split(',').map(function(s){return s.trim();}).filter(Boolean); var st='',loc='',p='';
+    if(parts.length>=3){ st=parts.slice(0,parts.length-2).join(', '); loc=parts[parts.length-2]; p=parts[parts.length-1]; } else if(parts.length===2){ st=parts[0]; loc=parts[1]; } else { st=parts[0]||''; }
+    _fillAddrSelects(); if(!p&&/^Kingston\s+\d+/i.test(loc)) p='St. Andrew';
+    _el('addr-street').value=st; _el('addr-parish').value=JA_PARISHES.indexOf(p)>=0?p:'';
+    if(_isKingston(_el('addr-parish').value)){ _el('addr-city').value=''; _el('addr-zone').value=/^Kingston\s+\d+/i.test(loc)?loc:''; } else { _el('addr-zone').value=''; _el('addr-city').value=loc; }
+    _addrMode(); _el('addr-street').oninput=_addrRecompute; _el('addr-city').oninput=_addrRecompute; _el('addr-zone').onchange=_addrRecompute;
+    _el('addr-parish').onchange=function(){ _addrMode(); _addrRecompute(); }; _el('addr-street').focus(); _addrRecompute(); }
+  window.toggleUpdate=function(which){
+    var inp=document.getElementById('rev-'+which+'-input'), val=document.getElementById('rev-'+which);
+    if(inp.style.display==='none'||!inp.style.display){ inp.style.display='block';
+      if(which==='addr'){ _addrInit(val.textContent); }
+      else if(which==='trn'){ inp.value=(val.textContent==='—'?'':val.textContent); inp.oninput=function(){ trnVal=inp.value; if(inp.value.trim()) val.textContent=inp.value; updateSubmit(); }; inp.focus(); }
+      else { inp.value=val.textContent; inp.oninput=function(){ if(inp.value.trim()) val.textContent=inp.value; }; inp.focus(); } }
+    else { inp.style.display='none'; }
+  };
+  window.updateSubmit=function(){ var c=document.getElementById('rev-csr').value.trim(); var st=(document.getElementById('rev-store')||{}).value||''; var ok=(document.getElementById('rev-confirmchk')||{}).checked;
+    document.getElementById('rev-submit').disabled = (c.length<3 || !st || !ok || !trnOk()); };
+  window.submitReview=function(){
+    var c=document.getElementById('rev-csr').value.trim(); var st=(document.getElementById('rev-store')||{}).value||''; var ok=(document.getElementById('rev-confirmchk')||{}).checked; if(c.length<3||!st||!ok||!trnOk()) return;
+    var t=document.getElementById('toast'); t.textContent='Credit request submitted · '+c+' · '+st;
+    t.className='show'; clearTimeout(window.__t); window.__t=setTimeout(function(){ t.className=''; },3500);
+    var b=document.getElementById('rev-submit'); b.disabled=true; b.textContent='Submitted';
+  };
+
+  function fmtAmt(n){ return Number(n||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+  function decode(s){ try{ return decodeURIComponent(s); }catch(e){ return s; } }
+  function populateHeader(){
+    if(!cName) return;
+    var nm=document.querySelector('.hd-name'); if(nm) nm.textContent=decode(cName);
+    var rc=document.querySelector('.chip.rating'); if(rc) rc.textContent='Rating '+cRating;
+    var ok=document.querySelector('.chip.ok');
+    if(ok && cArrears){ ok.className='chip'; ok.style.background='rgba(244,54,76,.18)'; ok.style.borderColor='rgba(244,54,76,.4)'; ok.style.color='#FF9AA6'; ok.innerHTML='In arrears'; }
+    var meta=document.querySelector('.hd-meta');
+    if(meta){ var idDigits=(cTrn||'').replace(/[^0-9]/g,'')||cId;
+      meta.innerHTML='<span><b>ID</b> '+(idDigits||'—')+'</span>'+
+        (cCosacs?'<span><b>COSACS</b> '+cCosacs+'</span>':'')+
+        '<span><b>Net income</b> '+money(income)+' / mo</span>'; }
+  }
+  function setupCash(){
+    var cur=document.querySelector('.crumb .cur'); if(cur) cur.textContent='Simulate cash loan';
+    document.title='Unicredit · Simulate cash loan';
+    var bar=document.querySelector('.cartbar');
+    if(bar){
+      var cbid=bar.querySelector('.cb-id'); if(cbid) cbid.style.display='none';
+      var see=bar.querySelector('.cb-see'); if(see) see.style.display='none';
+      var figs=bar.querySelector('.cb-figs');
+      if(figs){ figs.innerHTML='<div class="cb-fig fin" style="flex:1"><span class="k">Amount to disburse</span>'+
+        '<span class="dep-wrap"><span class="cur">$</span><input class="dep-input" id="disb" inputmode="decimal" style="width:230px;font-size:18px;color:var(--navy);font-weight:700"></span>'+
+        '<div class="mindown" id="disb-max"></div></div>'; }
+      var disb=document.getElementById('disb');
+      if(disb){
+        disb.value=fmtAmt(purchase);
+        disb.addEventListener('input', function(){ var v=parseFloat((disb.value||'').replace(/[^0-9.]/g,'')); purchase=isNaN(v)?0:Math.max(0,v); render(); });
+        disb.addEventListener('blur', function(){ disb.value=fmtAmt(purchase); });
+      }
+    }
+    var back=document.querySelector('.actionbar .btn-ghost');
+    if(back){ back.textContent='Back to customer'; back.setAttribute('onclick',"nav('customer')"); }
+  }
+
+  if(isCash){
+    if(isNaN(purchase)||!purchase) purchase=Math.round(slBase());
+    setupCash();
+  } else if(dep){
+    dep.value=Number(deposit).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+  }
+  populateHeader();
+  render();
+})();
+  window.nav=function(where){ document.body.classList.remove("sim-active");
+    if(where==="search"){ if(window.goToSearch) window.goToSearch(false); else if(window.showScreen) window.showScreen("empty"); }
+    else if(where==="customer"){ if(window.gotoCustomerScreen) window.gotoCustomerScreen(__id); }
+    else if(where==="carts"){ if(window.openCustomerCarts) window.openCustomerCarts(__id); } };
+};
 
 </script>
 </body></html>
