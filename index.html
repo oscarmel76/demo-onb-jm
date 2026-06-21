@@ -6004,7 +6004,7 @@ window.initSimulation=function(params){
     var p=PROMOS[pi], list=termsList(), h='';
     for(var k=0;k<list.length;k++){ var t=list[k], st=statusOf(t), mx=(t===p.max);
       h+='<button class="term'+(t===term?' sel':'')+'" onclick="__pt('+t+')"><span class="term-l"><span class="term-t">'+t+' months</span>'+
-         (mx?'<span class="term-tag">Max</span>':'')+(t===term?'<span class="term-sel">Selected</span>':'')+'</span><span class="term-r"><span class="term-inst">'+money(instFor(t))+'/mo</span><span class="dot '+st+'"></span></span></button>';
+         (t===term?'<span class="term-sel">Selected</span>':'')+'</span><span class="term-r"><span class="term-inst">'+money(instFor(t))+'/mo</span><span class="dot '+st+'"></span></span></button>';
     }
     document.getElementById('terms').innerHTML=h;
   }
