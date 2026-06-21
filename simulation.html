@@ -567,11 +567,13 @@
     else if(where==='carts'){ msg.action='back-to-carts'; }
     if(window.parent&&window.parent!==window){ try{ window.parent.postMessage(msg,'*'); return; }catch(e){} } window.location.href='01-customer-search.html'; };
   var trnVal = (trnOnFile && cTrn) ? cTrn : '';
-  function trnOk(){ return (trnVal||'').replace(/[^0-9]/g,'').length>=9; }
+  function trnOk(){ if(!isCash) return true; return (trnVal||'').replace(/[^0-9]/g,'').length>=9; }
   function setupTrn(){
     var lbl=document.getElementById('trn-status'), val=document.getElementById('rev-trn'),
         inp=document.getElementById('rev-trn-input'), btn=document.getElementById('trn-update');
     if(!val) return;
+    var row=val.closest('.rev-crow'); if(row) row.style.display=isCash?'':'none';
+    if(!isCash){ updateSubmit(); return; }
     inp.oninput=function(){ trnVal=inp.value; if(inp.value.trim()) val.textContent=inp.value; updateSubmit(); };
     if(trnOnFile && cTrn){
       trnVal=cTrn; val.textContent=cTrn; val.style.display=''; inp.style.display='none';
