@@ -1452,7 +1452,9 @@ a {
 #screen-carts .carts-sub { font-size: 14px; color: var(--emma-gray-500); margin-top: 4px; text-wrap: pretty; }
 #screen-carts .carts-new-btn { display: inline-flex; align-items: center; gap: 6px; height: 44px; padding: 0 18px; border-radius: var(--radius-btn); border: 1.5px solid var(--emma-navy); color: var(--emma-navy); background: #fff; font-size: 14px; font-weight: var(--fw-bold); letter-spacing: 0.03em; white-space: nowrap; transition: background 0.15s ease; }
 #screen-carts .carts-new-btn:hover { background: var(--emma-bg-blue); }
-#screen-carts .carts-list { display: flex; flex-direction: column; gap: 12px; }
+#screen-carts .carts-list { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width:760px){ #screen-carts .carts-list { grid-template-columns: 1fr; } }
+#screen-carts .cart-empty { grid-column: 1 / -1; }
 
 #screen-carts .cart-card { background: #fff; border: 1px solid var(--emma-gray-200); border-radius: var(--radius-md); box-shadow: var(--shadow-card); padding: var(--space-6); display: flex; flex-direction: column; gap: var(--space-5); }
 #screen-carts .cart-top { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-5); }
