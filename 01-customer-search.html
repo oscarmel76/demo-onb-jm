@@ -1114,6 +1114,14 @@ a {
 #screen-register-customer .field-hint { font-size: 11px; color: var(--emma-gray-500); padding: 6px 0 0 14px; }
 
 #screen-register-customer .phone-control { padding-left: 78px; }
+#screen-register-customer #field-phone .phone-box{ display:flex; align-items:center; gap:8px; width:100%; height:48px; border:1.5px solid var(--emma-gray-300); border-radius:var(--radius-btn); background:var(--emma-white); padding:0 16px; box-sizing:border-box; transition:border-color .15s ease, border-width .15s ease; }
+#screen-register-customer #field-phone .phone-box:hover{ border-color:var(--emma-gray-500); }
+#screen-register-customer #field-phone .phone-box:focus-within{ border-color:var(--emma-navy); border-width:2px; padding:0 15px; }
+#screen-register-customer #field-phone .phone-pre{ flex:none; opacity:0; font-size:14px; font-weight:var(--fw-medium); color:var(--emma-black); transition:opacity .15s ease; }
+#screen-register-customer #field-phone .phone-inp{ flex:1 1 auto; min-width:0; border:0; outline:0; background:transparent; height:100%; padding:0; font-family:var(--font-brand); font-size:14px; color:var(--emma-black); }
+#screen-register-customer #field-phone .phone-inp::placeholder{ color:transparent; }
+#screen-register-customer #field-phone .phone-box:focus-within ~ .field-label, #screen-register-customer #field-phone.has-value .field-label{ top:-7px; font-size:11px; color:var(--emma-navy); }
+#screen-register-customer #field-phone .phone-box:focus-within .phone-pre, #screen-register-customer #field-phone.has-value .phone-pre{ opacity:1; }
 #screen-register-customer .phone-prefix { position: absolute; left: 16px; top: 30px; transform: translateY(-50%); font-size: 14px; color: var(--emma-black); font-weight: var(--fw-medium); pointer-events: none; opacity: 0; transition: opacity 0.15s ease; }
 #screen-register-customer .field.has-value .phone-prefix,
 #screen-register-customer .field-control:focus ~ .phone-prefix { opacity: 1; }
@@ -2983,8 +2991,7 @@ a {
                   </span>
                 </div>
                 <div class="field" id="field-phone">
-                  <input class="field-control phone-control" id="phone-control" type="tel" placeholder=" " inputmode="numeric" autocomplete="off">
-                  <span class="phone-prefix">+1 (876)</span>
+                  <div class="phone-box"><span class="phone-pre">+1 (876)</span><input class="phone-inp" id="phone-control" type="tel" placeholder=" " inputmode="numeric" autocomplete="off"></div>
                   <label class="field-label">Phone number</label>
                 </div>
                 <div class="field span-2" id="field-email">
