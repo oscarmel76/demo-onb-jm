@@ -3,6 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>Unicredit · Plataforma de crédito (demo)</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -82,7 +85,8 @@
         } else if (d.fromCarts) {
           var nextSrc = 'simulation.html?amount=' + encodeURIComponent(d.amount) +
                         '&down=' + encodeURIComponent(d.down) +
-                        '&cart=' + encodeURIComponent(d.acct || '') + '&fromCarts=1&v=' + V;
+                        '&cart=' + encodeURIComponent(d.acct || '') +
+                        '&id=' + encodeURIComponent(d.id || '') + '&fromCarts=1&v=' + V;
           if (hp.getAttribute('src') !== nextSrc) hp.setAttribute('src', nextSrc);
         } else if (hp.getAttribute('src').indexOf('mode=cash') >= 0 || hp.getAttribute('src').indexOf('fromCarts') >= 0) {
           hp.setAttribute('src', 'simulation.html?v=' + V);
@@ -97,11 +101,11 @@
       }
       else if (d.action === 'back-to-carts') {
         show('search');
-        try { search.contentWindow.postMessage({ __unicredit: true, action: 'goto-carts' }, '*'); } catch (e) {}
+        try { search.contentWindow.postMessage({ __unicredit: true, action: 'goto-carts', id: d.id }, '*'); } catch (e) {}
       }
       else if (d.action === 'goto-customer') {
         show('search');
-        try { search.contentWindow.postMessage({ __unicredit: true, action: 'goto-customer' }, '*'); } catch (e) {}
+        try { search.contentWindow.postMessage({ __unicredit: true, action: 'goto-customer', id: d.id }, '*'); } catch (e) {}
       }
     });
 

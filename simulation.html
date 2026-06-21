@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>Unicredit · Simulate financing</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -565,6 +568,7 @@
     if(where==='search'){ msg.action='back'; msg.reset=true; }
     else if(where==='customer'){ msg.action='goto-customer'; }
     else if(where==='carts'){ msg.action='back-to-carts'; }
+    msg.id = cId || '';
     if(window.parent&&window.parent!==window){ try{ window.parent.postMessage(msg,'*'); return; }catch(e){} } window.location.href='01-customer-search.html'; };
   var trnVal = (trnOnFile && cTrn) ? cTrn : '';
   function trnOk(){ if(!isCash) return true; return (trnVal||'').replace(/[^0-9]/g,'').length>=9; }
