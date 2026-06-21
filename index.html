@@ -32,8 +32,8 @@
 </head>
 <body>
   <div class="stage">
-    <iframe id="search" class="frame active" src="01-customer-search.html" title="Customer search"></iframe>
-    <iframe id="hp"     class="frame"        src="simulation.html"         title="Financing simulation"></iframe>
+    <iframe id="search" class="frame active" title="Customer search"></iframe>
+    <iframe id="hp"     class="frame"        title="Financing simulation"></iframe>
   </div>
 
   <div id="boot"><div class="dot"></div></div>
@@ -42,6 +42,11 @@
     var search = document.getElementById('search');
     var hp     = document.getElementById('hp');
     var boot   = document.getElementById('boot');
+
+    // Cache-bust the iframes on every shell load so redeploys always show fresh.
+    var V = Date.now();
+    search.src = '01-customer-search.html?v=' + V;
+    hp.src     = 'simulation.html?v=' + V;
 
     function show(which) {
       var on  = which === 'hp' ? hp : search;
@@ -72,15 +77,15 @@
                    '&trn=' + encodeURIComponent(d.trn || '') +
                    '&trnOnFile=' + (d.trnOnFile ? '1' : '0') +
                    '&arrears=' + (d.arrears ? '1' : '0') +
-                   '&id=' + encodeURIComponent(d.id || '');
+                   '&id=' + encodeURIComponent(d.id || '') + '&v=' + V;
           if (hp.getAttribute('src') !== cs) hp.setAttribute('src', cs);
         } else if (d.fromCarts) {
           var nextSrc = 'simulation.html?amount=' + encodeURIComponent(d.amount) +
                         '&down=' + encodeURIComponent(d.down) +
-                        '&cart=' + encodeURIComponent(d.acct || '') + '&fromCarts=1';
+                        '&cart=' + encodeURIComponent(d.acct || '') + '&fromCarts=1&v=' + V;
           if (hp.getAttribute('src') !== nextSrc) hp.setAttribute('src', nextSrc);
-        } else if (hp.getAttribute('src') !== 'simulation.html') {
-          hp.setAttribute('src', 'simulation.html');
+        } else if (hp.getAttribute('src').indexOf('mode=cash') >= 0 || hp.getAttribute('src').indexOf('fromCarts') >= 0) {
+          hp.setAttribute('src', 'simulation.html?v=' + V);
         }
         show('hp');
       }
