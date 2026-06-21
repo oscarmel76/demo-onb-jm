@@ -563,7 +563,7 @@
 
   window.nav=function(where){ var msg={__unicredit:true};
     if(where==='search'){ msg.action='back'; msg.reset=true; }
-    else if(where==='customer'){ msg.action='back'; }
+    else if(where==='customer'){ msg.action='goto-customer'; }
     else if(where==='carts'){ msg.action='back-to-carts'; }
     if(window.parent&&window.parent!==window){ try{ window.parent.postMessage(msg,'*'); return; }catch(e){} } window.location.href='01-customer-search.html'; };
   var trnVal = (trnOnFile && cTrn) ? cTrn : '';

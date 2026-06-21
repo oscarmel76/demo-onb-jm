@@ -94,6 +94,10 @@
         show('search');
         try { search.contentWindow.postMessage({ __unicredit: true, action: 'goto-carts' }, '*'); } catch (e) {}
       }
+      else if (d.action === 'goto-customer') {
+        show('search');
+        try { search.contentWindow.postMessage({ __unicredit: true, action: 'goto-customer' }, '*'); } catch (e) {}
+      }
     });
 
     // Hide the splash once the first (search) iframe has loaded.
