@@ -5220,7 +5220,6 @@ document.addEventListener('click', function(e){
     <div class="hd-meta">
       <span><b>ID</b> 998887776</span>
       <span><b>COSCACS</b> JMJS000543</span>
-      <span><b>Net income</b> $54,000.00 / mo</span>
     </div>
   </header>
 
@@ -6164,15 +6163,14 @@ window.initSimulation=function(params){
   function decode(s){ try{ return decodeURIComponent(s); }catch(e){ return s; } }
   function populateHeader(){
     if(!cName) return;
-    var nm=document.querySelector('.hd-name'); if(nm) nm.textContent=decode(cName);
-    var rc=document.querySelector('.chip.rating'); if(rc) rc.textContent='Rating '+cRating;
-    var ok=document.querySelector('.chip.ok');
+    var nm=document.querySelector('#screen-simulation .hd-name'); if(nm) nm.textContent=decode(cName);
+    var rc=document.querySelector('#screen-simulation .chip.rating'); if(rc) rc.textContent='Rating '+cRating;
+    var ok=document.querySelector('#screen-simulation .chip.ok');
     if(ok && cArrears){ ok.className='chip'; ok.style.background='rgba(244,54,76,.18)'; ok.style.borderColor='rgba(244,54,76,.4)'; ok.style.color='#FF9AA6'; ok.innerHTML='In arrears'; }
-    var meta=document.querySelector('.hd-meta');
+    var meta=document.querySelector('#screen-simulation .hd-meta');
     if(meta){ var idDigits=(cTrn||'').replace(/[^0-9]/g,'')||cId;
       meta.innerHTML='<span><b>ID</b> '+(idDigits||'—')+'</span>'+
-        (cCosacs?'<span><b>COSACS</b> '+cCosacs+'</span>':'')+
-        '<span><b>Net income</b> '+money(income)+' / mo</span>'; }
+        (cCosacs?'<span><b>COSACS</b> '+cCosacs+'</span>':''); }
   }
   function setupCash(){
     var cur=document.querySelector('.crumb .cur'); if(cur) cur.textContent='Simulate cash loan';
