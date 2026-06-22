@@ -1572,8 +1572,8 @@ a {
 .jada-redux .sl-figs span{ font-size:10.5px; letter-spacing:.05em; text-transform:uppercase; color:#535C90; font-weight:600; }
 .jada-redux .sl-figs b{ font-size:15px; font-weight:700; color:#171C8F; font-variant-numeric:tabular-nums; }
 .jada-redux .sl-bar{ position:relative; z-index:1; height:8px; border-radius:9999px;
-  background:#C8D0EC; margin-top:auto; overflow:hidden; }
-.jada-redux .sl-bar-fill{ height:100%; border-radius:0; background:#077A50; transition:width .6s cubic-bezier(.4,0,.2,1); }
+  background:#2BA86C; margin-top:auto; overflow:hidden; }
+.jada-redux .sl-bar-fill{ height:100%; border-radius:0; background:#9AA3C9; transition:width .6s cubic-bezier(.4,0,.2,1); }
 .jada-redux .sl-bar-legend{ position:relative; z-index:1; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; font-size:11.5px; color:#535C90; margin-top:10px; }
 
 /* MMI — SECONDARY */
@@ -1693,9 +1693,9 @@ a {
 
 /* Request limit increase — action inside the SL card */
 .jada-redux .sl-action{ display:inline-flex; align-items:center; gap:6px; background:transparent;
-  border:1px solid rgba(255,255,255,.45); color:#fff; font-family:inherit; font-size:12px; font-weight:600;
+  border:1px solid #C2CAE8; color:#3D478F; font-family:inherit; font-size:12px; font-weight:600;
   letter-spacing:.02em; padding:7px 14px; border-radius:9999px; cursor:pointer; transition:background .15s; }
-.jada-redux .sl-action:hover{ background:rgba(255,255,255,.12); }
+.jada-redux .sl-action:hover{ background:#DCE3F6; }
 .jada-redux .sl-action svg{ width:13px; height:13px; flex:none; }
 
 /* Toast */
@@ -3358,7 +3358,7 @@ a {
           <div><span>Used</span><b>$125,000.00</b></div>
         </div>
       </div>
-      <div class="sl-bar"><div class="sl-bar-fill" style="width:65%"></div></div>
+      <div class="sl-bar"><div class="sl-bar-fill" style="width:35%"></div></div>
       <div class="sl-bar-legend">
         <span>65% available · $232,249.70 of $357,249.70</span>
         <button class="sl-action" onclick="requestLimitIncrease()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg> Request limit increase</button>
@@ -3585,7 +3585,7 @@ a {
         <div><span>Used</span><b>$125,000.00</b></div>
       </div>
     </div>
-    <div class="sl-bar"><div class="sl-bar-fill" style="width:65%"></div></div>
+    <div class="sl-bar"><div class="sl-bar-fill" style="width:35%"></div></div>
     <div class="sl-bar-legend"><span>65% available · $232,249.70 of $357,249.70</span></div>
   </article>
 
@@ -5129,7 +5129,7 @@ document.addEventListener('click', function(e){
     if(pay){ if(arr){ pay.className='hd-chip arrears'; pay.innerHTML=ICON_X+' In arrears'; } else { pay.className='hd-chip ok'; pay.innerHTML=ICON_CHK+' Up to date'; } }
     set('rc-sl-avail', dMoney(slAvail)); set('rc-sl-limit', dMoney(slTotal)); set('rc-sl-used', dMoney(slUsed));
     set('rc-sl-legend', availPct+'% available · '+dMoney(slAvail)+' of '+dMoney(slTotal));
-    var slb=document.getElementById('rc-sl-bar'); if(slb) slb.style.width=availPct+'%';
+    var slb=document.getElementById('rc-sl-bar'); if(slb) slb.style.width=usedPct+'%';
     set('rc-mmi-avail', dMoney(availMmi)); set('rc-mmi-cap', dMoney(mmiCap)); set('rc-mmi-committed', dMoney(c.committed)); set('rc-mmi-avail2', dMoney(availMmi));
     var mb=document.getElementById('rc-mmi-bar'); if(mb) mb.style.width=(mmiCap>0?Math.round(c.committed/mmiCap*100):0)+'%';
     set('rc-hp-avail', dMoney(hpAvail)); set('rc-cash-avail', dMoney(cashAvail));
@@ -5651,7 +5651,7 @@ a:focus-visible, button:focus-visible, [role="button"]:focus-visible, [onclick]:
     var figs=root.querySelectorAll(".sl-figs b");
     if(figs[0]) figs[0].textContent=money(d.limit);
     if(figs[1]) figs[1].textContent=money(d.used);
-    var availPct=d.limit>0?Math.round(avail/d.limit*100):0; var fill=root.querySelector(".sl-bar-fill"); if(fill) fill.style.width=availPct+"%";
+    var availPct=d.limit>0?Math.round(avail/d.limit*100):0; var fill=root.querySelector(".sl-bar-fill"); if(fill) fill.style.width=pct+"%";
     var leg=root.querySelector(".sl-bar-legend span"); if(leg) leg.textContent=availPct+"% available - "+money(avail)+" of "+money(d.limit);
   }
   function cardHTML(c,key,avail){
