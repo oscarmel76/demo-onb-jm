@@ -5785,6 +5785,14 @@ a:focus-visible, button:focus-visible, [role="button"]:focus-visible, [onclick]:
       supporting:sup("Alliance Financial Services","28 Nov 2023")}
   };
   window.CUSTOMER_FULL=CUSTOMER_FULL;
+  /* ===== contact history (versioned phone/email/address) ===== */
+  window.ensureContactLog=function(c){ if(!c) return; if(!c.contactLog){ var d=c.updated||todayStr(); c.contactLog={ phone:[{value:c.phone||"",date:d}], email:[{value:c.email||"",date:d}], address:[{value:c.address||"",date:d}] }; } };
+  window.curContact=function(c,f){ window.ensureContactLog(c); var a=c.contactLog[f]; return a[a.length-1].value; };
+  window.addContactVersion=function(c,f,val){ window.ensureContactLog(c); val=(val||"").trim(); if(!val) return false; var a=c.contactLog[f]; if(a[a.length-1].value===val) return false; a.push({value:val,date:todayStr()}); c[f]=val; return true; };
+  window.contactHistProfile=function(c,f){ window.ensureContactLog(c); var a=c.contactLog[f]; if(a.length<=1) return ""; var rows=""; for(var i=a.length-1;i>=0;i--){ var cur=(i===a.length-1); rows+="<div style='display:flex;justify-content:space-between;gap:10px;align-items:flex-start;"+(cur?"":"opacity:.65;")+"'><div><div style='font-size:13px;font-weight:"+(cur?"600":"500")+";color:"+(cur?"#1A1B1E":"#5a6072")+";"+(cur?"":"text-decoration:line-through;")+"'>"+a[i].value+"</div><div style='font-size:11px;color:#9A9AB0;'>"+a[i].date+"</div></div>"+(cur?"<span style='font-size:10px;font-weight:700;color:#15A35B;white-space:nowrap;'>CURRENT</span>":"")+"</div>"; } return "<details style='margin-top:9px;'><summary style='font-size:12px;font-weight:600;color:#171C8F;cursor:pointer;'>History ("+a.length+")</summary><div style='margin-top:8px;border-left:2px solid #ECECF4;padding-left:12px;display:flex;flex-direction:column;gap:9px;'>"+rows+"</div></details>"; };
+  window.contactHistReview=function(c,f){ window.ensureContactLog(c); var a=c.contactLog[f]; if(a.length<=1) return ""; var prev=a.slice(0,a.length-1).slice(-2).reverse(); var sx=prev.map(function(e){ return "<span style='text-decoration:line-through;'>"+e.value+"</span> <span style='color:#B6B6C6;'>("+e.date+")</span>"; }).join(" &middot; "); return "<div style='font-size:11px;color:#9A9AB0;margin-top:5px;'>Previous: "+sx+"</div>"; };
+  function profAddrValue(){ var st=((document.getElementById('pf-addr-street')||{}).value||"").trim(); var p=(document.getElementById('pf-addr-parish')||{}).value||""; var K=(p==="Kingston"||p==="St. Andrew"); var loc=K?((document.getElementById('pf-addr-zone')||{}).value||""):(((document.getElementById('pf-addr-city')||{}).value||"").trim()); var bits=[]; if(st)bits.push(st); if(loc)bits.push(loc); if(p)bits.push(p); return bits.join(", "); }
+  (function(){ var CF=window.CUSTOMER_FULL||{}; var j=CF.jada; if(j){ window.ensureContactLog(j); if(j.contactLog.phone.length===1) j.contactLog.phone.unshift({value:"+1 876 401 9920",date:"Mar 02, 2026"}); if(j.contactLog.address.length===1) j.contactLog.address.unshift({value:"7 Caledonia Avenue, Kingston 5, St. Andrew",date:"Nov 12, 2025"}); } })();
 
   function roRow(label,val){ return "<div style='display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid #F0F0F6;font-size:13px;'><span style='color:#7C878E;'>"+label+"</span><span style='font-weight:600;color:#1A1B1E;text-align:right;'>"+val+"</span></div>"; }
   function editF(label,val,full){ return "<div"+(full?" style='grid-column:1/-1;'":"")+"><div style='font-size:11px;font-weight:600;color:#7C878E;margin-bottom:5px;'>"+label+"</div><input class='prof-edit' value='"+val+"' style='width:100%;height:42px;border:1.5px solid #C7CBF0;border-radius:9px;padding:0 12px;font-family:inherit;font-size:14px;color:#1A1B1E;outline:none;box-sizing:border-box;'></div>"; }
@@ -5818,7 +5826,11 @@ function contactCard(c){ return "<section style='background:#fff;border:1px soli
     "<div style='display:flex;align-items:center;gap:9px;'><span style='font-size:13px;font-weight:700;'>Contact information</span><span style='font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#15A35B;background:#E1F5EE;padding:2px 8px;border-radius:9999px;'>Editable</span></div>"+
     "<button id='prof-save' disabled style='height:36px;padding:0 16px;border:0;border-radius:9px;background:#E4E4EF;color:#9A9AB0;font-family:inherit;font-size:13px;font-weight:700;cursor:not-allowed;transition:background .2s,color .2s;'>Save changes</button></div>"+
     "<div style='font-size:11.5px;color:#7C878E;margin-bottom:16px;'>Only phone, email and address can be updated. Everything else is read-only from onboarding.</div>"+
-    "<div style='display:grid;grid-template-columns:1fr 1fr;gap:14px;'>"+editF("Phone number",c.phone)+editF("Email",c.email)+addrField(c.address)+"</div></section>"; }
+    "<div style='display:grid;grid-template-columns:1fr 1fr;gap:14px;'>"+
+    "<div><div style='font-size:11px;font-weight:600;color:#7C878E;margin-bottom:5px;'>Phone number</div><input id='pf-phone' class='prof-edit' value='"+window.curContact(c,'phone')+"' style='width:100%;height:42px;border:1.5px solid #C7CBF0;border-radius:9px;padding:0 12px;font-family:inherit;font-size:14px;color:#1A1B1E;outline:none;box-sizing:border-box;'>"+window.contactHistProfile(c,'phone')+"</div>"+
+    "<div><div style='font-size:11px;font-weight:600;color:#7C878E;margin-bottom:5px;'>Email</div><input id='pf-email' class='prof-edit' value='"+window.curContact(c,'email')+"' style='width:100%;height:42px;border:1.5px solid #C7CBF0;border-radius:9px;padding:0 12px;font-family:inherit;font-size:14px;color:#1A1B1E;outline:none;box-sizing:border-box;'>"+window.contactHistProfile(c,'email')+"</div>"+
+    addrField(window.curContact(c,'address'))+"<div style='grid-column:1/-1;'>"+window.contactHistProfile(c,'address')+"</div>"+
+    "</div></section>"; }
   function personalCard(c){ return "<section style='background:#fff;border:1px solid #E8E8F4;border-radius:16px;padding:20px;'><div style='font-size:13px;font-weight:700;margin-bottom:10px;'>Personal information</div>"+roRow("Full name",c.name)+roRow("Date of birth",c.dob)+roRow("Gender",c.gender)+roRow("Nationality",c.nationality)+roRow("Marital status",c.marital)+roRow("TRN",c.trnOnFile?c.trn:"—")+"</section>"; }
   function employmentCard(c){ return "<section style='background:#fff;border:1px solid #E8E8F4;border-radius:16px;padding:20px;'><div style='font-size:13px;font-weight:700;margin-bottom:10px;'>Employment</div>"+roRow("Employer",c.employer)+roRow("Position",c.position)+roRow("Net monthly income",money(c.income))+roRow("Years employed",c.employed)+roRow("Work phone",c.workphone)+"</section>"; }
   function docCard(d){ return "<div class='prof-doc-card' style='border:1px solid #E8E8F4;border-radius:11px;padding:13px;'>"+
@@ -5863,7 +5875,7 @@ function contactCard(c){ return "<section style='background:#fff;border:1px soli
       "<a id='prof-back' style='cursor:pointer;color:#fff;font-size:13px;font-weight:600;text-decoration:underline;'>&lsaquo; Back to customer details</a>"+
       "<div style='display:flex;align-items:center;gap:11px;flex-wrap:wrap;margin-top:14px;'><h1 style='font-size:25px;font-weight:700;margin:0;letter-spacing:-.01em;'>"+c.name+"</h1><span style='font-size:11.5px;font-weight:600;background:#fff;color:#171C8F;border-radius:9999px;padding:4px 11px;'>Rating "+c.rating+"</span>"+okChip+"</div>"+
       "<div style='display:flex;flex-wrap:wrap;gap:8px 26px;margin-top:11px;font-size:12.5px;color:#CDD0F0;'><span>TRN "+(c.trnOnFile?c.trn:"<span style='color:#8E93C8'>&mdash;</span>")+"</span>"+((!c.trnOnFile&&c.primaryDoc)?"<span>"+c.primaryDoc.label+" "+c.primaryDoc.number+"</span>":"")+"<span>COSACS "+c.cosacs+"</span></div></div></header>"+
-      "<div style='max-width:1120px;margin:0 auto;padding:clamp(16px,2.4vw,28px) clamp(24px,4vw,48px) 60px;'>"+contactCard(c)+
+      "<div style='max-width:1120px;margin:0 auto;padding:clamp(16px,2.4vw,28px) clamp(24px,4vw,48px) 60px;'>"+"<div id='prof-contact-wrap'>"+contactCard(c)+"</div>"+
       "<div style='display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;'>"+personalCard(c)+employmentCard(c)+"</div>"+
       "<section id='prof-docs' style='background:#fff;border:1px solid #E8E8F4;border-radius:16px;padding:20px;margin-top:16px;'>"+docsSectionHTML(c)+"</section>"+
       "<section style='background:#fff;border:1px solid #E8E8F4;border-radius:16px;padding:20px;margin-top:16px;'>"+supportingSectionHTML(c)+"</section></div>";
@@ -5903,7 +5915,7 @@ function contactCard(c){ return "<section style='background:#fff;border:1px soli
       if(t.closest && t.closest("#prof-add-doc")){ var f=document.getElementById("prof-add-form"); if(f){ f.style.display=(f.style.display==="none"||!f.style.display)?"block":"none"; var ni=document.getElementById("prof-add-num"); if(ni&&f.style.display==="block") ni.focus(); } return; }
       if(t.closest && t.closest("#prof-add-confirm")){ addDocConfirm(); return; }
       if(t.closest && t.closest("#prof-add-cancel")){ var f2=document.getElementById("prof-add-form"); if(f2) f2.style.display="none"; pendingPhoto=null; return; }
-      if(t.closest && t.closest("#prof-save")){ var b=document.getElementById("prof-save"); if(b&&!b.disabled){ b.textContent="Changes saved"; b.style.background="#26D07C"; b.style.color="#0c5733"; b.disabled=true; b.style.cursor="default"; setTimeout(function(){ b.textContent="Save changes"; b.style.background="#E4E4EF"; b.style.color="#9A9AB0"; b.style.cursor="not-allowed"; },1600); } return; }
+      if(t.closest && t.closest("#prof-save")){ var b=document.getElementById("prof-save"); if(b&&!b.disabled){ var c=CUSTOMER_FULL[window.__profileId]; if(c){ window.addContactVersion(c,'phone',(document.getElementById('pf-phone')||{}).value); window.addContactVersion(c,'email',(document.getElementById('pf-email')||{}).value); var _a=profAddrValue(); if(_a) window.addContactVersion(c,'address',_a); } b.textContent="Changes saved"; b.style.background="#26D07C"; b.style.color="#0c5733"; b.disabled=true; b.style.cursor="default"; setTimeout(function(){ var w=document.getElementById('prof-contact-wrap'); if(w&&c){ w.innerHTML=contactCard(c); if(window.initProfileAddr) initProfileAddr(window.curContact(c,'address')); } },1200); } return; }
     });
     pscreen.addEventListener("input",function(e){
       if(e.target&&e.target.classList&&e.target.classList.contains("prof-edit")){ var b=document.getElementById("prof-save"); if(b){ b.disabled=false; b.style.background="#171C8F"; b.style.color="#fff"; b.style.cursor="pointer"; } }
@@ -6187,6 +6199,12 @@ window.initSimulation=function(params){
     document.getElementById('rev-credit').innerHTML=h;
     document.getElementById('rev-summary').innerHTML=(isCash?'Cash loan':acct)+' · <b>'+money0(inst)+'/mo</b> over '+term+'m';
     setupTrn();
+    var _cf=(window.CUSTOMER_FULL||{})[cId];
+    if(_cf){ _el('rev-phone').textContent=window.curContact(_cf,'phone'); _el('rev-addr').textContent=window.curContact(_cf,'address');
+      (function(id){ if(!_el(id+'-hist')){ var v=_el(id); if(v) v.insertAdjacentHTML('afterend','<div id="'+id+'-hist"></div>'); } })('rev-phone');
+      (function(id){ if(!_el(id+'-hist')){ var v=_el(id); if(v) v.insertAdjacentHTML('afterend','<div id="'+id+'-hist"></div>'); } })('rev-addr');
+      var _ph=_el('rev-phone-hist'); if(_ph) _ph.innerHTML=window.contactHistReview(_cf,'phone');
+      var _ah=_el('rev-addr-hist'); if(_ah) _ah.innerHTML=window.contactHistReview(_cf,'address'); }
     document.getElementById('sim-view').style.display='none';
     document.getElementById('review-view').style.display='block';
     window.scrollTo(0,0);
@@ -6222,6 +6240,7 @@ window.initSimulation=function(params){
     document.getElementById('rev-submit').disabled = (c.length<3 || !st || !ok || !trnOk()); };
   window.submitReview=function(){
     var c=document.getElementById('rev-csr').value.trim(); var st=(document.getElementById('rev-store')||{}).value||''; var ok=(document.getElementById('rev-confirmchk')||{}).checked; if(c.length<3||!st||!ok||!trnOk()) return;
+    var _cf=(window.CUSTOMER_FULL||{})[cId]; if(_cf){ window.addContactVersion(_cf,'phone',(_el('rev-phone')||{}).textContent); window.addContactVersion(_cf,'address',(_el('rev-addr')||{}).textContent); }
     var t=document.getElementById('toast'); t.textContent='Credit request submitted · '+c+' · '+st;
     t.className='show'; clearTimeout(window.__t); window.__t=setTimeout(function(){ t.className=''; },3500);
     var b=document.getElementById('rev-submit'); b.disabled=true; b.textContent='Submitted';
