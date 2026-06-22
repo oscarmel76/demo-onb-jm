@@ -3237,6 +3237,8 @@ a {
 <!-- ============================================
      SCREEN · JADA MARCIA SMITH THOMPSON — dedicated home (added scenario)
      ============================================ -->
+<div class="screen" id="screen-pipeline" data-screen-label="Customer · pipeline"><div class="app"><aside class="sidebar" id="pipe-sidebar"></aside><main class="main"><div id="pipe-hd"></div><div class="content-area jada-redux" id="pipeline-body" style="padding:clamp(16px,2.4vw,28px) clamp(24px,4vw,48px) 60px;"></div></main></div></div>
+
 <div class="screen" id="screen-jada-home" data-screen-label="Home · Jada Marcia Smith Thompson">
   <div class="app">
 
@@ -5067,11 +5069,11 @@ document.addEventListener('click', function(e){
     trn:'150-662-049',cosacs:'SPRE441002',trnOnFile:false,primaryDoc:{label:'NIDS',number:'NIDS-662049'},dob:'16 / 05 / 1996',phone:'+1 876 288 9930', addr:'3 Caledonia Road, Mandeville, Manchester',type:'Current',rating:'A',status:'active',
     income:64000,dsr:0.40,committed:0,updated:'Jun 12, 2026'},
    {id:'tasheka',first:'Tasheka',mid:'Marie',last:'Powell',last2:'',full:'Tasheka Marie Powell',
-    trn:'',cosacs:'TMPO552014',trnOnFile:false,primaryDoc:{label:'Passport',number:'P2240551'},dob:'14 / 03 / 1994',phone:'+1 876 615 2208', addr:'19 Molynes Road, Kingston 11',type:'Current',rating:'\u2014',status:'preapproved',noClick:true},
+    trn:'',cosacs:'TMPO552014',trnOnFile:false,primaryDoc:{label:'Passport',number:'P2240551'},dob:'14 / 03 / 1994',phone:'+1 876 615 2208', addr:'19 Molynes Road, Kingston 11',type:'Current',rating:'A',status:'preapproved',income:69000,dsr:0.40,committed:0,updated:'Jun 20, 2026'},
    {id:'andre',first:'Andre',mid:'Christopher',last:'Hutchinson',last2:'',full:'Andre Christopher Hutchinson',
-    trn:'',cosacs:'ACHU663127',trnOnFile:false,primaryDoc:{label:'Licence',number:'1942776305'},dob:'07 / 09 / 1988',phone:'+1 876 482 9913', addr:'52 Hagley Park Road, Kingston 10',type:'Current',rating:'\u2014',status:'analysis',noClick:true},
+    trn:'',cosacs:'ACHU663127',trnOnFile:false,primaryDoc:{label:'Licence',number:'1942776305'},dob:'07 / 09 / 1988',phone:'+1 876 482 9913', addr:'52 Hagley Park Road, Kingston 10',type:'Current',rating:'\u2014',status:'analysis',sale:{acct:'HP-30311',financed:145000,submitted:'Jun 19, 2026',product:'Hired Purchase'}},
    {id:'camille',first:'Camille',mid:'Antoinette',last:'Bennett',last2:'',full:'Camille Antoinette Bennett',
-    trn:'',cosacs:'CABE774239',trnOnFile:false,primaryDoc:{label:"Voter's ID",number:'VID-558041'},dob:'21 / 12 / 1990',phone:'+1 876 339 5572', addr:'6 Washington Boulevard, Kingston 20',type:'Current',rating:'\u2014',status:'observed',noClick:true}
+    trn:'',cosacs:'CABE774239',trnOnFile:false,primaryDoc:{label:"Voter's ID",number:'VID-558041'},dob:'21 / 12 / 1990',phone:'+1 876 339 5572', addr:'6 Washington Boulevard, Kingston 20',type:'Current',rating:'\u2014',status:'observed',sale:{acct:'HP-30342',financed:98000,submitted:'Jun 17, 2026',product:'Hired Purchase'},observations:['Proof of income is older than 90 days — attach an updated payslip.','Address on the utility bill does not match the application.','Second reference phone number is unreachable.']}
   ];
 
   function norm(s){ return (s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,' ').replace(/\s+/g,' ').trim(); }
@@ -5138,7 +5140,7 @@ document.addEventListener('click', function(e){
     set('rc-name', c.full); var _CF=window.CUSTOMER_FULL||{},_cf=null; for(var _k in _CF){ if(_CF[_k]&&_CF[_k].cosacs===c.cosacs){ _cf=_CF[_k]; break; } } var _trnOn=_cf?_cf.trnOnFile:c.trnOnFile, _pd=_cf?_cf.primaryDoc:null; set('rc-id', _trnOn?c.trn:'\u2014'); var _pdw=document.getElementById('rc-pdoc-wrap'); if(_pdw){ if(!_trnOn&&_pd){ var _l=document.getElementById('rc-pdoc-lbl'),_n=document.getElementById('rc-pdoc'); if(_l)_l.textContent=_pd.label; if(_n)_n.textContent=_pd.number; _pdw.style.display=''; } else { _pdw.style.display='none'; var _l4=document.getElementById('rc-pdoc-lbl'),_n4=document.getElementById('rc-pdoc'); if(_l4)_l4.textContent=''; if(_n4)_n4.textContent=''; } }; set('rc-cosacs', c.cosacs); set('rc-phone', c.phone); set('rc-addr', c.updated||'—'); set('rc-updated', c.updated||'—');
     set('rc-rating', 'Rating '+c.rating);
     var pay=document.getElementById('rc-pay');
-    if(pay){ if(arr){ pay.className='hd-chip arrears'; pay.innerHTML=ICON_X+' In arrears'; } else { pay.className='hd-chip ok'; pay.innerHTML=ICON_CHK+' Up to date'; } }
+    if(pay){ pay.style.cssText=''; if(c.status==='preapproved'){ pay.className='hd-chip'; pay.style.cssText='background:rgba(255,255,255,.18);color:#fff;border:1px solid rgba(255,255,255,.4);'; pay.innerHTML='Pre-approved'; } else if(arr){ pay.className='hd-chip arrears'; pay.innerHTML=ICON_X+' In arrears'; } else { pay.className='hd-chip ok'; pay.innerHTML=ICON_CHK+' Up to date'; } }
     set('rc-sl-avail', dMoney(slAvail)); set('rc-sl-limit', dMoney(slTotal)); set('rc-sl-used', dMoney(slUsed));
     set('rc-sl-legend', availPct+'% available · '+dMoney(slAvail)+' of '+dMoney(slTotal));
     var slb=document.getElementById('rc-sl-bar'); if(slb) slb.style.width=usedPct+'%';
@@ -5152,7 +5154,35 @@ document.addEventListener('click', function(e){
     if(csc){ csc.disabled=arr; csc.classList.toggle('disabled', arr); }
     if(window.showScreen) window.showScreen('customer-details');
   }
-  function openCustomerById(id){ var c=byId(id); if(!c) return; if(c.noClick) return; if(c.home==='jada'){ if(window.openJadaHome) window.openJadaHome(); else window.showScreen('jada-home'); } else openCustomerDetails(c); }
+  function pipelineBodyHTML(c){
+    var sale=c.sale||{};
+    var banner = c.status==='analysis'
+      ? '<div style="background:#FFF6E9;border:1px solid #F3D9AE;border-radius:12px;padding:13px 16px;font-size:13px;color:#8A5A00;line-height:1.5;">Credit application under review &mdash; read-only until credit returns a decision.</div>'
+      : '<div style="background:#FCF3DA;border:1px solid #ECD79A;border-radius:12px;padding:13px 16px;font-size:13px;color:#7A5A00;line-height:1.5;">Returned with observations &mdash; the sales rep must update the application before it can continue.</div>';
+    var badge = c.status==='analysis'
+      ? '<span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;background:#FFF1DC;color:#9A6800;padding:4px 10px;border-radius:9999px;white-space:nowrap;">Under credit review</span>'
+      : '<span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;background:#FCEFC9;color:#8A6B00;padding:4px 10px;border-radius:9999px;white-space:nowrap;">Returned with observations</span>';
+    function col(k,v,clr){ return '<div><div style="font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:#9A9AB0;font-weight:600;">'+k+'</div><div style="font-size:15px;font-weight:700;color:'+(clr||'#1A1B1E')+';margin-top:3px;font-variant-numeric:tabular-nums;">'+v+'</div></div>'; }
+    var saleCard = '<section style="background:#fff;border:1px solid #E2E5EC;border-radius:14px;padding:18px 20px;box-shadow:var(--shadow);"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;"><div style="font-size:14px;font-weight:700;color:#1A1B1E;">Submitted sale &middot; '+(sale.acct||'&mdash;')+'</div>'+badge+'</div><div style="display:flex;gap:34px;margin-top:14px;flex-wrap:wrap;">'+col('Product',sale.product||'Hired Purchase')+col('Amount financed',dMoney(sale.financed||0),'#171C8F')+col('Submitted',sale.submitted||'&mdash;')+'</div></section>';
+    var obs='';
+    if(c.status==='observed'){
+      var items=(c.observations||[]).map(function(o){ return '<div style="display:flex;gap:9px;align-items:flex-start;font-size:13.5px;color:#3A3A44;line-height:1.5;"><span style="color:#C9A227;margin-top:1px;">&#9679;</span><span>'+o+'</span></div>'; }).join('');
+      obs='<section style="background:#fff;border:1px solid #ECD79A;border-radius:14px;padding:18px 20px;box-shadow:var(--shadow);"><div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#8A6B00;margin-bottom:12px;">Analyst observations &mdash; action required</div><div style="display:flex;flex-direction:column;gap:9px;">'+items+'</div><button onclick="ucToast(\'Opening credit application to update&hellip;\')" style="margin-top:16px;height:46px;padding:0 22px;border:0;border-radius:11px;background:#171C8F;color:#fff;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;">Update credit application &rarr;</button></section>';
+    }
+    return '<div style="max-width:1120px;margin:0 auto;display:flex;flex-direction:column;gap:14px;">'+banner+saleCard+obs+'</div>';
+  }
+  window.openPipelineCustomer=function(c){
+    window.__activeCustId=c.id; window.__curCust=c;
+    var ps=document.getElementById('pipe-sidebar'); if(ps && !ps.children.length){ var src=document.querySelector('#screen-register-success .sidebar'); if(src) ps.innerHTML=src.innerHTML; }
+    var chip = c.status==='analysis'
+      ? '<span style="display:inline-flex;align-items:center;font-size:11.5px;font-weight:600;border-radius:9999px;padding:4px 11px;background:rgba(255,176,32,.22);color:#FFD27A;border:1px solid rgba(255,176,32,.5);">In analysis</span>'
+      : '<span style="display:inline-flex;align-items:center;font-size:11.5px;font-weight:600;border-radius:9999px;padding:4px 11px;background:rgba(246,190,0,.22);color:#FBE8A6;border:1px solid rgba(246,190,0,.5);">With observations</span>';
+    var dl=c.trnOnFile?'TRN':(c.primaryDoc?c.primaryDoc.label:'TRN'), dn=c.trnOnFile?c.trn:(c.primaryDoc?c.primaryDoc.number:'&mdash;');
+    document.getElementById('pipe-hd').innerHTML='<header class="blue-header jada-hd"><div class="hd-top"><nav class="breadcrumb"><a onclick="goToSearch(false)">New customer search</a><span class="sep">/</span><span class="current">Customer details</span></nav></div><div class="hd-main"><div class="hd-id"><div class="hd-id-text"><div class="hd-name-row"><h1 class="hd-name customer-name">'+c.full+'</h1>'+chip+'</div><div class="hd-meta"><span><b>'+dl+'</b> '+dn+'</span><span><b>COSACS</b> '+c.cosacs+'</span><span><b>Phone</b> '+c.phone+'</span></div></div></div></div></header>';
+    document.getElementById('pipeline-body').innerHTML=pipelineBodyHTML(c);
+    if(window.showScreen) window.showScreen('pipeline');
+  };
+  function openCustomerById(id){ var c=byId(id); if(!c) return; if(c.status==='analysis'||c.status==='observed'){ if(window.openPipelineCustomer) window.openPipelineCustomer(c); return; } if(c.home==='jada'){ if(window.openJadaHome) window.openJadaHome(); else window.showScreen('jada-home'); } else openCustomerDetails(c); }
 
   window.openCustomerFromRow=function(row){ openCustomerById(row.getAttribute('data-cid')); };
   window.openCustomerDetails=openCustomerDetails;
@@ -5650,6 +5680,7 @@ a:focus-visible, button:focus-visible, [role="button"]:focus-visible, [onclick]:
   var F48=16.5393;
   function custCarts(id){ var C=window.CUSTOMER_FULL||{}; var c=C[id]||C.jada; var ci=CARTITEMS[id]||CARTITEMS.jada; var mmiCap=(c.dsr||0.40)*c.income; return { limit:mmiCap*F48, used:(c.committed||0)*F48, carts:ci.carts||[] }; }
   var CARTITEMS={
+    tasheka:{carts:[]},
     jada:{ carts:[
       {acct:"HP-00471",count:"3 items",total:227000,deposit:57000,financed:170000,delivery:3500,warranty:8500,items:[["Living room set - 3-piece",120000],["Refrigerator - side-by-side",55000],["Smart TV 65 inch",40000]]},
       {acct:"HP-00488",count:"4 items",total:298000,deposit:74500,financed:223500,delivery:4000,warranty:9500,items:[["Sectional sofa - L-shape",110000],["French-door refrigerator",90000],["Washer and dryer pair",62000],["Microwave oven",12000]]},
@@ -5794,7 +5825,14 @@ a:focus-visible, button:focus-visible, [role="button"]:focus-visible, [onclick]:
       documents:[
                  {type:"nids",name:"NIDS",number:"NIDS-662049",uploaded:"28 Nov 2023",expires:"—"},
                  {type:"passport",name:"Passport",number:"S0490662",uploaded:"28 Nov 2023",expires:"04 Dec 2032"}],
-      supporting:sup("Alliance Financial Services","28 Nov 2023")}
+      supporting:sup("Alliance Financial Services","28 Nov 2023")},
+    tasheka:{name:"Tasheka Marie Powell",rating:"A",status:"preapproved",trn:"",cosacs:"TMPO552014",primaryDoc:{label:"Passport",number:"P2240551"},trnOnFile:false,updated:"Jun 20, 2026",
+      dob:"14 March 1994",gender:"Female",nationality:"Jamaican",marital:"Single",
+      phone:"+1 876 615 2208",email:"tasheka.powell@gmail.com",address:"19 Molynes Road, Kingston 11",
+      employer:"GraceKennedy Ltd",position:"Sales Associate",income:69000,employed:"1 year 3 months",workphone:"+1 876 922 3440",
+      dsr:0.40,committed:0,
+      documents:[{type:"passport",name:"Passport",number:"P2240551",uploaded:"20 Jun 2026",expires:"19 Jun 2034"}],
+      supporting:sup("GraceKennedy Ltd","20 Jun 2026")}
   };
   window.CUSTOMER_FULL=CUSTOMER_FULL;
   /* ===== contact history (versioned phone/email/address) ===== */
