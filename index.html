@@ -3119,7 +3119,7 @@ a {
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
         </button>
         <div class="hd-meta">
-          <span><b>TRN</b> <span id="rc-id">—</span></span>
+          <span><b>TRN</b> <span id="rc-id">—</span></span><span id="rc-pdoc-wrap" style="display:none"><b id="rc-pdoc-lbl"></b> <span id="rc-pdoc"></span></span>
           <span><b>COSACS</b> <span id="rc-cosacs">—</span></span>
           <span><b>Phone</b> <span id="rc-phone">—</span></span>
           <span><b>Updated</b> <span id="rc-addr">—</span></span>
@@ -5123,7 +5123,7 @@ document.addEventListener('click', function(e){
     var hpAvail=slAvail, cashAvail=availMmi*F36;
     var usedPct=(slTotal>0?Math.round(slUsed/slTotal*100):0);
     function set(id,v){ var e=document.getElementById(id); if(e) e.textContent=v; }
-    set('rc-name', c.full); set('rc-id', c.trn); set('rc-cosacs', c.cosacs); set('rc-phone', c.phone); set('rc-addr', c.updated||'—'); set('rc-updated', c.updated||'—');
+    set('rc-name', c.full); var _CF=window.CUSTOMER_FULL||{},_cf=null; for(var _k in _CF){ if(_CF[_k]&&_CF[_k].cosacs===c.cosacs){ _cf=_CF[_k]; break; } } var _trnOn=_cf?_cf.trnOnFile:c.trnOnFile, _pd=_cf?_cf.primaryDoc:null; set('rc-id', _trnOn?c.trn:'\u2014'); var _pdw=document.getElementById('rc-pdoc-wrap'); if(_pdw){ if(!_trnOn&&_pd){ var _l=document.getElementById('rc-pdoc-lbl'),_n=document.getElementById('rc-pdoc'); if(_l)_l.textContent=_pd.label; if(_n)_n.textContent=_pd.number; _pdw.style.display=''; } else { _pdw.style.display='none'; var _l4=document.getElementById('rc-pdoc-lbl'),_n4=document.getElementById('rc-pdoc'); if(_l4)_l4.textContent=''; if(_n4)_n4.textContent=''; } }; set('rc-cosacs', c.cosacs); set('rc-phone', c.phone); set('rc-addr', c.updated||'—'); set('rc-updated', c.updated||'—');
     set('rc-rating', 'Rating '+c.rating);
     var pay=document.getElementById('rc-pay');
     if(pay){ if(arr){ pay.className='hd-chip arrears'; pay.innerHTML=ICON_X+' In arrears'; } else { pay.className='hd-chip ok'; pay.innerHTML=ICON_CHK+' Up to date'; } }
@@ -5736,7 +5736,7 @@ a:focus-visible, button:focus-visible, [role="button"]:focus-visible, [onclick]:
                  {type:"passport",name:"Passport",number:"J1234567",uploaded:"12 May 2024",expires:"09 Aug 2030"},
                  {type:"license",name:"Driver's licence",number:"1234567890",uploaded:"12 May 2024",expires:"18 Jun 2027"}],
       supporting:sup("Sagicor Group Jamaica","12 May 2024")},
-    marcus:{name:"Marcus Anthony Brown",rating:"A",status:"active",trn:"117-204-558",cosacs:"MABR118042",trnOnFile:false,updated:"May 28, 2026",
+    marcus:{name:"Marcus Anthony Brown",rating:"A",status:"active",trn:"117-204-558",cosacs:"MABR118042",primaryDoc:{label:"Licence",number:"2045583117"},trnOnFile:false,updated:"May 28, 2026",
       dob:"22 July 1985",gender:"Male",nationality:"Jamaican",marital:"Married",
       phone:"+1 876 433 2107",email:"marcus.brown@gmail.com",address:"45 Constant Spring Road, Kingston 10",
       employer:"Digicel Jamaica",position:"Operations Manager",income:78000,employed:"4 years 1 month",workphone:"+1 876 511 5000",
@@ -5745,7 +5745,7 @@ a:focus-visible, button:focus-visible, [role="button"]:focus-visible, [onclick]:
                  {type:"license",name:"Driver's licence",number:"2045583117",uploaded:"03 Mar 2023",expires:"22 Jul 2028"},
                  {type:"voters",name:"Voters ID",number:"VID-558204",uploaded:"03 Mar 2023",expires:"—"}],
       supporting:sup("Digicel Jamaica","03 Mar 2023")},
-    keisha:{name:"Keisha Nicole Williams",rating:"B",status:"active",trn:"142-908-771",cosacs:"KNWI226310",trnOnFile:false,updated:"Jun 03, 2026",
+    keisha:{name:"Keisha Nicole Williams",rating:"B",status:"active",trn:"142-908-771",cosacs:"KNWI226310",primaryDoc:{label:"Passport",number:"K7781429"},trnOnFile:false,updated:"Jun 03, 2026",
       dob:"09 February 1991",gender:"Female",nationality:"Jamaican",marital:"Single",
       phone:"+1 876 501 7788",email:"keisha.williams@gmail.com",address:"8 Barbican Road, Kingston 8, St. Andrew",
       employer:"NCB Financial Group",position:"Customer Service Lead",income:51000,employed:"3 years 8 months",workphone:"+1 876 935 2340",
@@ -5753,7 +5753,7 @@ a:focus-visible, button:focus-visible, [role="button"]:focus-visible, [onclick]:
       documents:[{type:"trn",name:"TRN card",number:"142-908-771",uploaded:"19 Sep 2023",expires:"—"},
                  {type:"passport",name:"Passport",number:"K7781429",uploaded:"19 Sep 2023",expires:"21 Mar 2031"}],
       supporting:sup("NCB Financial Group","19 Sep 2023")},
-    devon:{name:"Devon Oneil Campbell",rating:"C",status:"arrears",trn:"133-870-216",cosacs:"DOCA339118",trnOnFile:false,updated:"Apr 11, 2026",
+    devon:{name:"Devon Oneil Campbell",rating:"C",status:"arrears",trn:"133-870-216",cosacs:"DOCA339118",primaryDoc:{label:"Voter's ID",number:"VID-216870"},trnOnFile:false,updated:"Apr 11, 2026",
       dob:"30 November 1979",gender:"Male",nationality:"Jamaican",marital:"Married",
       phone:"+1 876 770 4456",email:"devon.campbell@gmail.com",address:"27 Red Hills Road, Kingston 19",
       employer:"Jamaica Public Service",position:"Field Technician",income:42000,employed:"9 years 2 months",workphone:"+1 876 926 3000",
@@ -5762,7 +5762,7 @@ a:focus-visible, button:focus-visible, [role="button"]:focus-visible, [onclick]:
                  {type:"voters",name:"Voters ID",number:"VID-216870",uploaded:"07 Jan 2022",expires:"—"},
                  {type:"license",name:"Driver's licence",number:"8702161330",uploaded:"07 Jan 2022",expires:"30 Nov 2026"}],
       supporting:sup("Jamaica Public Service","07 Jan 2022")},
-    shanice:{name:"Shanice Patrice Reid",rating:"A",status:"active",trn:"150-662-049",cosacs:"SPRE441002",trnOnFile:false,updated:"Jun 12, 2026",
+    shanice:{name:"Shanice Patrice Reid",rating:"A",status:"active",trn:"150-662-049",cosacs:"SPRE441002",primaryDoc:{label:"NIDS",number:"NIDS-662049"},trnOnFile:false,updated:"Jun 12, 2026",
       dob:"16 May 1996",gender:"Female",nationality:"Jamaican",marital:"Single",
       phone:"+1 876 288 9930",email:"shanice.reid@gmail.com",address:"3 Caledonia Road, Mandeville, Manchester",
       employer:"Alliance Financial Services",position:"Marketing Associate",income:64000,employed:"2 years 5 months",workphone:"+1 876 962 1100",
@@ -5807,7 +5807,7 @@ function contactCard(c){ return "<section style='background:#fff;border:1px soli
     "<button id='prof-save' disabled style='height:36px;padding:0 16px;border:0;border-radius:9px;background:#E4E4EF;color:#9A9AB0;font-family:inherit;font-size:13px;font-weight:700;cursor:not-allowed;transition:background .2s,color .2s;'>Save changes</button></div>"+
     "<div style='font-size:11.5px;color:#7C878E;margin-bottom:16px;'>Only phone, email and address can be updated. Everything else is read-only from onboarding.</div>"+
     "<div style='display:grid;grid-template-columns:1fr 1fr;gap:14px;'>"+editF("Phone number",c.phone)+editF("Email",c.email)+addrField(c.address)+"</div></section>"; }
-  function personalCard(c){ return "<section style='background:#fff;border:1px solid #E8E8F4;border-radius:16px;padding:20px;'><div style='font-size:13px;font-weight:700;margin-bottom:10px;'>Personal information</div>"+roRow("Full name",c.name)+roRow("Date of birth",c.dob)+roRow("Gender",c.gender)+roRow("Nationality",c.nationality)+roRow("Marital status",c.marital)+roRow("TRN",c.trn)+"</section>"; }
+  function personalCard(c){ return "<section style='background:#fff;border:1px solid #E8E8F4;border-radius:16px;padding:20px;'><div style='font-size:13px;font-weight:700;margin-bottom:10px;'>Personal information</div>"+roRow("Full name",c.name)+roRow("Date of birth",c.dob)+roRow("Gender",c.gender)+roRow("Nationality",c.nationality)+roRow("Marital status",c.marital)+roRow("TRN",c.trnOnFile?c.trn:"—")+"</section>"; }
   function employmentCard(c){ return "<section style='background:#fff;border:1px solid #E8E8F4;border-radius:16px;padding:20px;'><div style='font-size:13px;font-weight:700;margin-bottom:10px;'>Employment</div>"+roRow("Employer",c.employer)+roRow("Position",c.position)+roRow("Net monthly income",money(c.income))+roRow("Years employed",c.employed)+roRow("Work phone",c.workphone)+"</section>"; }
   function docCard(d){ return "<div class='prof-doc-card' style='border:1px solid #E8E8F4;border-radius:11px;padding:13px;'>"+
     (d.photo?"<img class='prof-doc-thumb' src='"+d.photo+"' style='width:100%;height:72px;object-fit:cover;border-radius:8px;margin-bottom:10px;'>":"")+
@@ -5850,7 +5850,7 @@ function contactCard(c){ return "<section style='background:#fff;border:1px soli
     return "<header style='background:#171C8F;color:#fff;padding:22px clamp(24px,4vw,48px) 26px;border-bottom-left-radius:24px;border-bottom-right-radius:24px;'><div style='max-width:1120px;margin:0 auto;'>"+
       "<a id='prof-back' style='cursor:pointer;color:#fff;font-size:13px;font-weight:600;text-decoration:underline;'>&lsaquo; Back to customer details</a>"+
       "<div style='display:flex;align-items:center;gap:11px;flex-wrap:wrap;margin-top:14px;'><h1 style='font-size:25px;font-weight:700;margin:0;letter-spacing:-.01em;'>"+c.name+"</h1><span style='font-size:11.5px;font-weight:600;background:#fff;color:#171C8F;border-radius:9999px;padding:4px 11px;'>Rating "+c.rating+"</span>"+okChip+"</div>"+
-      "<div style='display:flex;flex-wrap:wrap;gap:8px 26px;margin-top:11px;font-size:12.5px;color:#CDD0F0;'><span>COSACS "+c.cosacs+"</span><span>TRN "+c.trn+"</span></div></div></header>"+
+      "<div style='display:flex;flex-wrap:wrap;gap:8px 26px;margin-top:11px;font-size:12.5px;color:#CDD0F0;'><span>TRN "+(c.trnOnFile?c.trn:"<span style='color:#8E93C8'>&mdash;</span>")+"</span>"+((!c.trnOnFile&&c.primaryDoc)?"<span>"+c.primaryDoc.label+" "+c.primaryDoc.number+"</span>":"")+"<span>COSACS "+c.cosacs+"</span></div></div></header>"+
       "<div style='max-width:1120px;margin:0 auto;padding:clamp(16px,2.4vw,28px) clamp(24px,4vw,48px) 60px;'>"+contactCard(c)+
       "<div style='display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;'>"+personalCard(c)+employmentCard(c)+"</div>"+
       "<section id='prof-docs' style='background:#fff;border:1px solid #E8E8F4;border-radius:16px;padding:20px;margin-top:16px;'>"+docsSectionHTML(c)+"</section>"+
@@ -5931,7 +5931,7 @@ function contactCard(c){ return "<section style='background:#fff;border:1px soli
     var ok=root.querySelector(".hd-chip.ok, .hd-chip.arrears");
     if(ok){ if(c.status==="arrears"){ ok.className="hd-chip arrears"; ok.innerHTML=IX+" In arrears"; } else { ok.className="hd-chip ok"; ok.innerHTML=ICK+" Up to date"; } }
     var meta=root.querySelector(".hd-meta");
-    if(meta){ meta.innerHTML="<span><b>TRN</b> "+c.trn+"</span><span><b>COSACS</b> "+c.cosacs+"</span><span><b>Phone</b> "+c.phone+"</span><span><b>Updated</b> "+(c.updated||"—")+"</span>"; }
+    if(meta){ meta.innerHTML="<span><b>TRN</b> "+(c.trnOnFile?c.trn:"<span style='color:#8E93C8'>&mdash;</span>")+"</span>"+((!c.trnOnFile&&c.primaryDoc)?"<span><b>"+c.primaryDoc.label+"</b> "+c.primaryDoc.number+"</span>":"")+"<span><b>COSACS</b> "+c.cosacs+"</span><span><b>Phone</b> "+c.phone+"</span><span><b>Updated</b> "+(c.updated||"—")+"</span>"; }
   };
   // Wrap openCustomerCarts so the carts screen header always reflects the real customer.
   var _occ=window.openCustomerCarts;
