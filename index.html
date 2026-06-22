@@ -5045,18 +5045,18 @@ document.addEventListener('click', function(e){
 
   var DB=[
    {id:'jada',first:'Jada',mid:'Marcia',last:'Smith',last2:'Thompson',full:'Jada Marcia Smith Thompson',
-    trn:'998-887-776',cosacs:'JMJS000543',dob:'18 / 06 / 1990',phone:'+1 876 978 4128', addr:'12 Hopefield Avenue, Kingston 6, St. Andrew',type:'Current',rating:'A',status:'active',home:'jada'},
+    trn:'998-887-776',cosacs:'JMJS000543',trnOnFile:true,primaryDoc:null,dob:'18 / 06 / 1990',phone:'+1 876 978 4128', addr:'12 Hopefield Avenue, Kingston 6, St. Andrew',type:'Current',rating:'A',status:'active',home:'jada'},
    {id:'marcus',first:'Marcus',mid:'Anthony',last:'Brown',last2:'',full:'Marcus Anthony Brown',
-    trn:'117-204-558',cosacs:'MABR118042',dob:'22 / 07 / 1985',phone:'+1 876 433 2107', addr:'45 Constant Spring Road, Kingston 10',type:'Current',rating:'A',status:'active',
+    trn:'117-204-558',cosacs:'MABR118042',trnOnFile:false,primaryDoc:{label:'Licence',number:'2045583117'},dob:'22 / 07 / 1985',phone:'+1 876 433 2107', addr:'45 Constant Spring Road, Kingston 10',type:'Current',rating:'A',status:'active',
     income:78000,dsr:0.40,committed:11000,updated:'May 28, 2026'},
    {id:'keisha',first:'Keisha',mid:'Nicole',last:'Williams',last2:'',full:'Keisha Nicole Williams',
-    trn:'142-908-771',cosacs:'KNWI226310',dob:'09 / 02 / 1991',phone:'+1 876 501 7788', addr:'8 Barbican Road, Kingston 8, St. Andrew',type:'Current',rating:'B',status:'active',
+    trn:'142-908-771',cosacs:'KNWI226310',trnOnFile:false,primaryDoc:{label:'Passport',number:'K7781429'},dob:'09 / 02 / 1991',phone:'+1 876 501 7788', addr:'8 Barbican Road, Kingston 8, St. Andrew',type:'Current',rating:'B',status:'active',
     income:51000,dsr:0.40,committed:5200,updated:'Jun 03, 2026'},
    {id:'devon',first:'Devon',mid:'Oneil',last:'Campbell',last2:'',full:'Devon Oneil Campbell',
-    trn:'133-870-216',cosacs:'DOCA339118',dob:'30 / 11 / 1979',phone:'+1 876 770 4456', addr:'27 Red Hills Road, Kingston 19',type:'Current',rating:'C',status:'arrears',
+    trn:'133-870-216',cosacs:'DOCA339118',trnOnFile:false,primaryDoc:{label:"Voter's ID",number:'VID-216870'},dob:'30 / 11 / 1979',phone:'+1 876 770 4456', addr:'27 Red Hills Road, Kingston 19',type:'Current',rating:'C',status:'arrears',
     income:42000,dsr:0.35,committed:7800,updated:'Apr 11, 2026'},
    {id:'shanice',first:'Shanice',mid:'Patrice',last:'Reid',last2:'',full:'Shanice Patrice Reid',
-    trn:'150-662-049',cosacs:'SPRE441002',dob:'16 / 05 / 1996',phone:'+1 876 288 9930', addr:'3 Caledonia Road, Mandeville, Manchester',type:'Current',rating:'A',status:'active',
+    trn:'150-662-049',cosacs:'SPRE441002',trnOnFile:false,primaryDoc:{label:'NIDS',number:'NIDS-662049'},dob:'16 / 05 / 1996',phone:'+1 876 288 9930', addr:'3 Caledonia Road, Mandeville, Manchester',type:'Current',rating:'A',status:'active',
     income:64000,dsr:0.40,committed:0,updated:'Jun 12, 2026'}
   ];
 
@@ -5177,7 +5177,7 @@ document.addEventListener('click', function(e){
   function recentItem(c){
     return '<div class="recent-item" data-cid="'+c.id+'">'+
       '<div class="recent-info"><div class="recent-name">'+c.full+'</div>'+
-      '<div class="recent-meta">'+(function(){var CF=window.CUSTOMER_FULL||{},cf=null;for(var k in CF){if(CF[k]&&CF[k].cosacs===c.cosacs){cf=CF[k];break;}}if(cf){return cf.trnOnFile?('TRN: '+cf.trn):(cf.primaryDoc?(cf.primaryDoc.label+': '+cf.primaryDoc.number):'TRN: \u2014');}return 'TRN: '+c.trn;})()+' · COSACS '+c.cosacs+'</div></div>'+
+      '<div class="recent-meta">'+(c.trnOnFile?('TRN: '+c.trn):(c.primaryDoc?(c.primaryDoc.label+': '+c.primaryDoc.number):'TRN: \u2014'))+' · COSACS '+c.cosacs+'</div></div>'+
       chip(c)+RCHEV+'</div>';
   }
   function buildRecents(){
