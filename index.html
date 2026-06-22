@@ -3227,7 +3227,7 @@ a {
 
   <div class="hist-row">
     <div><div class="hist-tt">Customer sales history</div><div class="hist-ds">View all active and closed purchases and loans</div></div>
-    <a class="hist-link" onclick="showScreen('sales-history')">See full history
+    <a class="hist-link" onclick="openSalesHistory((window.__curCust||{}).id||window.__activeCustId||'jada')">View sales history
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
     </a>
   </div>
@@ -3243,6 +3243,8 @@ a {
 <!-- ============================================
      SCREEN · JADA MARCIA SMITH THOMPSON — dedicated home (added scenario)
      ============================================ -->
+<div class="screen" id="screen-sales-history" data-screen-label="Customer sales history"><div class="app"><aside class="sidebar" id="sh-sidebar"></aside><main class="main"><div id="sh-hd"></div><div class="content-area jada-redux" id="sh-body" style="padding:clamp(16px,2.4vw,28px) clamp(24px,4vw,48px) 60px;"></div></main></div></div>
+
 <div class="screen" id="screen-pipeline" data-screen-label="Customer · pipeline"><div class="app"><aside class="sidebar" id="pipe-sidebar"></aside><main class="main"><div id="pipe-hd"></div><div class="content-area jada-redux" id="pipeline-body" style="padding:clamp(16px,2.4vw,28px) clamp(24px,4vw,48px) 60px;"></div></main></div></div>
 
 <div class="screen" id="screen-jada-home" data-screen-label="Home · Jada Marcia Smith Thompson">
@@ -3456,7 +3458,7 @@ a {
 
   <div class="hist-row">
     <div><div class="hist-tt">Customer sales history</div><div class="hist-ds">View all active and closed purchases and loans</div></div>
-    <a class="hist-link" onclick="showScreen('sales-history')">See full history
+    <a class="hist-link" onclick="openSalesHistory((window.__curCust||{}).id||window.__activeCustId||'jada')">View sales history
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
     </a>
   </div>
@@ -5264,6 +5266,100 @@ document.addEventListener('click', function(e){
     document.getElementById('pipe-hd').innerHTML='<header class="blue-header jada-hd"><div class="hd-top"><nav class="breadcrumb"><a onclick="goToSearch(false)">New customer search</a><span class="sep">/</span><span class="current">Customer details</span></nav></div><div class="hd-main"><div class="hd-id"><div class="hd-id-text"><div class="hd-name-row"><h1 class="hd-name customer-name">'+c.full+'</h1>'+chip+'</div><div class="hd-meta"><span><b>'+dl+'</b> '+dn+'</span><span><b>COSACS</b> '+c.cosacs+'</span><span><b>Phone</b> '+c.phone+'</span></div></div></div></div></header>';
     document.getElementById('pipeline-body').innerHTML=pipelineBodyHTML(c);
     if(window.showScreen) window.showScreen('pipeline');
+  };
+  /* ===== Customer sales history ===== */
+  function shSeed(str){ var h=2166136261>>>0; for(var i=0;i<str.length;i++){ h^=str.charCodeAt(i); h=Math.imul(h,16777619)>>>0; } return h>>>0; }
+  function shRng(seed){ var x=(seed>>>0)||1; return function(){ x^=x<<13; x>>>=0; x^=x>>>17; x^=x<<5; x>>>=0; return x/4294967296; }; }
+  var SH_MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function shDate(rnd,y0,y1){ var y=y0+Math.floor(rnd()*(y1-y0+1)),m=Math.floor(rnd()*12),d=Math.floor(rnd()*27)+1; return SH_MON[m]+' '+d+', '+y; }
+  function shM(n){ return '$'+Number(Math.round(n)).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+  function shGen(rnd,kind,active){
+    var total=[6,9,12,18,24,36][Math.floor(rnd()*6)];
+    var paid=active?Math.floor(rnd()*Math.min(total,4)):total;
+    var inst=Math.round(1200+rnd()*2600), rem=total-paid;
+    var out=active?Math.round(inst*rem*1.02):0;
+    var late=active&&rnd()<0.22?Math.floor(rnd()*25)+3:0;
+    var pre=kind==='hp'?['GZOV','MECA','IRMR','TVPR','FURN']:['CLOA','CSHL','LOAN'];
+    return { kind:kind, type:kind==='hp'?'Hired Purchase':'Cash Loan',
+      cosacs:'9100087'+(10000+Math.floor(rnd()*89999)), mambu:pre[Math.floor(rnd()*pre.length)]+(100+Math.floor(rnd()*899)),
+      activated:shDate(rnd,2024,2026), status:active?'Active':'Closed', rating:['A','A','A','B','B','C'][Math.floor(rnd()*6)],
+      outstanding:out, installment:inst, paid:paid, total:total, daysLate:late,
+      earlySettlement:active?Math.round(out*1.004):0, nextDue:active?shDate(rnd,2026,2026):'—', totalToPay:inst*total };
+  }
+  window.salesAccounts=function(id){ var rnd=shRng(shSeed(String(id||'x')));
+    var A={hp:[],cash:[]},C={hp:[],cash:[]}; var i;
+    for(i=0;i<2+Math.floor(rnd()*2);i++) A.hp.push(shGen(rnd,'hp',true));
+    for(i=0;i<1+Math.floor(rnd()*2);i++) A.cash.push(shGen(rnd,'cash',true));
+    for(i=0;i<1+Math.floor(rnd()*2);i++) C.hp.push(shGen(rnd,'hp',false));
+    for(i=0;i<1+Math.floor(rnd()*1);i++) C.cash.push(shGen(rnd,'cash',false));
+    return {active:A,closed:C};
+  };
+  function shRatingChip(r){ var c=r==='A'?['#0E7A55','#D5F2E3']:r==='B'?['#8A6B00','#FBEFC9']:['#C0283A','#FBDDE0']; return "<span style='font-size:9px;font-weight:700;text-transform:uppercase;color:"+c[0]+";background:"+c[1]+";padding:3px 8px;border-radius:9999px;'>"+r+"</span>"; }
+  function shStatusChip(st){ var on=st==='Active'; return "<span style='font-size:9px;font-weight:700;text-transform:uppercase;color:"+(on?'#0E7A55':'#7C878E')+";background:"+(on?'#D5F2E3':'#EDEDF2')+";padding:3px 8px;border-radius:9999px;'>"+st+"</span>"; }
+  function shAcctCard(a){
+    var pct=a.total?Math.max(4,Math.round(a.paid/a.total*100)):0;
+    var lateTxt=a.status!=='Active'?"<span style='font-size:12px;font-weight:700;color:#7C878E;'>● Closed</span>":(a.daysLate>0?"<span style='font-size:12px;font-weight:700;color:#C0283A;'>● "+a.daysLate+" days late</span>":"<span style='font-size:12px;font-weight:700;color:#0E7A55;'>● Up to date</span>");
+    var figs="<div style='display:flex;gap:26px;flex-wrap:wrap;margin-top:12px;align-items:flex-end;'>"+
+      "<div><div style='font-size:10px;text-transform:uppercase;color:#9A9AB0;font-weight:600;'>Outstanding</div><div style='font-size:17px;font-weight:800;color:#171C8F;'>"+shM(a.outstanding)+"</div></div>"+
+      "<div><div style='font-size:10px;text-transform:uppercase;color:#9A9AB0;font-weight:600;'>Installment</div><div style='font-size:14px;font-weight:700;color:#1A1B1E;'>"+shM(a.installment)+"/mo</div></div>"+
+      "<div style='min-width:108px;'><div style='font-size:10px;text-transform:uppercase;color:#9A9AB0;font-weight:600;'>Paid</div><div style='font-size:12px;color:#5a6072;margin:3px 0 4px;'>"+a.paid+" of "+a.total+"</div><div style='height:6px;border-radius:9999px;background:#ECECF4;overflow:hidden;'><div style='height:100%;width:"+pct+"%;background:"+(a.daysLate>0?'#E5566A':'#1C9657')+";'></div></div></div>"+
+      "<div style='margin-left:auto;'>"+lateTxt+"</div></div>";
+    var cartBtn=a.kind==='hp'?"<button data-sh-act='cart' style='font-size:12px;font-weight:600;color:#171C8F;background:#fff;border:1px solid #C7CBF0;border-radius:8px;padding:7px 12px;cursor:pointer;'>See cart</button>":"";
+    var detail="<div class='sh-acct-detail' style='display:none;border-top:1px solid #F0F0F6;margin-top:12px;padding-top:12px;'>"+
+      "<div style='display:flex;gap:30px;flex-wrap:wrap;'>"+
+        "<div><div style='font-size:10px;text-transform:uppercase;color:#9A9AB0;font-weight:600;'>Early settlement</div><div style='font-size:13px;font-weight:700;color:#1A1B1E;margin-top:2px;'>"+shM(a.earlySettlement)+"</div></div>"+
+        "<div><div style='font-size:10px;text-transform:uppercase;color:#9A9AB0;font-weight:600;'>Next due</div><div style='font-size:13px;font-weight:700;color:#1A1B1E;margin-top:2px;'>"+a.nextDue+"</div></div>"+
+        "<div><div style='font-size:10px;text-transform:uppercase;color:#9A9AB0;font-weight:600;'>Total to pay</div><div style='font-size:13px;font-weight:700;color:#1A1B1E;margin-top:2px;'>"+shM(a.totalToPay)+"</div></div>"+
+      "</div>"+
+      "<div style='display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;'>"+cartBtn+
+        "<button data-sh-act='statement' style='display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:#171C8F;background:#fff;border:1px solid #C7CBF0;border-radius:8px;padding:7px 12px;cursor:pointer;'><svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'></path><polyline points='7 10 12 15 17 10'></polyline><line x1='12' y1='15' x2='12' y2='3'></line></svg>Download account statement</button>"+
+        "<button data-sh-act='contract' style='display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:#171C8F;background:#fff;border:1px solid #C7CBF0;border-radius:8px;padding:7px 12px;cursor:pointer;'><svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'></path><polyline points='14 2 14 8 20 8'></polyline><line x1='9' y1='13' x2='15' y2='13'></line><line x1='9' y1='17' x2='15' y2='17'></line></svg>Download contract</button>"+
+      "</div></div>";
+    return "<div class='sh-acct' style='background:#fff;border:1px solid #E2E5EC;border-radius:12px;padding:14px 16px;'>"+
+      "<div class='sh-acct-head' data-sh-toggle style='cursor:pointer;'>"+
+        "<div style='display:flex;justify-content:space-between;align-items:flex-start;gap:10px;'><div><span style='font-size:14px;font-weight:700;color:#1A1B1E;'>"+a.type+"</span><div style='font-size:11px;color:#9A9AB0;margin-top:3px;'>MAMBU "+a.mambu+" · COSACS "+a.cosacs+" · activated "+a.activated+"</div></div>"+
+        "<div style='display:flex;gap:6px;align-items:center;flex:none;'>"+shStatusChip(a.status)+shRatingChip(a.rating)+"<span class='sh-chev' style='color:#9A9AB0;font-size:16px;'>▾</span></div></div>"+figs+
+      "</div>"+detail+"</div>";
+  }
+  function shGroup(label,kind,list){ if(!list.length) return ""; var icon=kind==='hp'?"<svg width='17' height='17' viewBox='0 0 24 24' fill='none' stroke='#1C9657' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='9' cy='20' r='1.4'></circle><circle cx='18' cy='20' r='1.4'></circle><path d='M2.5 3.5H5l2.2 11.1a1.6 1.6 0 0 0 1.6 1.3h8.5a1.6 1.6 0 0 0 1.6-1.25L21.5 7H6.2'></path></svg>":"<svg width='17' height='17' viewBox='0 0 24 24' fill='none' stroke='#1C9657' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='6' width='20' height='13' rx='2.5'></rect><path d='M2 10h20'></path></svg>";
+    var cards=list.map(shAcctCard).join("");
+    return "<div style='display:flex;align-items:center;gap:9px;margin:18px 0 10px;'><span style='width:30px;height:30px;border-radius:9px;background:rgba(28,150,103,.1);display:inline-flex;align-items:center;justify-content:center;'>"+icon+"</span><span style='font-size:14px;font-weight:700;color:#1A1B1E;'>"+label+"</span><span style='font-size:12px;color:#9A9AB0;'>"+list.length+"</span></div><div style='display:flex;flex-direction:column;gap:10px;'>"+cards+"</div>";
+  }
+  function shSummary(act){
+    var all=act.hp.concat(act.cash); var out=0,inst=0,late=0;
+    all.forEach(function(a){ out+=a.outstanding; inst+=a.installment; if(a.daysLate>0) late++; });
+    var pay=late>0?"<span style='display:inline-flex;align-items:center;gap:5px;color:#C0283A;'><span style='width:7px;height:7px;border-radius:50%;background:#E5566A;'></span>"+late+" past due</span>":"<span style='display:inline-flex;align-items:center;gap:5px;color:#0E7A55;'><span style='width:7px;height:7px;border-radius:50%;background:#1C9657;'></span>Up to date</span>";
+    return "<div style='background:#F7F8FF;border:1px solid #E6E9F5;border-radius:14px;padding:16px 20px;display:flex;gap:14px;flex-wrap:wrap;justify-content:space-between;'>"+
+      "<div><div style='font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:#7C878E;font-weight:600;'>Total outstanding</div><div style='font-size:24px;font-weight:800;color:#171C8F;letter-spacing:-.02em;'>"+shM(out)+"</div></div>"+
+      "<div><div style='font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:#7C878E;font-weight:600;'>Monthly installment</div><div style='font-size:18px;font-weight:700;color:#1A1B1E;margin-top:3px;'>"+shM(inst)+"</div></div>"+
+      "<div><div style='font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:#7C878E;font-weight:600;'>Active products</div><div style='font-size:18px;font-weight:700;color:#1A1B1E;margin-top:3px;'>"+all.length+"</div></div>"+
+      "<div><div style='font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:#7C878E;font-weight:600;'>Payment status</div><div style='font-size:14px;font-weight:700;margin-top:5px;'>"+pay+"</div></div></div>";
+  }
+  window.shTab=function(which){
+    ['active','closed'].forEach(function(t){ var p=document.getElementById('sh-pane-'+t); if(p) p.style.display=(t===which)?'block':'none';
+      var tb=document.getElementById('sh-tabbtn-'+t); if(tb){ tb.style.color=(t===which)?'#171C8F':'#9A9AB0'; tb.style.borderBottom=(t===which)?'2px solid #171C8F':'2px solid transparent'; tb.style.fontWeight=(t===which)?'700':'600'; } });
+  };
+  window.openSalesHistory=function(id){
+    id=id||window.__activeCustId||'jada'; var cf=(window.CUSTOMER_FULL||{})[id]||window.CUSTOMER_FULL.jada; window.__activeCustId=id; window.__shId=id;
+    var ps=document.getElementById('sh-sidebar'); if(ps && !ps.children.length){ var src=document.querySelector('#screen-register-success .sidebar'); if(src) ps.innerHTML=src.innerHTML; }
+    var dl=cf.trnOnFile?'TRN':(cf.primaryDoc?cf.primaryDoc.label:'TRN'), dn=cf.trnOnFile?cf.trn:(cf.primaryDoc?cf.primaryDoc.number:'—');
+    document.getElementById('sh-hd').innerHTML='<header class="blue-header jada-hd"><div class="hd-top"><nav class="breadcrumb"><a onclick="goToSearch(false)">New customer search</a><span class="sep">/</span><a onclick="window.openCustomerById(\''+id+'\')">Customer details</a><span class="sep">/</span><span class="current">Customer sales history</span></nav></div><div class="hd-main"><div class="hd-id"><div class="hd-id-text"><div class="hd-name-row"><h1 class="hd-name customer-name">'+cf.name+'</h1><button onclick="window.openProfile(\''+id+'\')" style="order:2;margin-left:auto;display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 14px;border:1.5px solid rgba(255,255,255,.35);background:rgba(255,255,255,.08);color:#fff;border-radius:9999px;font-family:inherit;font-size:12.5px;font-weight:700;cursor:pointer;">View customer profile &rarr;</button></div><div class="hd-meta"><span><b>'+dl+'</b> '+dn+'</span><span><b>COSACS</b> '+cf.cosacs+'</span><span><b>Phone</b> '+(cf.phone||'—')+'</span><span><b>Updated</b> '+(cf.updated||'—')+'</span></div></div></div></div></header>';
+    var acc=window.salesAccounts(id);
+    var na=acc.active.hp.length+acc.active.cash.length, nc=acc.closed.hp.length+acc.closed.cash.length;
+    var body="<h2 style='font-size:22px;font-weight:800;color:#171C8F;letter-spacing:-.01em;margin:0 0 14px;'>Customer sales history</h2>"+
+      "<div style='display:flex;gap:24px;border-bottom:1px solid #E6E9F5;margin-bottom:16px;'>"+
+        "<div id='sh-tabbtn-active' data-sh-tab='active' style='font-size:13px;font-weight:700;color:#171C8F;padding:0 2px 10px;border-bottom:2px solid #171C8F;cursor:pointer;'>Active <span style='color:#9A9AB0;'>"+na+"</span></div>"+
+        "<div id='sh-tabbtn-closed' data-sh-tab='closed' style='font-size:13px;font-weight:600;color:#9A9AB0;padding:0 2px 10px;border-bottom:2px solid transparent;cursor:pointer;'>Closed <span style='color:#C4C4D0;'>"+nc+"</span></div>"+
+      "</div>"+
+      "<div id='sh-pane-active'>"+shSummary(acc.active)+shGroup('Hired Purchases','hp',acc.active.hp)+shGroup('Cash Loans','cash',acc.active.cash)+"</div>"+
+      "<div id='sh-pane-closed' style='display:none;'>"+shGroup('Hired Purchases','hp',acc.closed.hp)+shGroup('Cash Loans','cash',acc.closed.cash)+(nc===0?"<div style='font-size:13px;color:#9A9AB0;padding:20px 0;'>No closed accounts.</div>":"")+"</div>";
+    var sb=document.getElementById('sh-body'); sb.innerHTML=body;
+    if(!sb.__shBound){ sb.__shBound=true; sb.addEventListener('click',function(e){
+      var tg=e.target.closest&&e.target.closest('[data-sh-toggle]'); if(tg){ var det=tg.parentNode.querySelector('.sh-acct-detail'); if(det){ var open=det.style.display!=='none'; det.style.display=open?'none':'block'; var ch=tg.querySelector('.sh-chev'); if(ch) ch.textContent=open?'▾':'▴'; } return; }
+      var ab=e.target.closest&&e.target.closest('[data-sh-act]'); if(ab){ var a=ab.getAttribute('data-sh-act'); var m=a==='cart'?'Opening cart…':a==='statement'?'Downloading account statement…':'Downloading contract…'; if(window.ucToast) window.ucToast(m); return; }
+      var tb=e.target.closest&&e.target.closest('[data-sh-tab]'); if(tb){ window.shTab(tb.getAttribute('data-sh-tab')); return; }
+    }); }
+    if(window.showScreen) window.showScreen('sales-history');
   };
   function openCustomerById(id){ var c=byId(id); if(!c) return; if(c.status==='analysis'||c.status==='observed'){ if(window.openPipelineCustomer) window.openPipelineCustomer(c); return; } if(c.home==='jada'){ if(window.openJadaHome) window.openJadaHome(); else window.showScreen('jada-home'); } else openCustomerDetails(c); }
 
