@@ -4455,6 +4455,7 @@ function refineResults() {
   var RECORDS = {
     rosa: {
       fullName: 'Rosa Andrew Williams',
+      customerKey: 'rosa',
       customerId: 'UC-1004732',
       cosacs: 'RAWL150873',
       docTypeLabel: "Driver's licence",
@@ -4876,7 +4877,12 @@ function refineResults() {
             m.classList.toggle('is-selected', i === selectedIdx);
           });
         }
-        else if (act === 'profile' || act === 'openSelected') { card.innerHTML = renderProfile(result); wire(card, result); }
+        else if (act === 'profile' || act === 'openSelected') {
+          var _rec = result.record || (result.matches ? result.matches[selectedIdx] : null);
+          var _key = _rec && _rec.customerKey;
+          if (_key && window.openCustomerById && (window.CUSTOMER_FULL||{})[_key]) { closeModal(); window.openCustomerById(_key); window.scrollTo(0,0); return; }
+          card.innerHTML = renderProfile(result); wire(card, result);
+        }
         else if (act === 'back') { card.innerHTML = renderMain(result); wire(card, result); }
         else if (act === 'addDoc') { card.innerHTML = renderAdded(result); wire(card, result); }
         else if (act === 'proceed') { proceedAnyway(); }
@@ -5063,6 +5069,8 @@ document.addEventListener('click', function(e){
   var DB=[
    {id:'jada',first:'Jada',mid:'Marcia',last:'Smith',last2:'Thompson',full:'Jada Marcia Smith Thompson',
     trn:'998-887-776',cosacs:'JMJS000543',trnOnFile:true,primaryDoc:null,dob:'18 / 06 / 1990',phone:'+1 876 978 4128', addr:'12 Hopefield Avenue, Kingston 6, St. Andrew',type:'Current',rating:'A',status:'active',home:'jada'},
+   {id:'rosa',first:'Rosa',mid:'Andrew',last:'Williams',last2:'',full:'Rosa Andrew Williams',
+    trn:'',cosacs:'RAWL150873',trnOnFile:false,primaryDoc:{label:"Driver's licence",number:'9290000 01'},dob:'14 / 03 / 1979',phone:'+1 876 412 8890', addr:'21 Mannings Hill Road, Kingston 8, St. Andrew',type:'Current',rating:'A',status:'active',income:95000,dsr:0.40,committed:12000,updated:'Jun 15, 2026'},
    {id:'marcus',first:'Marcus',mid:'Anthony',last:'Brown',last2:'',full:'Marcus Anthony Brown',
     trn:'117-204-558',cosacs:'MABR118042',trnOnFile:false,primaryDoc:{label:'Licence',number:'2045583117'},dob:'22 / 07 / 1985',phone:'+1 876 433 2107', addr:'45 Constant Spring Road, Kingston 10',type:'Current',rating:'A',status:'active',
     income:78000,dsr:0.40,committed:11000,updated:'May 28, 2026'},
@@ -5192,6 +5200,7 @@ document.addEventListener('click', function(e){
   function openCustomerById(id){ var c=byId(id); if(!c) return; if(c.status==='analysis'||c.status==='observed'){ if(window.openPipelineCustomer) window.openPipelineCustomer(c); return; } if(c.home==='jada'){ if(window.openJadaHome) window.openJadaHome(); else window.showScreen('jada-home'); } else openCustomerDetails(c); }
 
   window.openCustomerFromRow=function(row){ openCustomerById(row.getAttribute('data-cid')); };
+  window.openCustomerById=openCustomerById;
   window.openCustomerDetails=openCustomerDetails;
 
   function v(id){ var e=document.getElementById(id); return e? e.value.trim() : ''; }
@@ -5695,6 +5704,7 @@ a:focus-visible, button:focus-visible, [role="button"]:focus-visible, [onclick]:
   function custCarts(id){ var C=window.CUSTOMER_FULL||{}; var c=C[id]||C.jada; var ci=CARTITEMS[id]||CARTITEMS.jada; var mmiCap=(c.dsr||0.40)*c.income; return { limit:mmiCap*F48, used:(c.committed||0)*F48, carts:ci.carts||[] }; }
   var CARTITEMS={
     tasheka:{carts:[]},
+    rosa:{carts:[]},
     jada:{ carts:[
       {acct:"HP-00471",count:"3 items",total:227000,deposit:57000,financed:170000,delivery:3500,warranty:8500,items:[["Living room set - 3-piece",120000],["Refrigerator - side-by-side",55000],["Smart TV 65 inch",40000]]},
       {acct:"HP-00488",count:"4 items",total:298000,deposit:74500,financed:223500,delivery:4000,warranty:9500,items:[["Sectional sofa - L-shape",110000],["French-door refrigerator",90000],["Washer and dryer pair",62000],["Microwave oven",12000]]},
@@ -5846,7 +5856,14 @@ a:focus-visible, button:focus-visible, [role="button"]:focus-visible, [onclick]:
       employer:"GraceKennedy Ltd",position:"Sales Associate",income:69000,employed:"1 year 3 months",workphone:"+1 876 922 3440",
       dsr:0.35,committed:0,
       documents:[{type:"passport",name:"Passport",number:"P2240551",uploaded:"20 Jun 2026",expires:"19 Jun 2034"}],
-      supporting:sup("GraceKennedy Ltd","20 Jun 2026")}
+      supporting:sup("GraceKennedy Ltd","20 Jun 2026")},
+    rosa:{name:"Rosa Andrew Williams",rating:"A",status:"active",trn:"",cosacs:"RAWL150873",primaryDoc:{label:"Driver's licence",number:"9290000 01"},trnOnFile:false,updated:"Jun 15, 2026",
+      dob:"14 March 1979",gender:"Female",nationality:"Jamaican",marital:"Married",
+      phone:"+1 876 412 8890",homephone:"+1 876 924 7711",email:"rosa.williams@mail.com",address:"21 Mannings Hill Road, Kingston 8, St. Andrew",
+      employer:"Scotiabank Jamaica",position:"Branch Supervisor",income:95000,employed:"6 years 4 months",workphone:"+1 876 922 1000",
+      dsr:0.40,committed:12000,
+      documents:[{type:"license",name:"Driver's licence",number:"9290000 01",uploaded:"10 Mar 2020"}],
+      supporting:sup("Scotiabank Jamaica","10 Mar 2020")}
   };
   window.CUSTOMER_FULL=CUSTOMER_FULL;
   /* ===== contact history (versioned phone/email/address) ===== */
