@@ -5762,12 +5762,37 @@ a:focus-visible, button:focus-visible, [role="button"]:focus-visible, [onclick]:
 
   function roRow(label,val){ return "<div style='display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid #F0F0F6;font-size:13px;'><span style='color:#7C878E;'>"+label+"</span><span style='font-weight:600;color:#1A1B1E;text-align:right;'>"+val+"</span></div>"; }
   function editF(label,val,full){ return "<div"+(full?" style='grid-column:1/-1;'":"")+"><div style='font-size:11px;font-weight:600;color:#7C878E;margin-bottom:5px;'>"+label+"</div><input class='prof-edit' value='"+val+"' style='width:100%;height:42px;border:1.5px solid #C7CBF0;border-radius:9px;padding:0 12px;font-family:inherit;font-size:14px;color:#1A1B1E;outline:none;box-sizing:border-box;'></div>"; }
-  function contactCard(c){ return "<section style='background:#fff;border:1px solid #E8E8F4;border-radius:16px;padding:20px;'>"+
+  function addrField(addr){
+ var FS="width:100%;height:42px;border:1.5px solid #C7CBF0;border-radius:9px;padding:0 12px;font-family:inherit;font-size:14px;color:#1A1B1E;outline:none;box-sizing:border-box;";
+ return "<div style='grid-column:1/-1;'><div style='font-size:11px;font-weight:600;color:#7C878E;margin-bottom:5px;'>Address</div><div style='display:grid;grid-template-columns:1fr 1fr;gap:10px;'>"+
+ "<input id='pf-addr-street' class='prof-edit' placeholder='Street address' style='grid-column:1/-1;"+FS+"'>"+
+ "<select id='pf-addr-parish' class='prof-edit' style='"+FS+"background:#fff;cursor:pointer;'></select>"+
+ "<select id='pf-addr-zone' class='prof-edit' style='"+FS+"background:#fff;cursor:pointer;'></select>"+
+ "<input id='pf-addr-city' class='prof-edit' placeholder='City / town' style='"+FS+"'>"+
+ "</div></div>";
+}
+function initProfileAddr(addr){
+ var PAR=["Kingston","St. Andrew","St. Catherine","Clarendon","Manchester","St. Elizabeth","Westmoreland","Hanover","St. James","Trelawny","St. Ann","St. Mary","Portland","St. Thomas"];
+ var st=document.getElementById("pf-addr-street"),pa=document.getElementById("pf-addr-parish"),zo=document.getElementById("pf-addr-zone"),ci=document.getElementById("pf-addr-city");
+ if(!st) return;
+ pa.innerHTML="<option value=''>Parish</option>"+PAR.map(function(p){return "<option>"+p+"</option>";}).join("");
+ var z="<option value=''>Kingston zone</option>"; for(var i=1;i<=20;i++) z+="<option>Kingston "+i+"</option>"; zo.innerHTML=z;
+ function K(){ var p=pa.value; return p==="Kingston"||p==="St. Andrew"; }
+ function mode(){ zo.style.display=K()?"":"none"; ci.style.display=K()?"none":""; }
+ var parts=(addr||"").split(",").map(function(s){return s.trim();}).filter(Boolean),street="",loc="",p="";
+ if(parts.length>=3){ street=parts.slice(0,parts.length-2).join(", "); loc=parts[parts.length-2]; p=parts[parts.length-1]; }
+ else if(parts.length===2){ street=parts[0]; loc=parts[1]; } else { street=parts[0]||""; }
+ if(!p && /^Kingston\s+\d+/i.test(loc)) p="St. Andrew";
+ st.value=street; pa.value=(PAR.indexOf(p)>=0?p:"");
+ if(K()){ ci.value=""; zo.value=/^Kingston\s+\d+/i.test(loc)?loc:""; } else { zo.value=""; ci.value=loc; }
+ mode(); pa.addEventListener("change", mode);
+}
+function contactCard(c){ return "<section style='background:#fff;border:1px solid #E8E8F4;border-radius:16px;padding:20px;'>"+
     "<div style='display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:6px;'>"+
     "<div style='display:flex;align-items:center;gap:9px;'><span style='font-size:13px;font-weight:700;'>Contact information</span><span style='font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#15A35B;background:#E1F5EE;padding:2px 8px;border-radius:9999px;'>Editable</span></div>"+
     "<button id='prof-save' disabled style='height:36px;padding:0 16px;border:0;border-radius:9px;background:#E4E4EF;color:#9A9AB0;font-family:inherit;font-size:13px;font-weight:700;cursor:not-allowed;transition:background .2s,color .2s;'>Save changes</button></div>"+
     "<div style='font-size:11.5px;color:#7C878E;margin-bottom:16px;'>Only phone, email and address can be updated. Everything else is read-only from onboarding.</div>"+
-    "<div style='display:grid;grid-template-columns:1fr 1fr;gap:14px;'>"+editF("Phone number",c.phone)+editF("Email",c.email)+editF("Address",c.address,true)+"</div></section>"; }
+    "<div style='display:grid;grid-template-columns:1fr 1fr;gap:14px;'>"+editF("Phone number",c.phone)+editF("Email",c.email)+addrField(c.address)+"</div></section>"; }
   function personalCard(c){ return "<section style='background:#fff;border:1px solid #E8E8F4;border-radius:16px;padding:20px;'><div style='font-size:13px;font-weight:700;margin-bottom:10px;'>Personal information</div>"+roRow("Full name",c.name)+roRow("Date of birth",c.dob)+roRow("Gender",c.gender)+roRow("Nationality",c.nationality)+roRow("Marital status",c.marital)+roRow("TRN",c.trn)+"</section>"; }
   function employmentCard(c){ return "<section style='background:#fff;border:1px solid #E8E8F4;border-radius:16px;padding:20px;'><div style='font-size:13px;font-weight:700;margin-bottom:10px;'>Employment</div>"+roRow("Employer",c.employer)+roRow("Position",c.position)+roRow("Net monthly income",money(c.income))+roRow("Years employed",c.employed)+roRow("Work phone",c.workphone)+"</section>"; }
   function docCard(d){ return "<div class='prof-doc-card' style='border:1px solid #E8E8F4;border-radius:11px;padding:13px;'>"+
@@ -5811,7 +5836,7 @@ a:focus-visible, button:focus-visible, [role="button"]:focus-visible, [onclick]:
     return "<header style='background:#171C8F;color:#fff;padding:22px clamp(24px,4vw,48px) 26px;border-bottom-left-radius:24px;border-bottom-right-radius:24px;'><div style='max-width:1120px;margin:0 auto;'>"+
       "<a id='prof-back' style='cursor:pointer;color:#fff;font-size:13px;font-weight:600;text-decoration:underline;'>&lsaquo; Back to customer details</a>"+
       "<div style='display:flex;align-items:center;gap:11px;flex-wrap:wrap;margin-top:14px;'><h1 style='font-size:25px;font-weight:700;margin:0;letter-spacing:-.01em;'>"+c.name+"</h1><span style='font-size:11.5px;font-weight:600;background:#fff;color:#171C8F;border-radius:9999px;padding:4px 11px;'>Rating "+c.rating+"</span>"+okChip+"</div>"+
-      "<div style='display:flex;flex-wrap:wrap;gap:8px 26px;margin-top:11px;font-size:12.5px;color:#CDD0F0;'><span>ID "+c.trn.replace(/[^0-9]/g,"")+"</span><span>COSACS "+c.cosacs+"</span><span>TRN "+c.trn+"</span></div></div></header>"+
+      "<div style='display:flex;flex-wrap:wrap;gap:8px 26px;margin-top:11px;font-size:12.5px;color:#CDD0F0;'><span>COSACS "+c.cosacs+"</span><span>TRN "+c.trn+"</span></div></div></header>"+
       "<div style='max-width:1120px;margin:0 auto;padding:clamp(16px,2.4vw,28px) clamp(24px,4vw,48px) 60px;'>"+contactCard(c)+
       "<div style='display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;'>"+personalCard(c)+employmentCard(c)+"</div>"+
       "<section id='prof-docs' style='background:#fff;border:1px solid #E8E8F4;border-radius:16px;padding:20px;margin-top:16px;'>"+docsSectionHTML(c)+"</section>"+
@@ -5825,7 +5850,7 @@ a:focus-visible, button:focus-visible, [role="button"]:focus-visible, [onclick]:
     var fromEl=document.querySelector(".screen.active"); var from=fromEl?fromEl.id.replace(/^screen-/,""):"jada-home";
     window.__profileFrom=from;
     var root=document.querySelector("#screen-profile > div");
-    if(root){ root.innerHTML=buildProfile(c); }
+    if(root){ root.innerHTML=buildProfile(c); if(typeof initProfileAddr==="function") initProfileAddr(c.address); }
     if(window.showScreen) window.showScreen("profile");
     window.scrollTo(0,0);
   };
