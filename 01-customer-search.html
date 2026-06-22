@@ -5586,6 +5586,13 @@ a:focus-visible, button:focus-visible, [role="button"]:focus-visible, [onclick]:
   .jada-hd .hd-name-row:has(> button) .hd-name{ padding-right:0 !important; }
   .jada-hd .hd-name-row:has(> button) > button{ position:static !important; top:auto !important; right:auto !important; left:auto !important; order:3 !important; width:100% !important; box-sizing:border-box !important; margin:14px 0 0 !important; align-self:stretch !important; display:flex !important; justify-content:flex-start !important; align-items:center !important; height:auto !important; min-height:44px; border:0 !important; border-top:1px solid rgba(255,255,255,.2) !important; border-radius:0 !important; padding:13px 0 0 !important; background:transparent !important; }
 }
+
+/* Mobile: sales-history CTA -> full-width row below the text */
+@media (max-width:640px){
+  .hist-row{ align-items:flex-start !important; }
+  .hist-row > div:first-child{ width:100% !important; }
+  .hist-row .hist-link{ width:100% !important; margin:12px 0 0 !important; padding-top:12px !important; border-top:1px solid var(--line) !important; justify-content:flex-start !important; }
+}
 </style>
 <script id="app-logic">
 
