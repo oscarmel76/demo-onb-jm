@@ -5528,8 +5528,9 @@ a:focus-visible, button:focus-visible, [role="button"]:focus-visible, [onclick]:
 }
 
 /* ===================== carts-pack-css ===================== */
-.carts-view .cart-empty{ background:#fff;border:1px dashed var(--line);border-radius:14px;padding:34px 22px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px;box-shadow:var(--shadow); }
-.carts-view .cart-empty-ic{ width:46px;height:46px;border-radius:12px;background:rgba(23,28,143,.06);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:2px; }
+.carts-view .cart-empty{ background:#fff;border:1px solid var(--line);border-radius:16px;padding:44px 22px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:9px;box-shadow:var(--shadow); }
+.carts-view .cart-empty-ic{ width:60px;height:60px;border-radius:16px;background:rgba(23,28,143,.06);display:flex;align-items:center;justify-content:center;color:#171C8F;margin-bottom:4px; }
+.carts-view .cart-empty-ic svg{ width:28px;height:28px; }
 .carts-view .cart-empty-title{ font-size:16px;font-weight:800;color:var(--ink); }
 .carts-view .cart-empty-sub{ font-size:13px;color:var(--muted);max-width:460px;line-height:1.55; }
 .carts-view .cart-empty-sub b{ color:var(--navy); }
@@ -5733,7 +5734,7 @@ a:focus-visible, button:focus-visible, [role="button"]:focus-visible, [onclick]:
       +'<div class="cart-c-foot"><button class="cart-c-sim" onclick="simulateCart(&#39;'+key+'&#39;)">Simulate financing</button>'
       +'<button class="cart-c-see" onclick="openCart(&#39;'+key+'&#39;)">See cart</button></div></article>';
   }
-  var EMPTY='<div class="cart-empty"><div class="cart-empty-ic">&#128722;</div>'
+  var EMPTY='<div class="cart-empty"><div class="cart-empty-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M2.5 3.5H5l2.2 11.1a1.6 1.6 0 0 0 1.6 1.3h8.5a1.6 1.6 0 0 0 1.6-1.25L21.5 7H6.2"></path></svg></div>'
     +'<div class="cart-empty-title">No shopping carts yet</div>'
     +'<div class="cart-empty-sub">This customer has no carts ready to finance. A cart must be submitted from <b>COSACS</b> first &mdash; once it is sent across, it will appear here to review, simulate and finance.</div>'
     +'<div class="cart-empty-tag">Submit from COSACS to continue</div></div>';
