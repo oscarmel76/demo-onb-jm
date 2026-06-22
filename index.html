@@ -4529,8 +4529,8 @@ function refineResults() {
       lastName: val('lastname-control'),
       secondLastName: val('secondlastname-control'),
       dob: val('dob-control'),
-      phone: val('phone-control') ? ('+1 '+(($('#ob-cell-area')||{}).value||'876')+' '+val('phone-control')) : '',
-      homephone: val('ob-home-num') ? ('+1 '+(($('#ob-home-area')||{}).value||'876')+' '+val('ob-home-num')) : '',
+      phone: val('phone-control') ? ('+1 '+((document.getElementById('ob-cell-area')||{}).value||'876')+' '+val('phone-control')) : '',
+      homephone: val('ob-home-num') ? ('+1 '+((document.getElementById('ob-home-area')||{}).value||'876')+' '+val('ob-home-num')) : '',
       email: val('email-control')
     };
   }
