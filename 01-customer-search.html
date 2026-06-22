@@ -4677,7 +4677,75 @@ function refineResults() {
     var s = SCENARIOS.find(function (x) {
       return x.docType === form.docTypeKey && x.docNumber === form.number;
     });
-    return s ? s.build(form) : null;
+    if (s) return s.build(form);
+    return matchByIdentity(form);
+  }
+
+  /* ---------- Identity matching: NAME + DOB drive the duplicate alert ---------- */
+  function recordsList(){ return Object.keys(RECORDS).map(function(k){ return RECORDS[k]; }); }
+  function nameTokens(str){ return (str||'').toLowerCase().replace(/[^a-z\s]/g,' ').split(/\s+/).filter(Boolean); }
+  function sameNameTokens(a,b){ if(!a.length || a.length!==b.length) return false; return a.slice().sort().join(' ')===b.slice().sort().join(' '); }
+  function tokenOverlap(a,b){ var n=0; for(var i=0;i<b.length;i++){ if(a.indexOf(b[i])>=0) n++; } return n; }
+  function recDocTypeKey(rec){ var t=(rec.docTypeLabel||'').toLowerCase(); if(t.indexOf('licen')>=0)return 'licence'; if(t.indexOf('passport')>=0)return 'passport'; if(t.indexOf('voter')>=0)return 'voters'; if(t.indexOf('nids')>=0)return 'nids'; if(t.indexOf('trn')>=0)return 'trn'; return ''; }
+  function normDob(v){ v=(v||'').trim(); if(!v) return ''; if(/^\d{4}-\d{1,2}-\d{1,2}$/.test(v)){ var p=v.split('-'); return p[0]+'-'+(+p[1])+'-'+(+p[2]); } var MON={jan:1,feb:2,mar:3,apr:4,may:5,jun:6,jul:7,aug:8,sep:9,oct:10,nov:11,dec:12}; var m=v.toLowerCase().match(/^(\d{1,2})\s+([a-z]{3})[a-z]*\s+(\d{4})$/); if(m){ return m[3]+'-'+(MON[m[2]]||0)+'-'+(+m[1]); } return v.toLowerCase(); }
+
+  function matchByIdentity(form){
+    var nm=nameTokens(fullNameOf(form)); if(!nm.length || !form.dob) return null;
+    var edob=normDob(form.dob); if(!edob) return null;
+    var sameDob=recordsList().filter(function(r){ return normDob(r.dob)===edob; });
+    if(!sameDob.length) return null;
+    var exact=null; for(var i=0;i<sameDob.length;i++){ if(sameNameTokens(nameTokens(sameDob[i].fullName),nm)){ exact=sameDob[i]; break; } }
+    if(exact){
+      var rk=recDocTypeKey(exact), rn=(exact.docNumberFmt||'').replace(/[^a-zA-Z0-9]/g,'').toUpperCase();
+      if(form.docTypeKey===rk && form.number===rn) return buildBlock(exact,form);
+      if(form.docTypeKey===rk) return buildTypo(exact,form);
+      return buildDiffDoc(exact,form);
+    }
+    var similar=sameDob.filter(function(r){ return tokenOverlap(nameTokens(r.fullName),nm)>=2; });
+    if(similar.length) return buildSimilar(similar,form);
+    return null;
+  }
+
+  function buildBlock(p,form){
+    return {
+      title:'This customer already exists',
+      body:'This <strong>'+(form.docTypeLabel||'document').toLowerCase()+'</strong> is already registered to <strong>'+p.fullName+'</strong>. You can’t create a new customer with this document.',
+      record:p,
+      actions:[ {label:'Cancel',variant:'secondary',act:'close'}, {label:'Open profile',variant:'primary',act:'profile',icon:ICONS.arrow} ]
+    };
+  }
+  function buildDiffDoc(p,form){
+    var dl=form.docTypeLabel||'document';
+    return {
+      title:'Possible match',
+      body:'A customer with the same name and date of birth already exists, registered with a different document.',
+      record:p,
+      compare:{ entered:{heading:'Entered now',name:fullNameOf(form)||p.fullName,lines:[{label:'Document type',value:form.docTypeLabel||''},{label:'Document number',value:form.number||''}]}, found:{heading:'On file',name:p.fullName,lines:customerLines(p)} },
+      afterRecord:{ text:'Same details but a different individual?', link:{label:'Create new customer',act:'proceed'} },
+      actions:[ {label:'Cancel',variant:'secondary',act:'close'}, {label:'Add '+dl.toLowerCase()+' to customer',variant:'primary',act:'addDoc'} ],
+      added:{ title:dl+' added', body:'The '+dl.toLowerCase()+' <strong>'+(form.number||'')+'</strong> has been linked to <strong>'+p.fullName+'</strong>’s profile.' }
+    };
+  }
+  function buildTypo(p,form){
+    var DOC_PHRASES={trn:'a TRN',licence:'a driver’s licence',passport:'a Passport',nids:'an NIDS',voters:'a Voters ID'};
+    var docPhrase=DOC_PHRASES[form.docTypeKey]||'a document';
+    return {
+      title:'Possible typo',
+      body:'Another customer with the same name and date of birth already has <strong>'+docPhrase+'</strong> on file with a slightly different number. Please verify the number with the customer before continuing.',
+      record:p,
+      compare:{ entered:{heading:'Entered now',name:fullNameOf(form)||p.fullName,lines:[{label:'Document type',value:form.docTypeLabel||''},{label:'Document number',value:form.number||''}]}, found:{heading:'On file',name:p.fullName,lines:customerLines(p)} },
+      afterRecord:{ text:'Same details but a different individual?', link:{label:'Create new customer',act:'proceed'} },
+      actions:[ {label:'Cancel',variant:'secondary',act:'close'}, {label:'Open existing customer',variant:'primary',act:'profile'} ]
+    };
+  }
+  function buildSimilar(list,form){
+    return {
+      title:'Similar matches',
+      body:'No exact match for this document, but these customers share the same date of birth and a very similar name. Review before continuing.',
+      matches:list,
+      afterRecord:{ text:'Same details but a different individual?', link:{label:'Create new customer',act:'proceed'} },
+      actions:[ {label:'Cancel',variant:'secondary',act:'close'}, {label:'Open selected customer',variant:'primary',act:'openSelected'} ]
+    };
   }
 
   /* ---------- 5. Modal rendering ---------- */
