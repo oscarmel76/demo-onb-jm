@@ -6364,20 +6364,18 @@ window.initSimulation=function(params){
   function setupCash(){
     var cur=document.querySelector('.crumb .cur'); if(cur) cur.textContent='Simulate cash loan';
     document.title='Unicredit · Simulate cash loan';
-    var bar=document.querySelector('.cartbar');
-    if(bar){
-      var cbid=bar.querySelector('.cb-id'); if(cbid) cbid.style.display='none';
-      var see=bar.querySelector('.cb-see'); if(see) see.style.display='none';
-      var figs=bar.querySelector('.cb-figs');
-      if(figs){ figs.innerHTML='<div class="cb-fig fin" style="flex:1"><span class="k">Amount to disburse</span>'+
-        '<span class="dep-wrap"><span class="cur">$</span><input class="dep-input" id="disb" inputmode="decimal" style="width:230px;font-size:18px;color:var(--navy);font-weight:700"></span>'+
-        '<div class="mindown" id="disb-max"></div></div>'; }
-      var disb=document.getElementById('disb');
-      if(disb){
-        disb.value=fmtAmt(purchase);
-        disb.addEventListener('input', function(){ var v=parseFloat((disb.value||'').replace(/[^0-9.]/g,'')); purchase=isNaN(v)?0:Math.max(0,v); render(); });
-        disb.addEventListener('blur', function(){ disb.value=fmtAmt(purchase); });
-      }
+    var bar=document.querySelector('#screen-simulation .cartbar'); if(bar) bar.style.display='none';
+    var leftCol=document.querySelector('#screen-simulation .grid .col');
+    if(leftCol && !document.getElementById('cash-disb-card')){
+      var card=document.createElement('section'); card.className='card pad'; card.id='cash-disb-card';
+      card.innerHTML='<div class="label">Amount to disburse</div><div class="dep-wrap" style="margin-top:10px;display:inline-flex;align-items:center;gap:2px;"><span class="cur">$</span><input class="dep-input" id="disb" inputmode="decimal" style="width:230px;font-size:18px;color:var(--navy);font-weight:700"></div><div class="mindown" id="disb-max" style="margin-top:8px;"></div>';
+      leftCol.insertBefore(card, leftCol.firstChild);
+    }
+    var disb=document.getElementById('disb');
+    if(disb){
+      disb.value=fmtAmt(purchase);
+      disb.addEventListener('input', function(){ var v=parseFloat((disb.value||'').replace(/[^0-9.]/g,'')); purchase=isNaN(v)?0:Math.max(0,v); render(); });
+      disb.addEventListener('blur', function(){ disb.value=fmtAmt(purchase); });
     }
     var back=document.querySelector('.actionbar .btn-ghost');
     if(back){ back.textContent='Back to customer'; back.setAttribute('onclick',"nav('customer')"); }
