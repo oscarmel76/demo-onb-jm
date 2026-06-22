@@ -3110,7 +3110,7 @@ a {
     <div class="hd-id">
       <div class="hd-id-text">
         <div class="hd-name-row">
-          <h1 class="hd-name customer-name" id="rc-name">Customer</h1><button onclick="openProfile((window.__curCust||{}).id)" style="order:2;margin-left:auto;display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 14px;border:1.5px solid rgba(255,255,255,.35);background:rgba(255,255,255,.08);color:#fff;border-radius:9999px;font-family:inherit;font-size:12.5px;font-weight:700;cursor:pointer;">View full profile &rarr;</button>
+          <h1 class="hd-name customer-name" id="rc-name">Customer</h1><button class="vfp-btn" onclick="openProfile((window.__curCust||{}).id)" style="order:2;margin-left:auto;display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 14px;border:1.5px solid rgba(255,255,255,.35);background:rgba(255,255,255,.08);color:#fff;border-radius:9999px;font-family:inherit;font-size:12.5px;font-weight:700;cursor:pointer;">View full profile &rarr;</button>
           <span class="hd-chip rating" id="rc-rating">Rating A</span>
           <span class="hd-chip ok" id="rc-pay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Up to date</span>
         </div>
@@ -3314,7 +3314,7 @@ a {
     <div class="hd-id">
       <div class="hd-id-text">
         <div class="hd-name-row">
-          <h1 class="hd-name">Jada Marcia Smith Thompson</h1><button onclick="openProfile('jada')" style="order:2;margin-left:auto;display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 14px;border:1.5px solid rgba(255,255,255,.35);background:rgba(255,255,255,.08);color:#fff;border-radius:9999px;font-family:inherit;font-size:12.5px;font-weight:700;cursor:pointer;">View full profile &rarr;</button>
+          <h1 class="hd-name">Jada Marcia Smith Thompson</h1><button class="vfp-btn" onclick="openProfile('jada')" style="order:2;margin-left:auto;display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 14px;border:1.5px solid rgba(255,255,255,.35);background:rgba(255,255,255,.08);color:#fff;border-radius:9999px;font-family:inherit;font-size:12.5px;font-weight:700;cursor:pointer;">View full profile &rarr;</button>
           <span class="hd-chip rating">Rating A</span>
           <span class="hd-chip ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Up to date</span>
         </div>
@@ -3543,7 +3543,7 @@ a {
     <div class="hd-id">
       <div class="hd-id-text">
         <div class="hd-name-row">
-          <h1 class="hd-name">Jada Marcia Smith Thompson</h1><button onclick="openProfile(window.__cartsCust||'jada')" style="order:2;margin-left:auto;display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 14px;border:1.5px solid rgba(255,255,255,.35);background:rgba(255,255,255,.08);color:#fff;border-radius:9999px;font-family:inherit;font-size:12.5px;font-weight:700;cursor:pointer;">View full profile &rarr;</button>
+          <h1 class="hd-name">Jada Marcia Smith Thompson</h1><button class="vfp-btn" onclick="openProfile(window.__cartsCust||'jada')" style="order:2;margin-left:auto;display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 14px;border:1.5px solid rgba(255,255,255,.35);background:rgba(255,255,255,.08);color:#fff;border-radius:9999px;font-family:inherit;font-size:12.5px;font-weight:700;cursor:pointer;">View full profile &rarr;</button>
           <span class="hd-chip rating">Rating A</span>
           <span class="hd-chip ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Up to date</span>
         </div>
@@ -5424,6 +5424,11 @@ body.sim-active{ padding-top:0 !important; }
 <style id="app-overrides">
 /* a11y: visible keyboard focus */
 a:focus-visible, button:focus-visible, [role="button"]:focus-visible, [onclick]:focus-visible, input:focus-visible, select:focus-visible, [tabindex]:focus-visible{ outline:2px solid #171C8F !important; outline-offset:2px; border-radius:4px; }
+/* Option A: mobile — View full profile becomes a full-width row under the name (no overlap) */
+@media (max-width:640px){
+  .hd-name-row{ flex-wrap:wrap !important; }
+  .vfp-btn{ order:3 !important; width:100% !important; box-sizing:border-box !important; margin-left:0 !important; margin-top:14px !important; justify-content:flex-start !important; gap:8px !important; height:auto !important; min-height:44px; padding:13px 2px 0 !important; border:0 !important; border-top:1px solid rgba(255,255,255,.2) !important; border-radius:0 !important; background:transparent !important; }
+}
 /* #2 disabled-CTA helper */
 #screen-register-customer .cta-hint{ display:none; }
 #screen-register-customer .reg-inner:has(#cta-continue:disabled) .cta-hint{ display:flex; align-items:center; justify-content:flex-end; gap:7px; font-size:12.5px; color:var(--emma-gray-500); margin-bottom:10px; }
