@@ -5177,7 +5177,7 @@ document.addEventListener('click', function(e){
   function recentItem(c){
     return '<div class="recent-item" data-cid="'+c.id+'">'+
       '<div class="recent-info"><div class="recent-name">'+c.full+'</div>'+
-      '<div class="recent-meta">TRN: '+c.trn+' · COSACS '+c.cosacs+'</div></div>'+
+      '<div class="recent-meta">'+(function(){var CF=window.CUSTOMER_FULL||{},cf=null;for(var k in CF){if(CF[k]&&CF[k].cosacs===c.cosacs){cf=CF[k];break;}}if(cf){return cf.trnOnFile?('TRN: '+cf.trn):(cf.primaryDoc?(cf.primaryDoc.label+': '+cf.primaryDoc.number):'TRN: \u2014');}return 'TRN: '+c.trn;})()+' · COSACS '+c.cosacs+'</div></div>'+
       chip(c)+RCHEV+'</div>';
   }
   function buildRecents(){
@@ -5741,7 +5741,7 @@ a:focus-visible, button:focus-visible, [role="button"]:focus-visible, [onclick]:
       phone:"+1 876 433 2107",email:"marcus.brown@gmail.com",address:"45 Constant Spring Road, Kingston 10",
       employer:"Digicel Jamaica",position:"Operations Manager",income:78000,employed:"4 years 1 month",workphone:"+1 876 511 5000",
       dsr:0.40,committed:11000,
-      documents:[{type:"trn",name:"TRN card",number:"117-204-558",uploaded:"03 Mar 2023",expires:"—"},
+      documents:[
                  {type:"license",name:"Driver's licence",number:"2045583117",uploaded:"03 Mar 2023",expires:"22 Jul 2028"},
                  {type:"voters",name:"Voters ID",number:"VID-558204",uploaded:"03 Mar 2023",expires:"—"}],
       supporting:sup("Digicel Jamaica","03 Mar 2023")},
@@ -5750,7 +5750,7 @@ a:focus-visible, button:focus-visible, [role="button"]:focus-visible, [onclick]:
       phone:"+1 876 501 7788",email:"keisha.williams@gmail.com",address:"8 Barbican Road, Kingston 8, St. Andrew",
       employer:"NCB Financial Group",position:"Customer Service Lead",income:51000,employed:"3 years 8 months",workphone:"+1 876 935 2340",
       dsr:0.40,committed:5200,
-      documents:[{type:"trn",name:"TRN card",number:"142-908-771",uploaded:"19 Sep 2023",expires:"—"},
+      documents:[
                  {type:"passport",name:"Passport",number:"K7781429",uploaded:"19 Sep 2023",expires:"21 Mar 2031"}],
       supporting:sup("NCB Financial Group","19 Sep 2023")},
     devon:{name:"Devon Oneil Campbell",rating:"C",status:"arrears",trn:"133-870-216",cosacs:"DOCA339118",primaryDoc:{label:"Voter's ID",number:"VID-216870"},trnOnFile:false,updated:"Apr 11, 2026",
@@ -5758,7 +5758,7 @@ a:focus-visible, button:focus-visible, [role="button"]:focus-visible, [onclick]:
       phone:"+1 876 770 4456",email:"devon.campbell@gmail.com",address:"27 Red Hills Road, Kingston 19",
       employer:"Jamaica Public Service",position:"Field Technician",income:42000,employed:"9 years 2 months",workphone:"+1 876 926 3000",
       dsr:0.35,committed:7800,
-      documents:[{type:"trn",name:"TRN card",number:"133-870-216",uploaded:"07 Jan 2022",expires:"—"},
+      documents:[
                  {type:"voters",name:"Voters ID",number:"VID-216870",uploaded:"07 Jan 2022",expires:"—"},
                  {type:"license",name:"Driver's licence",number:"8702161330",uploaded:"07 Jan 2022",expires:"30 Nov 2026"}],
       supporting:sup("Jamaica Public Service","07 Jan 2022")},
@@ -5767,7 +5767,7 @@ a:focus-visible, button:focus-visible, [role="button"]:focus-visible, [onclick]:
       phone:"+1 876 288 9930",email:"shanice.reid@gmail.com",address:"3 Caledonia Road, Mandeville, Manchester",
       employer:"Alliance Financial Services",position:"Marketing Associate",income:64000,employed:"2 years 5 months",workphone:"+1 876 962 1100",
       dsr:0.40,committed:0,
-      documents:[{type:"trn",name:"TRN card",number:"150-662-049",uploaded:"28 Nov 2023",expires:"—"},
+      documents:[
                  {type:"nids",name:"NIDS",number:"NIDS-662049",uploaded:"28 Nov 2023",expires:"—"},
                  {type:"passport",name:"Passport",number:"S0490662",uploaded:"28 Nov 2023",expires:"04 Dec 2032"}],
       supporting:sup("Alliance Financial Services","28 Nov 2023")}
