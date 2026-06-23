@@ -5371,7 +5371,7 @@ document.addEventListener('click', function(e){
     var ps=document.getElementById('ad-sidebar'); if(ps && !ps.children.length){ var src=document.querySelector('#screen-register-success .sidebar'); if(src) ps.innerHTML=src.innerHTML; }
     var dl=cf.trnOnFile?'TRN':(cf.primaryDoc?cf.primaryDoc.label:'TRN'), dn=cf.trnOnFile?cf.trn:(cf.primaryDoc?cf.primaryDoc.number:'—');
     document.getElementById('ad-hd').innerHTML=window.buildCustHeader(custId, cf, '');
-    var ab=document.getElementById('ad-body'); ab.innerHTML=renderAccountDetail(custId,det);
+    var ab=document.getElementById('ad-body'); var _adctx=a.mambu+' · '+(a.kind==='hp'?'Hired purchase':'Cash loan'); ab.innerHTML=window.custTabBar(custId,'sales')+window.navSubBar('Back to Sales history', "window.openSalesHistory('"+custId+"')", _adctx)+renderAccountDetail(custId,det);
     if(!ab.__bound){ ab.__bound=true; ab.addEventListener('click',function(e){
       var b=e.target.closest&&e.target.closest('[data-ad-act]'); if(b){ var a2=b.getAttribute('data-ad-act'); var m=a2==='cart'?'Opening cart…':a2==='statement'?'Downloading account statement…':'Downloading contract…'; if(window.ucToast) window.ucToast(m); return; }
       var bk=e.target.closest&&e.target.closest('[data-ad-back]'); if(bk){ if(window.openSalesHistory) window.openSalesHistory(window.__adCust); return; }
@@ -5383,6 +5383,12 @@ document.addEventListener('click', function(e){
       for(var i=0;i<all.length;i++){ var r=all[i].rating; if(r==='C') w='C'; else if(r==='B' && w!=='C') w='B'; }
       return w;
     }catch(e){ return 'A'; }
+  };
+  window.navSubBar=function(backLabel, backFn, ctx){
+    return "<div style='display:flex;align-items:center;gap:11px;flex-wrap:wrap;margin:-2px 0 16px;'>"+
+      "<button onclick=\""+backFn+"\" style='display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:#171C8F;background:#fff;border:1px solid #C7CBF0;border-radius:9px;padding:8px 14px;cursor:pointer;'><svg width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><line x1='19' y1='12' x2='5' y2='12'></line><polyline points='12 19 5 12 12 5'></polyline></svg>"+backLabel+"</button>"+
+      (ctx?"<span style='font-size:13px;color:#7C878E;font-weight:600;'>"+ctx+"</span>":"")+
+    "</div>";
   };
   window.custTabBar=function(id, active){
     function T(k,label,fn){ var on=active===k; return "<button onclick=\""+fn+"\" style='font-family:inherit;font-size:13px;font-weight:"+(on?'700':'600')+";color:"+(on?'#171C8F':'#7C878E')+";background:none;border:0;border-bottom:2px solid "+(on?'#171C8F':'transparent')+";padding:13px 2px;cursor:pointer;white-space:nowrap;'>"+label+"</button>"; }
