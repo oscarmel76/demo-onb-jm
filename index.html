@@ -5297,29 +5297,28 @@ document.addEventListener('click', function(e){
   function shRatingChip(r){ var c=r==='A'?['#0E7A55','#D5F2E3']:r==='B'?['#8A6B00','#FBEFC9']:['#C0283A','#FBDDE0']; return "<span style='font-size:9px;font-weight:700;text-transform:uppercase;color:"+c[0]+";background:"+c[1]+";padding:3px 8px;border-radius:9999px;'>"+r+"</span>"; }
   function shStatusChip(st){ var on=st==='Active'; return "<span style='font-size:9px;font-weight:700;text-transform:uppercase;color:"+(on?'#0E7A55':'#7C878E')+";background:"+(on?'#D5F2E3':'#EDEDF2')+";padding:3px 8px;border-radius:9999px;'>"+st+"</span>"; }
   function shAcctCard(a){
-    var pct=a.total?Math.max(4,Math.round(a.paid/a.total*100)):0;
-    var lateTxt=a.status!=='Active'?"<span style='font-size:12px;font-weight:700;color:#7C878E;'>● Closed</span>":(a.daysLate>0?"<span style='font-size:12px;font-weight:700;color:#C0283A;'>● "+a.daysLate+" days late</span>":"<span style='font-size:12px;font-weight:700;color:#0E7A55;'>● Up to date</span>");
-    var figs="<div style='display:flex;gap:26px;flex-wrap:wrap;margin-top:12px;align-items:flex-end;'>"+
-      "<div><div style='font-size:10px;text-transform:uppercase;color:#9A9AB0;font-weight:600;'>Outstanding</div><div style='font-size:17px;font-weight:800;color:#171C8F;'>"+shM(a.outstanding)+"</div></div>"+
-      "<div><div style='font-size:10px;text-transform:uppercase;color:#9A9AB0;font-weight:600;'>Installment</div><div style='font-size:14px;font-weight:700;color:#1A1B1E;'>"+shM(a.installment)+"/mo</div></div>"+
-      "<div style='min-width:108px;'><div style='font-size:10px;text-transform:uppercase;color:#9A9AB0;font-weight:600;'>Paid</div><div style='font-size:12px;color:#5a6072;margin:3px 0 4px;'>"+a.paid+" of "+a.total+"</div><div style='height:6px;border-radius:9999px;background:#ECECF4;overflow:hidden;'><div style='height:100%;width:"+pct+"%;background:"+(a.daysLate>0?'#E5566A':'#1C9657')+";'></div></div></div>"+
-      "<div style='margin-left:auto;'>"+lateTxt+"</div></div>";
-    var cartBtn=a.kind==='hp'?"<button data-sh-act='cart' style='font-size:12px;font-weight:600;color:#171C8F;background:#fff;border:1px solid #C7CBF0;border-radius:8px;padding:7px 12px;cursor:pointer;'>See cart</button>":"";
-    var detail="<div class='sh-acct-detail' style='display:none;border-top:1px solid #F0F0F6;margin-top:12px;padding-top:12px;'>"+
-      "<div style='display:flex;gap:30px;flex-wrap:wrap;'>"+
-        "<div><div style='font-size:10px;text-transform:uppercase;color:#9A9AB0;font-weight:600;'>Early settlement</div><div style='font-size:13px;font-weight:700;color:#1A1B1E;margin-top:2px;'>"+shM(a.earlySettlement)+"</div></div>"+
-        "<div><div style='font-size:10px;text-transform:uppercase;color:#9A9AB0;font-weight:600;'>Next due</div><div style='font-size:13px;font-weight:700;color:#1A1B1E;margin-top:2px;'>"+a.nextDue+"</div></div>"+
-        "<div><div style='font-size:10px;text-transform:uppercase;color:#9A9AB0;font-weight:600;'>Total to pay</div><div style='font-size:13px;font-weight:700;color:#1A1B1E;margin-top:2px;'>"+shM(a.totalToPay)+"</div></div>"+
-      "</div>"+
-      "<div style='display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;'>"+cartBtn+
-        "<button data-sh-act='statement' style='display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:#171C8F;background:#fff;border:1px solid #C7CBF0;border-radius:8px;padding:7px 12px;cursor:pointer;'><svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'></path><polyline points='7 10 12 15 17 10'></polyline><line x1='12' y1='15' x2='12' y2='3'></line></svg>Download account statement</button>"+
-        "<button data-sh-act='contract' style='display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:#171C8F;background:#fff;border:1px solid #C7CBF0;border-radius:8px;padding:7px 12px;cursor:pointer;'><svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'></path><polyline points='14 2 14 8 20 8'></polyline><line x1='9' y1='13' x2='15' y2='13'></line><line x1='9' y1='17' x2='15' y2='17'></line></svg>Download contract</button>"+
-      "</div></div>";
-    return "<div class='sh-acct' style='background:#fff;border:1px solid #E2E5EC;border-radius:12px;padding:14px 16px;'>"+
-      "<div class='sh-acct-head' data-sh-toggle style='cursor:pointer;'>"+
-        "<div style='display:flex;justify-content:space-between;align-items:flex-start;gap:10px;'><div><span style='font-size:14px;font-weight:700;color:#1A1B1E;'>"+a.type+"</span><div style='font-size:11px;color:#9A9AB0;margin-top:3px;'>MAMBU "+a.mambu+" · COSACS "+a.cosacs+" · activated "+a.activated+"</div></div>"+
-        "<div style='display:flex;gap:6px;align-items:center;flex:none;'>"+shStatusChip(a.status)+shRatingChip(a.rating)+"<span class='sh-chev' style='color:#9A9AB0;font-size:16px;'>▾</span></div></div>"+figs+
-      "</div>"+detail+"</div>";
+    var closed=a.status!=='Active';
+    var pct=a.total?Math.max(4,Math.round(a.paid/a.total*100)):100;
+    var statusPill=closed
+      ? "<span style='font-size:11.5px;font-weight:700;color:#7C878E;display:inline-flex;align-items:center;gap:5px;'><span style='width:7px;height:7px;border-radius:50%;background:#B7BBC9;'></span>Closed</span>"
+      : (a.daysLate>0
+        ? "<span style='font-size:11.5px;font-weight:700;color:#C0283A;display:inline-flex;align-items:center;gap:5px;'><span style='width:7px;height:7px;border-radius:50%;background:#E5566A;'></span>"+a.daysLate+" days late</span>"
+        : "<span style='font-size:11.5px;font-weight:700;color:#0E7A55;display:inline-flex;align-items:center;gap:5px;'><span style='width:7px;height:7px;border-radius:50%;background:#1C9657;'></span>Up to date</span>");
+    function cell(k,v){ return "<div><div style='font-size:9.5px;text-transform:uppercase;letter-spacing:.04em;color:#9A9AB0;font-weight:600;'>"+k+"</div><div style='font-size:14px;font-weight:700;color:#1A1B1E;margin-top:4px;'>"+v+"</div></div>"; }
+    var grid="<div style='border-top:1px solid #F0F0F6;margin-top:12px;padding-top:13px;display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:16px;align-items:start;'>"+
+      "<div><div style='font-size:9.5px;text-transform:uppercase;letter-spacing:.04em;color:#9A9AB0;font-weight:600;'>Outstanding</div><div style='font-size:18px;font-weight:800;color:#171C8F;margin-top:2px;letter-spacing:-.01em;'>"+shM(a.outstanding)+"</div></div>"+
+      cell('Installment',shM(a.installment)+'/mo')+
+      "<div><div style='font-size:9.5px;text-transform:uppercase;letter-spacing:.04em;color:#9A9AB0;font-weight:600;'>Paid</div><div style='font-size:12px;color:#5a6072;margin:3px 0 5px;'>"+a.paid+" of "+a.total+"</div><div style='height:6px;border-radius:9999px;background:#ECECF4;overflow:hidden;'><div style='height:100%;width:"+pct+"%;background:"+(a.daysLate>0?'#E5566A':'#1C9657')+";'></div></div></div>"+
+      cell('Early settlement',shM(a.earlySettlement))+
+      cell('Next due',a.nextDue)+
+      cell('Total to pay',shM(a.totalToPay))+
+    "</div>";
+    var footer="<div style='border-top:1px solid #F0F0F6;margin-top:14px;padding-top:12px;display:flex;justify-content:flex-end;'><button data-sh-act='view' data-mambu='"+a.mambu+"' style='display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:#fff;background:#171C8F;border:0;border-radius:9px;padding:9px 18px;cursor:pointer;'>View account <svg width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><line x1='5' y1='12' x2='19' y2='12'></line><polyline points='12 5 19 12 12 19'></polyline></svg></button></div>";
+    return "<div class='sh-acct' style='background:#fff;border:1px solid #E2E5EC;border-radius:14px;padding:16px 18px;'>"+
+      "<div style='display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;'>"+
+        "<div><div style='font-size:15px;font-weight:700;color:#1A1B1E;'>"+a.mambu+"</div><div style='font-size:11px;color:#9A9AB0;margin-top:3px;'>COSACS "+a.cosacs+" · activated "+a.activated+"</div></div>"+
+        "<div style='display:flex;align-items:center;gap:8px;'>"+statusPill+shRatingChip(a.rating)+"</div>"+
+      "</div>"+grid+footer+"</div>";
   }
   function shGroup(label,kind,list){ if(!list.length) return ""; var icon=kind==='hp'?"<svg width='17' height='17' viewBox='0 0 24 24' fill='none' stroke='#1C9657' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='9' cy='20' r='1.4'></circle><circle cx='18' cy='20' r='1.4'></circle><path d='M2.5 3.5H5l2.2 11.1a1.6 1.6 0 0 0 1.6 1.3h8.5a1.6 1.6 0 0 0 1.6-1.25L21.5 7H6.2'></path></svg>":"<svg width='17' height='17' viewBox='0 0 24 24' fill='none' stroke='#1C9657' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='6' width='20' height='13' rx='2.5'></rect><path d='M2 10h20'></path></svg>";
     var cards=list.map(shAcctCard).join("");
@@ -5356,7 +5355,7 @@ document.addEventListener('click', function(e){
     var sb=document.getElementById('sh-body'); sb.innerHTML=body;
     if(!sb.__shBound){ sb.__shBound=true; sb.addEventListener('click',function(e){
       var tg=e.target.closest&&e.target.closest('[data-sh-toggle]'); if(tg){ var det=tg.parentNode.querySelector('.sh-acct-detail'); if(det){ var open=det.style.display!=='none'; det.style.display=open?'none':'block'; var ch=tg.querySelector('.sh-chev'); if(ch) ch.textContent=open?'▾':'▴'; } return; }
-      var ab=e.target.closest&&e.target.closest('[data-sh-act]'); if(ab){ var a=ab.getAttribute('data-sh-act'); var m=a==='cart'?'Opening cart…':a==='statement'?'Downloading account statement…':'Downloading contract…'; if(window.ucToast) window.ucToast(m); return; }
+      var ab=e.target.closest&&e.target.closest('[data-sh-act]'); if(ab){ var a=ab.getAttribute('data-sh-act'); var m=a==='cart'?'Opening cart…':a==='statement'?'Downloading account statement…':a==='contract'?'Downloading contract…':'Opening account detail… (coming soon)'; if(window.ucToast) window.ucToast(m); return; }
       var tb=e.target.closest&&e.target.closest('[data-sh-tab]'); if(tb){ window.shTab(tb.getAttribute('data-sh-tab')); return; }
     }); }
     if(window.showScreen) window.showScreen('sales-history');
