@@ -5766,8 +5766,9 @@ a:focus-visible, button:focus-visible, [role="button"]:focus-visible, [onclick]:
 .bottom-nav a{ flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; padding:6px 0; font-size:10.5px; font-weight:600; color:#9aa0ad; text-decoration:none; border-radius:10px; cursor:pointer; transition:color .15s ease, background .15s ease; }
 .bottom-nav a svg{ width:21px; height:21px; }
 .bottom-nav a.active{ color:#171C8F; background:#F2F3FF; }
-@media (max-width:640px){
+@media (max-width:767.98px){ /* bottom-nav now covers all mobile+tablet (was 640) */
  aside.sidebar{ display:none !important; }
+ .main{ margin-left:0 !important; }
  .bottom-nav{ display:flex !important; position:fixed; left:0; right:0; bottom:0; z-index:60; background:#fff; border-top:1px solid #E8E8F4; box-shadow:0 -2px 14px rgba(23,28,143,.07); padding:6px 10px calc(8px + env(safe-area-inset-bottom)); }
  .main, .content-area{ padding-bottom:80px !important; }
  .content-area{ padding-left:16px !important; padding-right:16px !important; gap:14px !important; }
