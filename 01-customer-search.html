@@ -5366,9 +5366,40 @@ document.addEventListener('click', function(e){
       (ctx?"<span style='font-size:13px;color:#7C878E;font-weight:600;'>"+ctx+"</span>":"")+
     "</div>";
   };
+  (function(){ if(typeof document!=="undefined" && !document.getElementById('uc-anim-css')){ var st=document.createElement('style'); st.id='uc-anim-css'; st.textContent="@keyframes uc-shimmer{0%{background-position:-460px 0}100%{background-position:460px 0}}.uc-sk{background:#E9ECF5;border-radius:7px;background-image:linear-gradient(90deg,#E9ECF5 0,#F4F6FB 220px,#E9ECF5 440px);background-size:900px 100%;animation:uc-shimmer 1.25s linear infinite}.uc-skcard{background:#fff;border:1px solid #E6E9F5;border-radius:16px;padding:18px}@keyframes uc-fadeup{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}.uc-fadein{animation:uc-fadeup .3s cubic-bezier(.22,1,.36,1) both}@media (prefers-reduced-motion:reduce){.uc-sk{animation:none}.uc-fadein{animation:none}}"; (document.head||document.documentElement).appendChild(st); } })();
+  window.tabSkeleton=function(tab){
+    function blk(w,h,r,mb){ return "<div class='uc-sk' style='width:"+w+";height:"+h+"px;"+(r?'border-radius:'+r+';':'')+(mb?'margin-bottom:'+mb+'px;':'')+"'></div>"; }
+    function card(flex){ return "<div class='uc-skcard' style='flex:"+flex+";min-width:240px;'>"+blk('40%',9,'',12)+blk('62%',26,'',16)+blk('100%',8,'9999px',0)+"</div>"; }
+    if(tab==='sales'){ return "<div class='uc-sk' style='width:100%;height:80px;border-radius:14px;margin-bottom:18px;'></div><div class='uc-skcard' style='margin-bottom:10px;'>"+blk('30%',12,'',14)+blk('100%',8,'9999px',0)+"</div><div class='uc-skcard'>"+blk('30%',12,'',14)+blk('100%',8,'9999px',0)+"</div>"; }
+    if(tab==='profile'){ return "<div class='uc-skcard' style='margin-bottom:16px;'>"+blk('25%',12,'',16)+blk('100%',40,'9px',12)+blk('100%',40,'9px',0)+"</div><div style='display:flex;gap:14px;flex-wrap:wrap;'>"+card('1')+card('1')+"</div>"; }
+    return "<div style='display:flex;gap:14px;flex-wrap:wrap;margin-bottom:18px;'>"+card('1.4')+card('1')+"</div><div style='display:flex;gap:14px;flex-wrap:wrap;'>"+card('1')+card('1')+"</div>";
+  };
+  window.gotoTab=function(tab,id){
+    id=id||window.__activeCustId||'jada';
+    var conf={overview:{screen:'screen-register-success',sel:'#screen-register-success .content-area',fn:function(){ if(window.openCustomerById) window.openCustomerById(id); }},
+              sales:{screen:'screen-sales-history',sel:'#sh-body',fn:function(){ if(window.openSalesHistory) window.openSalesHistory(id); }},
+              profile:{screen:'screen-profile',sel:'#prof-body',fn:function(){ if(window.openProfile) window.openProfile(id); }}}[tab];
+    if(!conf){ return; }
+    conf.fn();
+    var screen=document.getElementById(conf.screen); if(!screen){ return; }
+    var main=screen.querySelector('.main')||screen;
+    try{ if(getComputedStyle(main).position==='static') main.style.position='relative'; }catch(e){ main.style.position='relative'; }
+    var old=main.querySelector('.uc-skel-ov'); if(old&&old.parentNode) old.parentNode.removeChild(old);
+    var hd=main.querySelector('.jada-hd'); var top=hd?Math.round(hd.getBoundingClientRect().height):140;
+    var ov=document.createElement('div'); ov.className='uc-skel-ov';
+    ov.style.cssText='position:absolute;left:0;right:0;bottom:0;top:'+top+'px;z-index:20;background:#FAFAFA;overflow:hidden;';
+    ov.innerHTML="<div style='padding:clamp(16px,2.4vw,28px) clamp(24px,4vw,48px) 60px;'>"+window.custTabBar(id,tab)+window.tabSkeleton(tab)+"</div>";
+    main.appendChild(ov);
+    var body=document.querySelector(conf.sel);
+    setTimeout(function(){
+      if(body){ body.classList.remove('uc-fadein'); void body.offsetWidth; body.classList.add('uc-fadein'); }
+      ov.style.transition='opacity .3s ease'; ov.style.opacity='0';
+      setTimeout(function(){ if(ov.parentNode) ov.parentNode.removeChild(ov); }, 320);
+    }, 300);
+  };
   window.custTabBar=function(id, active){
     function T(k,label,fn){ var on=active===k; return "<button onclick=\""+fn+"\" style='font-family:inherit;font-size:13px;font-weight:"+(on?'700':'600')+";color:"+(on?'#171C8F':'#7C878E')+";background:none;border:0;border-bottom:2px solid "+(on?'#171C8F':'transparent')+";padding:13px 2px;cursor:pointer;white-space:nowrap;'>"+label+"</button>"; }
-    return "<div style='display:flex;gap:26px;border-bottom:1px solid #E6E9F5;margin-bottom:18px;'>"+T('overview','Overview',"window.openCustomerById('"+id+"')")+T('sales','Sales history',"window.openSalesHistory('"+id+"')")+T('profile','Profile',"window.openProfile('"+id+"')")+"</div>";
+    return "<div style='display:flex;gap:26px;border-bottom:1px solid #E6E9F5;margin-bottom:18px;'>"+T('overview','Overview',"window.gotoTab('overview','"+id+"')")+T('sales','Sales history',"window.gotoTab('sales','"+id+"')")+T('profile','Profile',"window.gotoTab('profile','"+id+"')")+"</div>";
   };
   window.buildCustHeader=function(id, cf, crumbs){
     var pre=cf.status==='preapproved';
