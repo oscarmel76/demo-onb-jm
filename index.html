@@ -1889,6 +1889,16 @@ a {
   .jada-redux .sl-avail-amount{ font-size:28px !important; }
 }
 
+/* narrow/tablet customer header: organize meta into 2 tidy columns + divider so it breathes (was cramped) */
+@media (max-width:991.98px){
+  .jada-hd .hd-meta{ display:grid !important; grid-template-columns:1fr 1fr; gap:12px 22px; max-width:600px; margin-top:14px !important; padding-top:14px; border-top:1px solid rgba(255,255,255,.12); }
+}
+/* collapsed icon rail: center the Jamaica flag like the other nav icons (it kept its 14px padding) */
+@media (max-width:767.98px){
+  .sidebar .sidebar-footer .sb-flag{ justify-content:center !important; padding-left:0 !important; padding-right:0 !important; gap:0 !important; }
+  .sidebar .sidebar-footer .sb-flag .flag-jamaica{ width:24px !important; height:24px !important; }
+}
+
 /* ===== Search button — full width, pill, with magnifier icon ===== */
 .form-actions{ display:block !important; margin-top: var(--space-3) !important; }
 #screen-register-customer .form-actions{ display:flex !important; align-items:center; justify-content:space-between; gap:16px; margin-top:32px !important; }
