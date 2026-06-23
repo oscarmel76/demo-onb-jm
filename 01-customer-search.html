@@ -5385,21 +5385,21 @@ document.addEventListener('click', function(e){
     var main=screen.querySelector('.main')||screen;
     try{ if(getComputedStyle(main).position==='static') main.style.position='relative'; }catch(e){ main.style.position='relative'; }
     var old=main.querySelector('.uc-skel-ov'); if(old&&old.parentNode) old.parentNode.removeChild(old);
-    var hd=main.querySelector('.jada-hd'); var top=hd?Math.round(hd.getBoundingClientRect().height):140;
+    var mr=main.getBoundingClientRect(); var tbEl=main.querySelector('.uc-tabbar');
+    var top = tbEl ? Math.round(tbEl.getBoundingClientRect().bottom - mr.top + 6)
+                   : ((main.querySelector('.jada-hd')?Math.round(main.querySelector('.jada-hd').getBoundingClientRect().height):140)+52);
     var ov=document.createElement('div'); ov.className='uc-skel-ov';
-    ov.style.cssText='position:absolute;left:0;right:0;bottom:0;top:'+top+'px;z-index:20;background:#FAFAFA;overflow:hidden;';
-    ov.innerHTML="<div style='padding:clamp(16px,2.4vw,28px) clamp(24px,4vw,48px) 60px;'>"+window.custTabBar(id,tab)+window.tabSkeleton(tab)+"</div>";
+    ov.style.cssText='position:absolute;left:0;right:0;bottom:0;top:'+top+'px;z-index:20;background:#FAFAFA;overflow:hidden;will-change:opacity,transform;';
+    ov.innerHTML="<div style='padding:6px clamp(24px,4vw,48px) 60px;'>"+window.tabSkeleton(tab)+"</div>";
     main.appendChild(ov);
-    var body=document.querySelector(conf.sel);
     setTimeout(function(){
-      if(body){ body.classList.remove('uc-fadein'); void body.offsetWidth; body.classList.add('uc-fadein'); }
-      ov.style.transition='opacity .3s ease'; ov.style.opacity='0';
-      setTimeout(function(){ if(ov.parentNode) ov.parentNode.removeChild(ov); }, 320);
-    }, 300);
+      ov.style.transition='opacity .32s ease, transform .32s ease'; ov.style.opacity='0'; ov.style.transform='translateY(-6px)';
+      setTimeout(function(){ if(ov.parentNode) ov.parentNode.removeChild(ov); }, 340);
+    }, 280);
   };
   window.custTabBar=function(id, active){
     function T(k,label,fn){ var on=active===k; return "<button onclick=\""+fn+"\" style='font-family:inherit;font-size:13px;font-weight:"+(on?'700':'600')+";color:"+(on?'#171C8F':'#7C878E')+";background:none;border:0;border-bottom:2px solid "+(on?'#171C8F':'transparent')+";padding:13px 2px;cursor:pointer;white-space:nowrap;'>"+label+"</button>"; }
-    return "<div style='display:flex;gap:26px;border-bottom:1px solid #E6E9F5;margin-bottom:18px;'>"+T('overview','Overview',"window.gotoTab('overview','"+id+"')")+T('sales','Sales history',"window.gotoTab('sales','"+id+"')")+T('profile','Profile',"window.gotoTab('profile','"+id+"')")+"</div>";
+    return "<div class='uc-tabbar' style='display:flex;gap:26px;border-bottom:1px solid #E6E9F5;margin-bottom:18px;'>"+T('overview','Overview',"window.gotoTab('overview','"+id+"')")+T('sales','Sales history',"window.gotoTab('sales','"+id+"')")+T('profile','Profile',"window.gotoTab('profile','"+id+"')")+"</div>";
   };
   window.buildCustHeader=function(id, cf, crumbs){
     var pre=cf.status==='preapproved';
