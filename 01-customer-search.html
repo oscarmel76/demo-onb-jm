@@ -1171,7 +1171,7 @@ a {
 #screen-register-success .breadcrumb .sep { color: #fff; opacity: 0.8; }
 #screen-register-success .breadcrumb .current { color: #9799CD; }
 #screen-register-success .header-topright { display: flex; align-items: center; gap: var(--space-3); margin-left: auto; }
-#screen-register-success .flag-jamaica { width: 28px; height: 28px; }
+/* overview sidebar flag uses base 22px (was 28px, caused mismatch vs other tabs) */
 
 #screen-register-success .zone1 { padding: var(--space-6) 0 var(--space-8); }
 #screen-register-success .zone1 .row { --bs-gutter-x: 0; --bs-gutter-y: 0; align-items: stretch; }
@@ -3092,32 +3092,7 @@ a {
 
     <!-- MAIN -->
     <main class="main">
-      <header class="blue-header jada-hd" id="reg-hd">
-  <div class="hd-top"></div>
-
-  <div class="hd-main">
-    <div class="hd-id">
-      <div class="hd-id-text">
-        <div class="hd-name-row">
-          <h1 class="hd-name customer-name" id="rc-name">Customer</h1>
-          <span class="hd-chip rating" id="rc-rating">Rating A</span>
-          <span class="hd-chip ok" id="rc-pay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Up to date</span>
-        </div>
-        <button class="hd-toggle" aria-expanded="false" onclick="toggleCustHeader(this)">
-          Customer details
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-        </button>
-        <div class="hd-meta">
-          <span><b>TRN</b> <span id="rc-id">—</span></span><span id="rc-pdoc-wrap" style="display:none"><b id="rc-pdoc-lbl"></b> <span id="rc-pdoc"></span></span>
-          <span><b>COSACS</b> <span id="rc-cosacs">—</span></span>
-          <span><b>Phone</b> <span id="rc-phone">—</span></span>
-          <span><b>Updated</b> <span id="rc-addr">—</span></span>
-          
-        </div>
-      </div>
-    </div>
-  </div>
-</header>
+      <div id="reg-hd"></div>
 
       <div class="content-area jada-redux">
 
@@ -5205,6 +5180,7 @@ document.addEventListener('click', function(e){
     if(hpc){ hpc.disabled=arr; hpc.classList.toggle('disabled', arr); }
     if(csc){ csc.disabled=arr; csc.classList.toggle('disabled', arr); }
     var _ca=document.querySelector('#screen-register-success .content-area'); if(_ca){ if(!document.getElementById('rc-tabbar')) _ca.insertAdjacentHTML('afterbegin','<div id="rc-tabbar"></div>'); var _tb=document.getElementById('rc-tabbar'); if(_tb && window.custTabBar) _tb.innerHTML=window.custTabBar(c.id,'overview'); }
+    var _hdEl=document.getElementById('reg-hd'); if(_hdEl && window.buildCustHeader){ var _cfh=_cf||{name:c.full,status:c.status,rating:c.rating,trnOnFile:c.trnOnFile,trn:c.trn,primaryDoc:(c.primaryDoc||null),cosacs:c.cosacs,phone:c.phone,updated:c.updated}; _hdEl.innerHTML=window.buildCustHeader(c.id,_cfh,''); }
     if(window.showScreen) window.showScreen('customer-details');
   }
   function pipelineBodyHTML(c){
