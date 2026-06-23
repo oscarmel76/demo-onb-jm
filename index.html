@@ -5225,7 +5225,7 @@ document.addEventListener('click', function(e){
     var usedPct=(slTotal>0?Math.round(slUsed/slTotal*100):0); var availPct=(slTotal>0?Math.round(slAvail/slTotal*100):0);
     function set(id,v){ var e=document.getElementById(id); if(e) e.textContent=v; }
     set('rc-name', c.full); var _CF=window.CUSTOMER_FULL||{},_cf=null; for(var _k in _CF){ if(_CF[_k]&&_CF[_k].cosacs===c.cosacs){ _cf=_CF[_k]; break; } } var _trnOn=_cf?_cf.trnOnFile:c.trnOnFile, _pd=_cf?_cf.primaryDoc:null; set('rc-id', _trnOn?c.trn:'\u2014'); var _pdw=document.getElementById('rc-pdoc-wrap'); if(_pdw){ if(!_trnOn&&_pd){ var _l=document.getElementById('rc-pdoc-lbl'),_n=document.getElementById('rc-pdoc'); if(_l)_l.textContent=_pd.label; if(_n)_n.textContent=_pd.number; _pdw.style.display=''; } else { _pdw.style.display='none'; var _l4=document.getElementById('rc-pdoc-lbl'),_n4=document.getElementById('rc-pdoc'); if(_l4)_l4.textContent=''; if(_n4)_n4.textContent=''; } }; set('rc-cosacs', c.cosacs); set('rc-phone', c.phone); set('rc-addr', c.updated||'—'); set('rc-updated', c.updated||'—');
-    set('rc-rating', 'Rating '+c.rating);
+    set('rc-rating', 'Rating '+(c.status==='preapproved'?c.rating:(window.customerRating?window.customerRating(c.id):c.rating)));
     var pay=document.getElementById('rc-pay');
     if(pay){ pay.style.cssText=''; if(c.status==='preapproved'){ pay.className='hd-chip'; pay.style.cssText='background:rgba(255,255,255,.18);color:#fff;border:1px solid rgba(255,255,255,.4);'; pay.innerHTML='Pre-approved'; } else if(arr){ pay.className='hd-chip arrears'; pay.innerHTML=ICON_X+' In arrears'; } else { pay.className='hd-chip ok'; pay.innerHTML=ICON_CHK+' Up to date'; } }
     set('rc-sl-avail', dMoney(slAvail)); set('rc-sl-limit', dMoney(slTotal)); set('rc-sl-used', dMoney(slUsed));
@@ -5280,11 +5280,11 @@ document.addEventListener('click', function(e){
     var paid=active?Math.floor(rnd()*Math.min(total,4)):total;
     var inst=Math.round(1200+rnd()*2600), rem=total-paid;
     var out=active?Math.round(inst*rem*1.02):0;
-    var late=active&&rnd()<0.22?Math.floor(rnd()*25)+3:0;
+    var lr=rnd(); var late=!active?0:(lr<0.62?0:lr<0.80?(Math.floor(rnd()*28)+1):lr<0.92?(Math.floor(rnd()*30)+30):(Math.floor(rnd()*36)+60)); var ratingV=late>=60?'C':late>=30?'B':'A';
     var pre=kind==='hp'?['GZOV','MECA','IRMR','TVPR','FURN']:['CLOA','CSHL','LOAN'];
     return { kind:kind, type:kind==='hp'?'Hired Purchase':'Cash Loan',
       cosacs:'9100087'+(10000+Math.floor(rnd()*89999)), mambu:pre[Math.floor(rnd()*pre.length)]+(100+Math.floor(rnd()*899)),
-      activated:shDate(rnd,2024,2026), status:active?'Active':'Closed', rating:['A','A','A','B','B','C'][Math.floor(rnd()*6)],
+      activated:shDate(rnd,2024,2026), status:active?'Active':'Closed', rating:ratingV,
       outstanding:out, installment:inst, paid:paid, total:total, daysLate:late,
       earlySettlement:active?Math.round(out*1.004):0, nextDue:active?shDate(rnd,2026,2026):'—', totalToPay:inst*total };
   }
@@ -5398,7 +5398,7 @@ document.addEventListener('click', function(e){
     var det=window.accountDetail(a);
     var ps=document.getElementById('ad-sidebar'); if(ps && !ps.children.length){ var src=document.querySelector('#screen-register-success .sidebar'); if(src) ps.innerHTML=src.innerHTML; }
     var dl=cf.trnOnFile?'TRN':(cf.primaryDoc?cf.primaryDoc.label:'TRN'), dn=cf.trnOnFile?cf.trn:(cf.primaryDoc?cf.primaryDoc.number:'—');
-    document.getElementById('ad-hd').innerHTML='<header class="blue-header jada-hd"><div class="hd-top"><nav class="breadcrumb"><a onclick="goToSearch(false)">New customer search</a><span class="sep">/</span><a onclick="window.openCustomerById(\''+custId+'\')">Customer details</a><span class="sep">/</span><a onclick="window.openSalesHistory(\''+custId+'\')">Customer sales history</a><span class="sep">/</span><span class="current">Account details</span></nav></div><div class="hd-main"><div class="hd-id"><div class="hd-id-text"><div class="hd-name-row"><h1 class="hd-name customer-name">'+cf.name+'</h1></div><div class="hd-meta"><span><b>'+dl+'</b> '+dn+'</span><span><b>COSACS</b> '+cf.cosacs+'</span><span><b>Phone</b> '+(cf.phone||'—')+'</span></div></div></div></div></header>';
+    document.getElementById('ad-hd').innerHTML=window.buildCustHeader(custId, cf, '<nav class="breadcrumb"><a onclick="goToSearch(false)">New customer search</a><span class="sep">/</span><a onclick="window.openCustomerById(\''+custId+'\')">Customer details</a><span class="sep">/</span><a onclick="window.openSalesHistory(\''+custId+'\')">Customer sales history</a><span class="sep">/</span><span class="current">Account details</span></nav>');
     var ab=document.getElementById('ad-body'); ab.innerHTML=renderAccountDetail(custId,det);
     if(!ab.__bound){ ab.__bound=true; ab.addEventListener('click',function(e){
       var b=e.target.closest&&e.target.closest('[data-ad-act]'); if(b){ var a2=b.getAttribute('data-ad-act'); var m=a2==='cart'?'Opening cart…':a2==='statement'?'Downloading account statement…':'Downloading contract…'; if(window.ucToast) window.ucToast(m); return; }
@@ -5406,11 +5406,31 @@ document.addEventListener('click', function(e){
     }); }
     if(window.showScreen) window.showScreen('account-detail');
   };
+  window.customerRating=function(id){
+    try{ var acc=window.salesAccounts(id); var all=acc.active.hp.concat(acc.active.cash); var w='A';
+      for(var i=0;i<all.length;i++){ var r=all[i].rating; if(r==='C') w='C'; else if(r==='B' && w!=='C') w='B'; }
+      return w;
+    }catch(e){ return 'A'; }
+  };
+  window.buildCustHeader=function(id, cf, crumbs){
+    var pre=cf.status==='preapproved';
+    var rating=pre?cf.rating:(window.customerRating?window.customerRating(id):cf.rating);
+    var CHK="<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'></polyline></svg>";
+    var XI="<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'><line x1='18' y1='6' x2='6' y2='18'></line><line x1='6' y1='6' x2='18' y2='18'></line></svg>";
+    var statusChip = pre
+      ? "<span class='hd-chip' style='background:rgba(255,255,255,.18);color:#fff;border:1px solid rgba(255,255,255,.4);'>Pre-approved</span>"
+      : (cf.status==='arrears'
+        ? "<span class='hd-chip arrears'>"+XI+" In arrears</span>"
+        : "<span class='hd-chip ok'>"+CHK+" Up to date</span>");
+    var trnSpan="<span><b>TRN</b> "+(cf.trnOnFile?cf.trn:"<span style='color:#8E93C8'>&mdash;</span>")+"</span>";
+    var pdocSpan=(!cf.trnOnFile&&cf.primaryDoc)?"<span><b>"+cf.primaryDoc.label+"</b> "+cf.primaryDoc.number+"</span>":"";
+    return "<header class='blue-header jada-hd'><div class='hd-top'>"+crumbs+"</div><div class='hd-main'><div class='hd-id'><div class='hd-id-text'><div class='hd-name-row'><h1 class='hd-name customer-name'>"+cf.name+"</h1><button onclick=\"window.openProfile('"+id+"')\" style='order:2;margin-left:auto;display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 14px;border:1.5px solid rgba(255,255,255,.35);background:rgba(255,255,255,.08);color:#fff;border-radius:9999px;font-family:inherit;font-size:12.5px;font-weight:700;cursor:pointer;'>View full profile &rarr;</button><span class='hd-chip rating'>Rating "+rating+"</span>"+statusChip+"</div><div class='hd-meta'>"+trnSpan+pdocSpan+"<span><b>COSACS</b> "+cf.cosacs+"</span><span><b>Phone</b> "+(cf.phone||'—')+"</span><span><b>Updated</b> "+(cf.updated||'—')+"</span></div></div></div></div></header>";
+  };
   window.openSalesHistory=function(id){
     id=id||window.__activeCustId||'jada'; var cf=(window.CUSTOMER_FULL||{})[id]||window.CUSTOMER_FULL.jada; window.__activeCustId=id; window.__shId=id;
     var ps=document.getElementById('sh-sidebar'); if(ps && !ps.children.length){ var src=document.querySelector('#screen-register-success .sidebar'); if(src) ps.innerHTML=src.innerHTML; }
     var dl=cf.trnOnFile?'TRN':(cf.primaryDoc?cf.primaryDoc.label:'TRN'), dn=cf.trnOnFile?cf.trn:(cf.primaryDoc?cf.primaryDoc.number:'—');
-    document.getElementById('sh-hd').innerHTML='<header class="blue-header jada-hd"><div class="hd-top"><nav class="breadcrumb"><a onclick="goToSearch(false)">New customer search</a><span class="sep">/</span><a onclick="window.openCustomerById(\''+id+'\')">Customer details</a><span class="sep">/</span><span class="current">Customer sales history</span></nav></div><div class="hd-main"><div class="hd-id"><div class="hd-id-text"><div class="hd-name-row"><h1 class="hd-name customer-name">'+cf.name+'</h1><button onclick="window.openProfile(\''+id+'\')" style="order:2;margin-left:auto;display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 14px;border:1.5px solid rgba(255,255,255,.35);background:rgba(255,255,255,.08);color:#fff;border-radius:9999px;font-family:inherit;font-size:12.5px;font-weight:700;cursor:pointer;">View customer profile &rarr;</button></div><div class="hd-meta"><span><b>'+dl+'</b> '+dn+'</span><span><b>COSACS</b> '+cf.cosacs+'</span><span><b>Phone</b> '+(cf.phone||'—')+'</span><span><b>Updated</b> '+(cf.updated||'—')+'</span></div></div></div></div></header>';
+    document.getElementById('sh-hd').innerHTML=window.buildCustHeader(id, cf, '<nav class="breadcrumb"><a onclick="goToSearch(false)">New customer search</a><span class="sep">/</span><a onclick="window.openCustomerById(\''+id+'\')">Customer details</a><span class="sep">/</span><span class="current">Customer sales history</span></nav>');
     var acc=window.salesAccounts(id);
     var na=acc.active.hp.length+acc.active.cash.length, nc=acc.closed.hp.length+acc.closed.cash.length;
     var body="<h2 style='font-size:22px;font-weight:800;color:#171C8F;letter-spacing:-.01em;margin:0 0 14px;'>Customer sales history</h2>"+
