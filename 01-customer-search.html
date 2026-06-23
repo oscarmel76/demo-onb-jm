@@ -3243,6 +3243,8 @@ a {
 <!-- ============================================
      SCREEN · JADA MARCIA SMITH THOMPSON — dedicated home (added scenario)
      ============================================ -->
+<div class="screen" id="screen-account-detail" data-screen-label="Account details"><div class="app"><aside class="sidebar" id="ad-sidebar"></aside><main class="main"><div id="ad-hd"></div><div class="content-area jada-redux" id="ad-body" style="padding:clamp(16px,2.4vw,28px) clamp(24px,4vw,48px) 60px;"></div></main></div></div>
+
 <div class="screen" id="screen-sales-history" data-screen-label="Customer sales history"><div class="app"><aside class="sidebar" id="sh-sidebar"></aside><main class="main"><div id="sh-hd"></div><div class="content-area jada-redux" id="sh-body" style="padding:clamp(16px,2.4vw,28px) clamp(24px,4vw,48px) 60px;"></div></main></div></div>
 
 <div class="screen" id="screen-pipeline" data-screen-label="Customer · pipeline"><div class="app"><aside class="sidebar" id="pipe-sidebar"></aside><main class="main"><div id="pipe-hd"></div><div class="content-area jada-redux" id="pipeline-body" style="padding:clamp(16px,2.4vw,28px) clamp(24px,4vw,48px) 60px;"></div></main></div></div>
@@ -5287,11 +5289,11 @@ document.addEventListener('click', function(e){
       earlySettlement:active?Math.round(out*1.004):0, nextDue:active?shDate(rnd,2026,2026):'—', totalToPay:inst*total };
   }
   window.salesAccounts=function(id){ var rnd=shRng(shSeed(String(id||'x')));
-    var A={hp:[],cash:[]},C={hp:[],cash:[]}; var i;
-    for(i=0;i<2+Math.floor(rnd()*2);i++) A.hp.push(shGen(rnd,'hp',true));
-    for(i=0;i<1+Math.floor(rnd()*2);i++) A.cash.push(shGen(rnd,'cash',true));
-    for(i=0;i<1+Math.floor(rnd()*2);i++) C.hp.push(shGen(rnd,'hp',false));
-    for(i=0;i<1+Math.floor(rnd()*1);i++) C.cash.push(shGen(rnd,'cash',false));
+    var A={hp:[],cash:[]},C={hp:[],cash:[]}; var i,x;
+    for(i=0;i<2+Math.floor(rnd()*2);i++){ x=shGen(rnd,'hp',true); x.aid='ah'+i; A.hp.push(x); }
+    for(i=0;i<1+Math.floor(rnd()*2);i++){ x=shGen(rnd,'cash',true); x.aid='ac'+i; A.cash.push(x); }
+    for(i=0;i<1+Math.floor(rnd()*2);i++){ x=shGen(rnd,'hp',false); x.aid='ch'+i; C.hp.push(x); }
+    for(i=0;i<1+Math.floor(rnd()*1);i++){ x=shGen(rnd,'cash',false); x.aid='cc'+i; C.cash.push(x); }
     return {active:A,closed:C};
   };
   function shRatingChip(r){ var c=r==='A'?['#0E7A55','#D5F2E3']:r==='B'?['#8A6B00','#FBEFC9']:['#C0283A','#FBDDE0']; return "<span style='font-size:9px;font-weight:700;text-transform:uppercase;color:"+c[0]+";background:"+c[1]+";padding:3px 8px;border-radius:9999px;'>"+r+"</span>"; }
@@ -5313,7 +5315,7 @@ document.addEventListener('click', function(e){
       cell('Next due',a.nextDue)+
       cell('Total to pay',shM(a.totalToPay))+
     "</div>";
-    var footer="<div style='border-top:1px solid #F0F0F6;margin-top:14px;padding-top:12px;display:flex;justify-content:flex-end;'><button data-sh-act='view' data-mambu='"+a.mambu+"' style='display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:#fff;background:#171C8F;border:0;border-radius:9px;padding:9px 18px;cursor:pointer;'>View account <svg width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><line x1='5' y1='12' x2='19' y2='12'></line><polyline points='12 5 19 12 12 19'></polyline></svg></button></div>";
+    var footer="<div style='border-top:1px solid #F0F0F6;margin-top:14px;padding-top:12px;display:flex;justify-content:flex-end;'><button data-sh-act='view' data-aid='"+a.aid+"' style='display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:#fff;background:#171C8F;border:0;border-radius:9px;padding:9px 18px;cursor:pointer;'>View account <svg width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><line x1='5' y1='12' x2='19' y2='12'></line><polyline points='12 5 19 12 12 19'></polyline></svg></button></div>";
     return "<div class='sh-acct' style='background:#fff;border:1px solid #E2E5EC;border-radius:14px;padding:16px 18px;'>"+
       "<div style='display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;'>"+
         "<div><div style='font-size:15px;font-weight:700;color:#1A1B1E;'>"+a.mambu+"</div><div style='font-size:11px;color:#9A9AB0;margin-top:3px;'>COSACS "+a.cosacs+" · activated "+a.activated+"</div></div>"+
@@ -5338,6 +5340,72 @@ document.addEventListener('click', function(e){
     ['active','closed'].forEach(function(t){ var p=document.getElementById('sh-pane-'+t); if(p) p.style.display=(t===which)?'block':'none';
       var tb=document.getElementById('sh-tabbtn-'+t); if(tb){ tb.style.color=(t===which)?'#171C8F':'#9A9AB0'; tb.style.borderBottom=(t===which)?'2px solid #171C8F':'2px solid transparent'; tb.style.fontWeight=(t===which)?'700':'600'; } });
   };
+  /* ===== Account detail ===== */
+  var AD_CART="<svg width='17' height='17' viewBox='0 0 24 24' fill='none' stroke='#171C8F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='9' cy='20' r='1.4'></circle><circle cx='18' cy='20' r='1.4'></circle><path d='M2.5 3.5H5l2.2 11.1a1.6 1.6 0 0 0 1.6 1.3h8.5a1.6 1.6 0 0 0 1.6-1.25L21.5 7H6.2'></path></svg>";
+  var AD_CAL="<svg width='17' height='17' viewBox='0 0 24 24' fill='none' stroke='#171C8F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='4' width='18' height='18' rx='2'></rect><line x1='16' y1='2' x2='16' y2='6'></line><line x1='8' y1='2' x2='8' y2='6'></line><line x1='3' y1='10' x2='21' y2='10'></line></svg>";
+  var AD_LIST="<svg width='17' height='17' viewBox='0 0 24 24' fill='none' stroke='#171C8F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><line x1='8' y1='6' x2='21' y2='6'></line><line x1='8' y1='12' x2='21' y2='12'></line><line x1='8' y1='18' x2='21' y2='18'></line><line x1='3' y1='6' x2='3.01' y2='6'></line><line x1='3' y1='12' x2='3.01' y2='12'></line><line x1='3' y1='18' x2='3.01' y2='18'></line></svg>";
+  var AD_DL="<svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'></path><polyline points='7 10 12 15 17 10'></polyline><line x1='12' y1='15' x2='12' y2='3'></line></svg>";
+  var AD_DOC="<svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'></path><polyline points='14 2 14 8 20 8'></polyline><line x1='9' y1='13' x2='15' y2='13'></line><line x1='9' y1='17' x2='15' y2='17'></line></svg>";
+  var AD_CART2="<svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='9' cy='20' r='1.4'></circle><circle cx='18' cy='20' r='1.4'></circle><path d='M2.5 3.5H5l2.2 11.1a1.6 1.6 0 0 0 1.6 1.3h8.5a1.6 1.6 0 0 0 1.6-1.25L21.5 7H6.2'></path></svg>";
+  window.accountDetail=function(a){
+    var rnd=shRng(shSeed((a.aid||a.mambu)+'det'));
+    var isHP=a.kind==='hp', inst=a.installment, total=a.total, paid=a.paid;
+    var loanAmount=Math.round(inst*total/(1.2+rnd()*0.25));
+    var goods=isHP?Math.round(loanAmount*1.18):loanAmount;
+    var deposit=isHP?Math.max(0,goods-loanAmount):0;
+    var outPen=a.daysLate>0?Math.round(inst*0.05):0;
+    var outPrincipal=Math.round(a.outstanding*(0.93+rnd()*0.04));
+    var outInterest=Math.max(0,a.outstanding-outPrincipal-outPen);
+    var outBalance=outPrincipal+outInterest+outPen;
+    var rate=(35+Math.floor(rnd()*35))+'.'+('0'+Math.floor(rnd()*60)).slice(-2)+'%';
+    var txns=[],totA=0,totP=0,totI=0,n=Math.min(Math.max(paid,0),4);
+    for(var i=0;i<n;i++){ var amt=Math.round(inst*(0.9+rnd()*1.5)),pr=Math.round(amt*(0.42+rnd()*0.18)),inI=amt-pr;
+      txns.push({ref:(rnd()<0.5?String(100000000+Math.floor(rnd()*899999999)):'0000000'),date:shDate(rnd,2024,2026),amount:amt,principal:pr,interest:inI}); totA+=amt;totP+=pr;totI+=inI; }
+    return { isHP:isHP, accountNo:a.cosacs, ref:'REF. '+['KYKP','GZOV','MECA','IRMR','TVPR'][Math.floor(rnd()*5)]+(100+Math.floor(rnd()*899)),
+      goods:goods, deposit:deposit, loanAmount:loanAmount, overdue:a.daysLate>0?Math.round(inst):0, balanceDue:0, installment:inst, arrears:a.daysLate, rate:rate,
+      agreementDate:a.activated, outPrincipal:outPrincipal, outInterest:outInterest, outFees:0, outPen:outPen, outBalance:outBalance,
+      nextDate:a.nextDue, nextAmount:inst, pPrincipal:inst, pPrincipalDue:0, pInterest:0, pInterestDue:0,
+      lastPaymentDate:txns[0]?txns[0].date:'—', lastDatePaid:txns[0]?txns[0].date:'—', lastAmountPaid:txns[0]?txns[0].amount:0,
+      frequency:'Monthly', maturity:shDate(rnd,2027,2028), txns:txns, totA:totA, totP:totP, totI:totI };
+  };
+  function adRow(k,v){ return "<div style='display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-bottom:1px solid #F0F0F6;'><span style='font-size:12.5px;color:#7C878E;'>"+k+"</span><span style='font-size:12.5px;font-weight:700;color:#1A1B1E;text-align:right;'>"+v+"</span></div>"; }
+  function adSection(title,icon,body,chip){ return "<section style='background:#fff;border:1px solid #E2E5EC;border-radius:14px;padding:18px 20px;margin-top:14px;'><div style='display:flex;align-items:center;gap:9px;margin-bottom:12px;'>"+icon+"<span style='font-size:14px;font-weight:700;color:#1A1B1E;'>"+title+"</span>"+(chip?"<span style='margin-left:auto;font-size:11px;font-weight:700;color:#5560C8;background:#EEF0FF;padding:4px 11px;border-radius:9999px;'>"+chip+"</span>":"")+"</div>"+body+"</section>"; }
+  function adBox(label,val){ return "<div style='background:#F7F8FF;border:1px solid #E6E9F5;border-radius:12px;padding:13px 15px;margin-top:10px;'><div style='font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:#7C878E;font-weight:700;'>"+label+"</div><div style='font-size:20px;font-weight:800;color:#171C8F;margin-top:3px;'>"+val+"</div></div>"; }
+  function renderAccountDetail(custId, det){
+    var leftRows=det.isHP
+      ? adRow('Goods value',shM(det.goods))+adRow('Deposit',shM(det.deposit))+adRow('Loan amount',shM(det.loanAmount))+adRow('Overdue',shM(det.overdue))+adRow('Balance due',shM(det.balanceDue))+adRow('Installment amount',shM(det.installment))+adRow('Days in arrears',det.arrears+' days')+adRow('Interest rate',det.rate)
+      : adRow('Loan amount',shM(det.loanAmount))+adRow('Amount disbursed',shM(det.goods))+adRow('Overdue',shM(det.overdue))+adRow('Balance due',shM(det.balanceDue))+adRow('Installment amount',shM(det.installment))+adRow('Days in arrears',det.arrears+' days')+adRow('Interest rate',det.rate);
+    var rightRows=adRow('Agreement date',det.agreementDate)+adRow('Outstanding principal',shM(det.outPrincipal))+adRow('Outstanding interest',shM(det.outInterest))+adRow('Outstanding fees',shM(det.outFees))+adRow('Outstanding penalties',shM(det.outPen));
+    var info=adSection((det.isHP?'Hired purchase information':'Cash loan information'),AD_CART,"<div style='display:grid;grid-template-columns:1fr 1fr;gap:0 44px;'><div>"+leftRows+"</div><div>"+rightRows+adBox('Outstanding balance',shM(det.outBalance))+"</div></div>",det.ref);
+    var payLeft="<div style='background:#F7F8FF;border:1px solid #E6E9F5;border-radius:12px;padding:13px 15px;display:flex;justify-content:space-between;align-items:center;gap:12px;'><div><div style='font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:#7C878E;font-weight:700;'>Next payment</div><div style='font-size:14px;font-weight:700;color:#171C8F;margin-top:3px;'>"+det.nextDate+"</div></div><div style='font-size:20px;font-weight:800;color:#171C8F;'>"+shM(det.nextAmount)+"</div></div>"+adRow('Principal',shM(det.pPrincipal))+adRow('Principal due',shM(det.pPrincipalDue))+adRow('Interest',shM(det.pInterest))+adRow('Interest due',shM(det.pInterestDue));
+    var payRight=adRow('Last payment date',det.lastPaymentDate)+adRow('Last date paid',det.lastDatePaid)+adRow('Last amount paid',shM(det.lastAmountPaid))+adRow('Payment frequency',det.frequency)+adRow('Loan maturity date',det.maturity);
+    var pay=adSection('Payment information',AD_CAL,"<div style='display:grid;grid-template-columns:1fr 1fr;gap:0 44px;'><div>"+payLeft+"</div><div>"+payRight+"</div></div>");
+    var heads=['Reference','Transaction date','Transaction type','Amount','Principal','Interest','Penalties','Fees & charges','Total balance'];
+    var th="<tr style='background:#F7F8FF;'>"+heads.map(function(h,ix){return "<th style='text-align:"+(ix<3?'left':'right')+";font-size:9.5px;text-transform:uppercase;letter-spacing:.03em;color:#7C878E;font-weight:700;padding:10px 12px;white-space:nowrap;'>"+h+"</th>";}).join("")+"</tr>";
+    var rows=det.txns.map(function(t){ return "<tr style='border-top:1px solid #F0F0F6;'><td style='padding:11px 12px;font-size:12.5px;color:#171C8F;font-weight:600;'>"+t.ref+"</td><td style='padding:11px 12px;font-size:12.5px;color:#1A1B1E;white-space:nowrap;'>"+t.date+"</td><td style='padding:11px 12px;font-size:12.5px;color:#1A1B1E;'>Repayment</td><td style='padding:11px 12px;font-size:12.5px;text-align:right;'>"+shM(t.amount)+"</td><td style='padding:11px 12px;font-size:12.5px;text-align:right;'>"+shM(t.principal)+"</td><td style='padding:11px 12px;font-size:12.5px;text-align:right;'>"+shM(t.interest)+"</td><td style='padding:11px 12px;font-size:12.5px;text-align:right;'>$0.00</td><td style='padding:11px 12px;font-size:12.5px;text-align:right;'>$0.00</td><td style='padding:11px 12px;font-size:12.5px;text-align:right;'>$0.00</td></tr>"; }).join("")||"<tr><td colspan='9' style='padding:16px 12px;font-size:12.5px;color:#9A9AB0;text-align:center;'>No payment transactions yet.</td></tr>";
+    var totalRow="<tr style='background:#F7F8FF;border-top:1px solid #E2E5EC;'><td colspan='3' style='padding:11px 12px;font-size:12.5px;font-weight:800;color:#1A1B1E;text-align:right;'>Total</td><td style='padding:11px 12px;font-size:12.5px;font-weight:800;text-align:right;'>"+shM(det.totA)+"</td><td style='padding:11px 12px;font-size:12.5px;font-weight:800;text-align:right;'>"+shM(det.totP)+"</td><td style='padding:11px 12px;font-size:12.5px;font-weight:800;text-align:right;'>"+shM(det.totI)+"</td><td style='padding:11px 12px;font-size:12.5px;font-weight:800;text-align:right;'>$0.00</td><td style='padding:11px 12px;font-size:12.5px;font-weight:800;text-align:right;'>$0.00</td><td style='padding:11px 12px;font-size:12.5px;font-weight:800;text-align:right;'>$0.00</td></tr>";
+    var txn=adSection('Payment transactions',AD_LIST,"<div style='overflow-x:auto;'><table style='width:100%;border-collapse:collapse;min-width:780px;'>"+th+rows+totalRow+"</table></div><div style='font-size:11px;color:#9A9AB0;text-align:center;margin-top:10px;'>Payments made on the same day may not be reflected in this document.</div>");
+    function ub(act,label,svg){ return "<button data-ad-act='"+act+"' style='display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:#171C8F;background:#fff;border:1px solid #C7CBF0;border-radius:8px;padding:8px 13px;cursor:pointer;'>"+svg+label+"</button>"; }
+    var actions="<div style='display:flex;gap:8px;flex-wrap:wrap;'>"+(det.isHP?ub('cart','See cart',AD_CART2):"")+ub('statement','Download account statement',AD_DL)+ub('contract','Download contract',AD_DOC)+"</div>";
+    var head="<div style='display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:4px;'><div style='display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;'><h2 style='font-size:22px;font-weight:800;color:#171C8F;margin:0;letter-spacing:-.01em;'>Account details</h2><span style='font-size:13px;color:#7C878E;'>· Account No. "+det.accountNo+"</span></div>"+actions+"</div>";
+    var back="<div style='margin-top:18px;'><button data-ad-back style='display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:#171C8F;background:#fff;border:1.5px solid #C7CBF0;border-radius:10px;padding:10px 16px;cursor:pointer;'>&larr; Back to Sales History</button></div>";
+    return head+info+pay+txn+back;
+  }
+  window.openAccountDetail=function(custId, aid){
+    custId=custId||window.__shId||'jada'; window.__adCust=custId; var cf=(window.CUSTOMER_FULL||{})[custId]||window.CUSTOMER_FULL.jada;
+    var acc=window.salesAccounts(custId); var all=acc.active.hp.concat(acc.active.cash,acc.closed.hp,acc.closed.cash);
+    var a=null,i; for(i=0;i<all.length;i++){ if(all[i].aid===aid){ a=all[i]; break; } } if(!a) a=all[0]; if(!a) return;
+    var det=window.accountDetail(a);
+    var ps=document.getElementById('ad-sidebar'); if(ps && !ps.children.length){ var src=document.querySelector('#screen-register-success .sidebar'); if(src) ps.innerHTML=src.innerHTML; }
+    var dl=cf.trnOnFile?'TRN':(cf.primaryDoc?cf.primaryDoc.label:'TRN'), dn=cf.trnOnFile?cf.trn:(cf.primaryDoc?cf.primaryDoc.number:'—');
+    document.getElementById('ad-hd').innerHTML='<header class="blue-header jada-hd"><div class="hd-top"><nav class="breadcrumb"><a onclick="goToSearch(false)">New customer search</a><span class="sep">/</span><a onclick="window.openCustomerById(\''+custId+'\')">Customer details</a><span class="sep">/</span><a onclick="window.openSalesHistory(\''+custId+'\')">Customer sales history</a><span class="sep">/</span><span class="current">Account details</span></nav></div><div class="hd-main"><div class="hd-id"><div class="hd-id-text"><div class="hd-name-row"><h1 class="hd-name customer-name">'+cf.name+'</h1></div><div class="hd-meta"><span><b>'+dl+'</b> '+dn+'</span><span><b>COSACS</b> '+cf.cosacs+'</span><span><b>Phone</b> '+(cf.phone||'—')+'</span></div></div></div></div></header>';
+    var ab=document.getElementById('ad-body'); ab.innerHTML=renderAccountDetail(custId,det);
+    if(!ab.__bound){ ab.__bound=true; ab.addEventListener('click',function(e){
+      var b=e.target.closest&&e.target.closest('[data-ad-act]'); if(b){ var a2=b.getAttribute('data-ad-act'); var m=a2==='cart'?'Opening cart…':a2==='statement'?'Downloading account statement…':'Downloading contract…'; if(window.ucToast) window.ucToast(m); return; }
+      var bk=e.target.closest&&e.target.closest('[data-ad-back]'); if(bk){ if(window.openSalesHistory) window.openSalesHistory(window.__adCust); return; }
+    }); }
+    if(window.showScreen) window.showScreen('account-detail');
+  };
   window.openSalesHistory=function(id){
     id=id||window.__activeCustId||'jada'; var cf=(window.CUSTOMER_FULL||{})[id]||window.CUSTOMER_FULL.jada; window.__activeCustId=id; window.__shId=id;
     var ps=document.getElementById('sh-sidebar'); if(ps && !ps.children.length){ var src=document.querySelector('#screen-register-success .sidebar'); if(src) ps.innerHTML=src.innerHTML; }
@@ -5355,7 +5423,7 @@ document.addEventListener('click', function(e){
     var sb=document.getElementById('sh-body'); sb.innerHTML=body;
     if(!sb.__shBound){ sb.__shBound=true; sb.addEventListener('click',function(e){
       var tg=e.target.closest&&e.target.closest('[data-sh-toggle]'); if(tg){ var det=tg.parentNode.querySelector('.sh-acct-detail'); if(det){ var open=det.style.display!=='none'; det.style.display=open?'none':'block'; var ch=tg.querySelector('.sh-chev'); if(ch) ch.textContent=open?'▾':'▴'; } return; }
-      var ab=e.target.closest&&e.target.closest('[data-sh-act]'); if(ab){ var a=ab.getAttribute('data-sh-act'); var m=a==='cart'?'Opening cart…':a==='statement'?'Downloading account statement…':a==='contract'?'Downloading contract…':'Opening account detail… (coming soon)'; if(window.ucToast) window.ucToast(m); return; }
+      var ab=e.target.closest&&e.target.closest('[data-sh-act]'); if(ab){ var a=ab.getAttribute('data-sh-act'); if(a==='view'){ if(window.openAccountDetail) window.openAccountDetail(window.__shId, ab.getAttribute('data-aid')); return; } var m=a==='cart'?'Opening cart…':a==='statement'?'Downloading account statement…':'Downloading contract…'; if(window.ucToast) window.ucToast(m); return; }
       var tb=e.target.closest&&e.target.closest('[data-sh-tab]'); if(tb){ window.shTab(tb.getAttribute('data-sh-tab')); return; }
     }); }
     if(window.showScreen) window.showScreen('sales-history');
