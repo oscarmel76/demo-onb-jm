@@ -6550,7 +6550,7 @@ window.initSimulation=function(params){
     setupTrn();
     var _cf=(window.CUSTOMER_FULL||{})[cId];
     if(_cf){ _el('rev-phone').textContent=window.curContact(_cf,'phone'); if(_el('rev-home')) _el('rev-home').textContent=window.curContact(_cf,'home'); _el('rev-addr').textContent=window.curContact(_cf,'address');
-      var _BDG=" <span style='font-size:9.5px;font-weight:700;text-transform:uppercase;color:#0E7A55;background:#D5F2E3;padding:2px 7px;border-radius:9999px;margin-left:5px;'>Primary</span>";
+      var _BDG="";
       var _pl=_el('rev-phone-label'); if(_pl) _pl.innerHTML="Cell phone"+_BDG;
       var _hl=_el('rev-home-label'); if(_hl) _hl.innerHTML="Home phone"+_BDG;
       var _al=_el('rev-addr-label'); if(_al) _al.innerHTML="Address"+_BDG;
