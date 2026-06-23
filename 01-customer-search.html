@@ -5111,9 +5111,7 @@ document.addEventListener('click', function(e){
    {id:'andre',first:'Andre',mid:'Christopher',last:'Hutchinson',last2:'',full:'Andre Christopher Hutchinson',
     trn:'',cosacs:'ACHU663127',trnOnFile:false,primaryDoc:{label:'Licence',number:'1942776305'},dob:'07 / 09 / 1988',phone:'+1 876 482 9913', addr:'52 Hagley Park Road, Kingston 10',type:'Current',rating:'\u2014',status:'analysis',sale:{acct:'HP-30311',financed:145000,submitted:'Jun 19, 2026',product:'Hired Purchase'}},
    {id:'camille',first:'Camille',mid:'Antoinette',last:'Bennett',last2:'',full:'Camille Antoinette Bennett',
-    trn:'',cosacs:'CABE774239',trnOnFile:false,primaryDoc:{label:"Voter's ID",number:'VID-558041'},dob:'21 / 12 / 1990',phone:'+1 876 339 5572', addr:'6 Washington Boulevard, Kingston 20',type:'Current',rating:'\u2014',status:'observed',sale:{acct:'HP-30342',financed:98000,submitted:'Jun 17, 2026',product:'Hired Purchase'},observations:['Proof of income is older than 90 days — attach an updated payslip.','Address on the utility bill does not match the application.','Second reference phone number is unreachable.']},
-   {id:'rohan',first:'Rohan',mid:'Anthony',last:'Clarke',last2:'',full:'Rohan Anthony Clarke',
-    trn:'',cosacs:'RACL885310',trnOnFile:false,primaryDoc:{label:'Licence',number:'2055931007'},dob:'03 / 11 / 1985',phone:'+1 876 705 4412', addr:'14 Red Hills Road, Kingston 19',type:'Current',rating:'D',status:'rejected',sale:{acct:'HP-30377',financed:182000,submitted:'Jun 21, 2026',product:'Hired Purchase'},rejectReasons:['Credit rating D — below the minimum accepted rating.','Internal delinquency of 41 days on an existing account (limit is 7 days).','Outstanding delinquency balance of $3,450 (limit is $500).']}
+    trn:'',cosacs:'CABE774239',trnOnFile:false,primaryDoc:{label:"Voter's ID",number:'VID-558041'},dob:'21 / 12 / 1990',phone:'+1 876 339 5572', addr:'6 Washington Boulevard, Kingston 20',type:'Current',rating:'\u2014',status:'observed',sale:{acct:'HP-30342',financed:98000,submitted:'Jun 17, 2026',product:'Hired Purchase'},observations:['Proof of income is older than 90 days — attach an updated payslip.','Address on the utility bill does not match the application.','Second reference phone number is unreachable.']}
   ];
 
   function norm(s){ return (s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,' ').replace(/\s+/g,' ').trim(); }
@@ -5260,10 +5258,23 @@ document.addEventListener('click', function(e){
     for(i=0;i<1+Math.floor(rnd()*2);i++){ x=shGen(rnd,'cash',true); x.aid='ac'+i; A.cash.push(x); }
     for(i=0;i<1+Math.floor(rnd()*2);i++){ x=shGen(rnd,'hp',false); x.aid='ch'+i; C.hp.push(x); }
     for(i=0;i<1+Math.floor(rnd()*1);i++){ x=shGen(rnd,'cash',false); x.aid='cc'+i; C.cash.push(x); }
-    return {active:A,closed:C};
+    var REJ={ marcus:[{ kind:'hp', mambu:'IRMR742', cosacs:'910008791204', applied:'Jun 21, 2026', product:'Hired Purchase', requested:312000, installment:9200, reason:'Installment exceeds the approved monthly maximum (MMI). Ask the customer to put down a larger deposit, or to provide updated proof of income, so the monthly amount falls within the limit.' }] };
+    return {active:A,closed:C,rejected:(REJ[id]||[])};
   };
   function shRatingChip(r){ var c=r==='A'?['#0E7A55','#D5F2E3']:r==='B'?['#8A6B00','#FBEFC9']:['#C0283A','#FBDDE0']; return "<span style='font-size:9px;font-weight:700;text-transform:uppercase;color:"+c[0]+";background:"+c[1]+";padding:3px 8px;border-radius:9999px;'>"+r+"</span>"; }
   function shStatusChip(st){ var on=st==='Active'; return "<span style='font-size:9px;font-weight:700;text-transform:uppercase;color:"+(on?'#0E7A55':'#7C878E')+";background:"+(on?'#D5F2E3':'#EDEDF2')+";padding:3px 8px;border-radius:9999px;'>"+st+"</span>"; }
+  function shRejectedCard(a){
+    return "<div style='background:#fff;border:1px solid #F1C4CB;border-radius:14px;padding:16px 18px;'>"+
+      "<div style='display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;'><div><div style='font-size:15px;font-weight:700;color:#1A1B1E;'>"+a.mambu+"</div><div style='font-size:11px;color:#9A9AB0;margin-top:3px;'>COSACS "+a.cosacs+" \u00b7 applied "+a.applied+"</div></div><span style='font-size:11.5px;font-weight:700;color:#C0283A;display:inline-flex;align-items:center;gap:5px;'><span style='width:7px;height:7px;border-radius:50%;background:#E5566A;'></span>Rejected</span></div>"+
+      "<div style='border-top:1px solid #F0F0F6;margin-top:12px;padding-top:13px;display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:16px;'>"+
+        "<div><div style='font-size:9.5px;text-transform:uppercase;letter-spacing:.04em;color:#9A9AB0;font-weight:600;'>Product</div><div style='font-size:14px;font-weight:700;color:#1A1B1E;margin-top:4px;'>"+a.product+"</div></div>"+
+        "<div><div style='font-size:9.5px;text-transform:uppercase;letter-spacing:.04em;color:#9A9AB0;font-weight:600;'>Requested amount</div><div style='font-size:18px;font-weight:800;color:#171C8F;margin-top:2px;'>"+shM(a.requested)+"</div></div>"+
+        "<div><div style='font-size:9.5px;text-transform:uppercase;letter-spacing:.04em;color:#9A9AB0;font-weight:600;'>Monthly installment</div><div style='font-size:14px;font-weight:700;color:#1A1B1E;margin-top:4px;'>"+shM(a.installment)+"/mo</div></div>"+
+      "</div>"+
+      "<div style='margin-top:14px;background:#FCEBED;border:1px solid #F1C4CB;border-radius:11px;padding:12px 14px;'><div style='font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:#A3283A;font-weight:700;margin-bottom:5px;'>Reason for rejection</div><div style='font-size:13px;color:#7a2230;line-height:1.5;'>"+a.reason+"</div></div>"+
+    "</div>";
+  }
+  function shRejectedSection(list){ if(!list||!list.length) return ""; var cards=list.map(shRejectedCard).join(""); var icon="<svg width='17' height='17' viewBox='0 0 24 24' fill='none' stroke='#C0283A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'></circle><line x1='15' y1='9' x2='9' y2='15'></line><line x1='9' y1='9' x2='15' y2='15'></line></svg>"; return "<div style='display:flex;align-items:center;gap:9px;margin:18px 0 4px;'><span style='width:30px;height:30px;border-radius:9px;background:rgba(192,40,58,.1);display:inline-flex;align-items:center;justify-content:center;'>"+icon+"</span><span style='font-size:14px;font-weight:700;color:#1A1B1E;'>Rejected applications</span><span style='font-size:12px;color:#9A9AB0;'>"+list.length+"</span></div><div style='display:flex;flex-direction:column;gap:10px;'>"+cards+"</div>"; }
   function shAcctCard(a){
     var closed=a.status!=='Active';
     var pct=a.total?Math.max(4,Math.round(a.paid/a.total*100)):100;
@@ -5489,7 +5500,7 @@ document.addEventListener('click', function(e){
     var na=acc.active.hp.length+acc.active.cash.length, nc=acc.closed.hp.length+acc.closed.cash.length;
     var _closedInner=(nc>0)?(shGroup('Hired Purchases','hp',acc.closed.hp)+shGroup('Cash Loans','cash',acc.closed.cash)):"";
     var _closedSection=(nc>0)?("<div style='margin-top:24px;border-top:1px dashed #DFE2EC;padding-top:16px;'><div data-sh-closed-toggle style='display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;'><span style='font-size:14px;font-weight:700;color:#5a6072;'>Closed accounts <span style='color:#9A9AB0;font-weight:600;'>"+nc+"</span></span><span style='font-size:12.5px;font-weight:700;color:#171C8F;display:inline-flex;align-items:center;gap:5px;'><span class='sh-closed-label'>Show</span> <svg class='sh-closed-chev' width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round' style='transition:transform .2s ease;'><polyline points='6 9 12 15 18 9'></polyline></svg></span></div><div class='sh-closed-body' style='display:none;margin-top:6px;'>"+_closedInner+"</div></div>"):"";
-    var body=window.custTabBar(id,'sales')+shSummary(acc.active)+shGroup('Hired Purchases','hp',acc.active.hp)+shGroup('Cash Loans','cash',acc.active.cash)+_closedSection;
+    var body=window.custTabBar(id,'sales')+shSummary(acc.active)+shGroup('Hired Purchases','hp',acc.active.hp)+shGroup('Cash Loans','cash',acc.active.cash)+shRejectedSection(acc.rejected||[])+_closedSection;
     var sb=document.getElementById('sh-body'); sb.innerHTML=body;
     if(!sb.__shBound){ sb.__shBound=true; sb.addEventListener('click',function(e){
       var ct=e.target.closest&&e.target.closest('[data-sh-closed-toggle]'); if(ct){ var cb=ct.parentNode.querySelector('.sh-closed-body'); if(cb){ var op=cb.style.display!=='none'; cb.style.display=op?'none':'block'; var lab=ct.querySelector('.sh-closed-label'); if(lab) lab.textContent=op?'Show':'Hide'; var ch=ct.querySelector('.sh-closed-chev'); if(ch) ch.style.transform=op?'':'rotate(180deg)'; } return; }
@@ -5499,7 +5510,7 @@ document.addEventListener('click', function(e){
     }); }
     if(window.showScreen) window.showScreen('sales-history');
   };
-  function openCustomerById(id){ var c=byId(id); if(!c) return; if(c.status==='analysis'||c.status==='observed'||c.status==='rejected'){ if(window.openPipelineCustomer) window.openPipelineCustomer(c); return; } if(c.home==='jada'){ if(window.openJadaHome) window.openJadaHome(); else window.showScreen('jada-home'); } else openCustomerDetails(c); }
+  function openCustomerById(id){ var c=byId(id); if(!c) return; if(c.status==='analysis'||c.status==='observed'){ if(window.openPipelineCustomer) window.openPipelineCustomer(c); return; } if(c.home==='jada'){ if(window.openJadaHome) window.openJadaHome(); else window.showScreen('jada-home'); } else openCustomerDetails(c); }
 
   window.openCustomerFromRow=function(row){ openCustomerById(row.getAttribute('data-cid')); };
   window.openCustomerById=openCustomerById;
