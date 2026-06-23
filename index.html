@@ -5335,9 +5335,9 @@ document.addEventListener('click', function(e){
     var txn=adSection('Payment transactions',AD_LIST,"<div style='overflow-x:auto;'><table style='width:100%;border-collapse:collapse;min-width:780px;'>"+th+rows+totalRow+"</table></div><div style='font-size:11px;color:#9A9AB0;text-align:center;margin-top:10px;'>Payments made on the same day may not be reflected in this document.</div>");
     function ub(act,label,svg){ return "<button data-ad-act='"+act+"' style='display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:#171C8F;background:#fff;border:1px solid #C7CBF0;border-radius:8px;padding:8px 13px;cursor:pointer;'>"+svg+label+"</button>"; }
     var actions="<div style='display:flex;gap:8px;flex-wrap:wrap;'>"+(det.isHP?ub('cart','See cart',AD_CART2):"")+ub('statement','Download account statement',AD_DL)+ub('contract','Download contract',AD_DOC)+"</div>";
-    var head="<div style='display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:4px;'><div style='display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;'><h2 style='font-size:22px;font-weight:800;color:#171C8F;margin:0;letter-spacing:-.01em;'>Account details</h2><span style='font-size:13px;color:#7C878E;'>· Account No. "+det.accountNo+"</span></div>"+actions+"</div>";
+    var head="<div style='display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin:2px 0 6px;'><div><h2 style='font-size:22px;font-weight:800;color:#171C8F;margin:0;letter-spacing:-.01em;'>"+(det.mambu||'Account')+"</h2><div style='font-size:13px;color:#7C878E;margin-top:4px;'>"+(det.kindLabel||'')+" · Account No. "+det.accountNo+"</div></div>"+actions+"</div>";
     var back="<div style='margin-top:18px;'><button data-ad-back style='display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:#171C8F;background:#fff;border:1.5px solid #C7CBF0;border-radius:10px;padding:10px 16px;cursor:pointer;'>&larr; Back to Sales History</button></div>";
-    return head+info+pay+txn+back;
+    return head+info+pay+txn;
   }
   window.openAccountDetail=function(custId, aid){
     custId=custId||window.__shId||'jada'; window.__adCust=custId; var cf=(window.CUSTOMER_FULL||{})[custId]||window.CUSTOMER_FULL.jada;
@@ -5347,7 +5347,7 @@ document.addEventListener('click', function(e){
     var ps=document.getElementById('ad-sidebar'); if(ps && !ps.children.length){ var src=document.querySelector('#screen-register-success .sidebar'); if(src) ps.innerHTML=src.innerHTML; }
     var dl=cf.trnOnFile?'TRN':(cf.primaryDoc?cf.primaryDoc.label:'TRN'), dn=cf.trnOnFile?cf.trn:(cf.primaryDoc?cf.primaryDoc.number:'—');
     document.getElementById('ad-hd').innerHTML=window.buildCustHeader(custId, cf, '');
-    var ab=document.getElementById('ad-body'); var _adctx=a.mambu+' · '+(a.kind==='hp'?'Hired purchase':'Cash loan'); ab.innerHTML=window.custTabBar(custId,'sales')+window.navSubBar('Back to Sales history', "window.openSalesHistory('"+custId+"')", _adctx)+renderAccountDetail(custId,det);
+    var ab=document.getElementById('ad-body'); det.mambu=a.mambu; det.kindLabel=(a.kind==='hp'?'Hired purchase':'Cash loan'); ab.innerHTML=window.navSubBar('Back to Sales history', "window.openSalesHistory('"+custId+"')", "")+renderAccountDetail(custId,det);
     if(!ab.__bound){ ab.__bound=true; ab.addEventListener('click',function(e){
       var b=e.target.closest&&e.target.closest('[data-ad-act]'); if(b){ var a2=b.getAttribute('data-ad-act'); var m=a2==='cart'?'Opening cart…':a2==='statement'?'Downloading account statement…':'Downloading contract…'; if(window.ucToast) window.ucToast(m); return; }
       var bk=e.target.closest&&e.target.closest('[data-ad-back]'); if(bk){ if(window.openSalesHistory) window.openSalesHistory(window.__adCust); return; }
