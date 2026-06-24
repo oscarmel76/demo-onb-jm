@@ -29,7 +29,7 @@
   /* NEUTRALES */
   --emma-black:     #1A1B1E;
   --emma-gray:      #7C878E;
-  --emma-gray-500:  #8A8AA0;
+  --emma-gray-500:  #62647A;
   --emma-gray-300:  #D1D1E0;
   --emma-gray-200:  #E8E8F4;
   --emma-gray-100:  #F5F5F5;
@@ -44,8 +44,8 @@
   --color-info:     #2196F3;
 
   /* DISABLED (botones) */
-  --btn-primary-disabled-bg: #E4E4EF;
-  --btn-primary-disabled-text: #7477BC;
+  --btn-primary-disabled-bg: #E1E4F2;
+  --btn-primary-disabled-text: #5358A6;
 
   /* TIPOGRAFÍA */
   --font-brand: 'Roboto', sans-serif;
@@ -1106,7 +1106,7 @@ a {
   transition: top 0.15s ease, font-size 0.15s ease, color 0.15s ease;
 }
 #screen-register-customer .field-label .req { color: var(--emma-navy); }
-#screen-register-customer .field-label .opt { color: var(--emma-gray-300); font-weight: var(--fw-regular); }
+#screen-register-customer .field-label .opt { color: #6B6E7C; font-weight: var(--fw-regular); }
 #screen-register-customer .field-control:focus ~ .field-label,
 #screen-register-customer .field-control:not(:placeholder-shown) ~ .field-label,
 #screen-register-customer .field.has-value .field-label,
@@ -1512,7 +1512,7 @@ a {
 <style id="jada-redux-css">
 /* ===== Jada home — compact redesign (Spending Limit / MMI) ===== */
 .jada-redux,.jada-hd{ --navy:#171C8F; --navy2:#1b2099; --green:#26D07C; --green-d:#1fb869;
-  --ink:#1A1B1E; --muted:#7C878E; --muted2:#8A8AA0; --line:#E8E8F4; --bg:#F7F8FF;
+  --ink:#1A1B1E; --muted:#5E686E; --muted2:#8A8AA0; --line:#E8E8F4; --bg:#F7F8FF;
   --amber:#F6BE00; --shadow:0 2px 12px rgba(23,28,143,.10); --shadow-h:0 10px 30px rgba(23,28,143,.16);
   font-family:'Roboto',-apple-system,BlinkMacSystemFont,sans-serif; }
 .jada-redux *,.jada-hd *{ box-sizing:border-box; }
@@ -1575,7 +1575,7 @@ a {
 .jada-redux .sl-avail-amount .cents{ font-size:.55em; font-weight:700; opacity:.85; }
 .jada-redux .sl-figs{ display:flex; gap:24px; }
 .jada-redux .sl-figs div{ display:flex; flex-direction:column; gap:2px; }
-.jada-redux .sl-figs span{ font-size:10.5px; letter-spacing:.05em; text-transform:uppercase; color:#535C90; font-weight:600; }
+.jada-redux .sl-figs span{ font-size:10.5px; letter-spacing:.02em; color:#535C90; font-weight:600; }
 .jada-redux .sl-figs b{ font-size:15px; font-weight:700; color:#171C8F; font-variant-numeric:tabular-nums; }
 .jada-redux .sl-bar{ position:relative; z-index:1; height:8px; border-radius:9999px;
   background:#1C9657; margin-top:auto; overflow:hidden; }
@@ -1590,7 +1590,7 @@ a {
 .jada-redux .mmi-tag{ background:#EEF0FF; color:var(--navy); font-size:10px; font-weight:700;
   letter-spacing:.06em; padding:3px 7px; border-radius:6px; }
 .jada-redux .mmi-headline{ display:flex; align-items:baseline; gap:7px; margin-top:11px; }
-.jada-redux .mmi-amount{ font-size:clamp(22px,2vw,25px); font-weight:800; letter-spacing:-.02em; color:var(--navy); line-height:1; }
+.jada-redux .mmi-amount{ font-size:clamp(22px,2vw,25px); font-weight:800; letter-spacing:-.02em; color:#1C9657; line-height:1; }
 .jada-redux .mmi-amount .cents{ font-size:.6em; font-weight:700; opacity:.7; }
 .jada-redux .mmi-per{ font-size:12.5px; color:var(--muted); font-weight:600; }
 .jada-redux .mmi-bar{ height:7px; border-radius:9999px; background:var(--navy); margin-top:13px; overflow:hidden; }
@@ -1632,6 +1632,7 @@ a {
   background:var(--navy); color:#fff; font-size:14px; font-weight:700; letter-spacing:.03em;
   display:inline-flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
 .jada-redux .pc-cta:hover{ background:var(--green-d); }
+.jada-redux .pc-cta.disabled, .jada-redux .pc-cta:disabled{ background:#C3C6DC !important; color:#fff !important; cursor:not-allowed !important; }
 .jada-redux .pc-cta svg{ width:17px; height:17px; }
 .jada-redux .pc-cta.ghost{ background:transparent; color:var(--navy); border:1.5px solid var(--navy); }
 .jada-redux .pc-cta.ghost:hover{ background:#EEF0FF; }
@@ -2995,14 +2996,14 @@ a {
                   </span>
                 </div>
                 <div class="field span-2" id="field-phone">
-                  <div style="font-size:11px;font-weight:600;color:#7C878E;margin-bottom:6px;">Cell phone</div>
+                  <div style="font-size:11px;font-weight:600;color:#5E686E;margin-bottom:6px;">Cell phone</div>
                   <div style="display:flex;gap:10px;">
                     <select id="ob-cell-area" class="field-control" style="width:108px;flex:none;cursor:pointer;"><option value="876">876</option><option value="658">658</option></select>
                     <input id="phone-control" type="tel" inputmode="numeric" class="field-control" placeholder="Cell phone number" style="flex:1;" autocomplete="off">
                   </div>
                 </div>
                 <div class="field span-2" id="field-homephone">
-                  <div style="font-size:11px;font-weight:600;color:#7C878E;margin-bottom:6px;">Home phone (landline) <span style="color:#9A9AB0;font-weight:400;">&middot; optional</span></div>
+                  <div style="font-size:11px;font-weight:600;color:#5E686E;margin-bottom:6px;">Home phone (landline) <span style="color:#6B6E7C;font-weight:400;">&middot; optional</span></div>
                   <div style="display:flex;gap:10px;">
                     <select id="ob-home-area" class="field-control" style="width:108px;flex:none;cursor:pointer;"><option value="876">876</option><option value="658">658</option></select>
                     <input id="ob-home-num" type="tel" inputmode="numeric" class="field-control" placeholder="Home phone number" style="flex:1;" autocomplete="off">
@@ -3120,7 +3121,7 @@ a {
         </span>
         <span class="term-chip">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
-          Up to 48 months
+          Max term · 48 months
         </span>
       </div>
       <div class="sl-mid">
@@ -3179,7 +3180,7 @@ a {
         <span class="pc-term"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg> up to 36 months</span>
       </div>
       <div class="pc-meta"><span>No active cash loans</span></div>
-      <button class="pc-cta ghost" id="rc-cash-cta" onclick="openCashLoan((window.__curCust||{}).id)">New cash loan
+      <button class="pc-cta" id="rc-cash-cta" onclick="openCashLoan((window.__curCust||{}).id)">New cash loan
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
       </button>
     </article>
@@ -3321,7 +3322,7 @@ a {
         </span>
         <span class="term-chip">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
-          Up to 48 months
+          Max term · 48 months
         </span>
       </div>
       <div class="sl-mid">
@@ -3406,7 +3407,7 @@ a {
         </span>
       </div>
       <div class="pc-meta"><span>No active cash loans</span></div>
-      <button class="pc-cta ghost" onclick="openCashLoan('jada')">New cash loan
+      <button class="pc-cta" onclick="openCashLoan('jada')">New cash loan
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
       </button>
     </article>
@@ -3543,7 +3544,7 @@ a {
       </span>
       <span class="term-chip">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
-        Up to 48 months
+        Max term · 48 months
       </span>
     </div>
     <div class="sl-mid">
@@ -5179,12 +5180,12 @@ document.addEventListener('click', function(e){
     set('rc-rating', 'Rating '+(c.status==='preapproved'?c.rating:(window.customerRating?window.customerRating(c.id):c.rating)));
     var pay=document.getElementById('rc-pay');
     if(pay){ pay.style.cssText=''; if(c.status==='preapproved'){ pay.className='hd-chip'; pay.style.cssText='background:rgba(255,255,255,.18);color:#fff;border:1px solid rgba(255,255,255,.4);'; pay.innerHTML='Pre-approved'; } else if(arr){ pay.className='hd-chip arrears'; pay.innerHTML=ICON_X+' In arrears'; } else { pay.className='hd-chip ok'; pay.innerHTML=ICON_CHK+' Up to date'; } }
-    set('rc-sl-avail', dMoney(slAvail)); set('rc-sl-limit', dMoney(slTotal)); set('rc-sl-used', dMoney(slUsed));
-    set('rc-sl-legend', availPct+'% available · '+dMoney(slAvail)+' of '+dMoney(slTotal));
+    set('rc-sl-avail', money0(slAvail)); set('rc-sl-limit', money0(slTotal)); set('rc-sl-used', money0(slUsed));
+    set('rc-sl-legend', availPct+'% available · '+money0(slAvail)+' of '+money0(slTotal));
     var slb=document.getElementById('rc-sl-bar'); if(slb) slb.style.width=usedPct+'%';
-    set('rc-mmi-avail', dMoney(availMmi)); set('rc-mmi-cap', dMoney(mmiCap)); set('rc-mmi-committed', dMoney(c.committed)); set('rc-mmi-avail2', dMoney(availMmi));
+    set('rc-mmi-avail', money0(availMmi)); set('rc-mmi-cap', money0(mmiCap)); set('rc-mmi-committed', money0(c.committed)); set('rc-mmi-avail2', money0(availMmi));
     var mb=document.getElementById('rc-mmi-bar'); if(mb) mb.style.width=(mmiCap>0?Math.round(c.committed/mmiCap*100):0)+'%';
-    set('rc-hp-avail', dMoney(hpAvail)); set('rc-cash-avail', dMoney(cashAvail));
+    set('rc-hp-avail', money0(hpAvail)); set('rc-cash-avail', money0(cashAvail));
     set('rc-hp-meta', c.committed>0 ? 'Active HP · committed '+money0(c.committed)+'/mo' : 'No active HP');
     var ban=document.getElementById('rc-arrears'); if(ban) ban.style.display=arr?'flex':'none';
     var hpc=document.getElementById('rc-hp-cta'), csc=document.getElementById('rc-cash-cta');
@@ -5206,7 +5207,7 @@ document.addEventListener('click', function(e){
       : c.status==='rejected'
       ? '<span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;background:#FBDDE0;color:#A3283A;padding:4px 10px;border-radius:9999px;white-space:nowrap;">Rejected</span>'
       : '<span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;background:#FCEFC9;color:#8A6B00;padding:4px 10px;border-radius:9999px;white-space:nowrap;">Returned with observations</span>';
-    function col(k,v,clr){ return '<div><div style="font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:#9A9AB0;font-weight:600;">'+k+'</div><div style="font-size:15px;font-weight:700;color:'+(clr||'#1A1B1E')+';margin-top:3px;font-variant-numeric:tabular-nums;">'+v+'</div></div>'; }
+    function col(k,v,clr){ return '<div><div style="font-size:10.5px;letter-spacing:.02em;color:#6B6E7C;font-weight:600;">'+k+'</div><div style="font-size:15px;font-weight:700;color:'+(clr||'#1A1B1E')+';margin-top:3px;font-variant-numeric:tabular-nums;">'+v+'</div></div>'; }
     var saleCard = '<section style="background:#fff;border:1px solid #E2E5EC;border-radius:14px;padding:18px 20px;box-shadow:var(--shadow);"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;"><div style="font-size:14px;font-weight:700;color:#1A1B1E;">Submitted sale &middot; '+(sale.acct||'&mdash;')+'</div>'+badge+'</div><div style="display:flex;gap:34px;margin-top:14px;flex-wrap:wrap;">'+col('Product',sale.product||'Hired Purchase')+col('Amount financed',dMoney(sale.financed||0),'#171C8F')+col('Submitted',sale.submitted||'&mdash;')+'</div></section>';
     var obs='';
     if(c.status==='observed'){
@@ -5238,7 +5239,7 @@ document.addEventListener('click', function(e){
   function shRng(seed){ var x=(seed>>>0)||1; return function(){ x^=x<<13; x>>>=0; x^=x>>>17; x^=x<<5; x>>>=0; return x/4294967296; }; }
   var SH_MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   function shDate(rnd,y0,y1){ var y=y0+Math.floor(rnd()*(y1-y0+1)),m=Math.floor(rnd()*12),d=Math.floor(rnd()*27)+1; return SH_MON[m]+' '+d+', '+y; }
-  function shM(n){ return '$'+Number(Math.round(n)).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+  function shM(n){ return '$'+Number(Math.round(n)).toLocaleString('en-US',{maximumFractionDigits:0}); }
   function shGen(rnd,kind,active){
     var total=[6,9,12,18,24,36][Math.floor(rnd()*6)];
     var paid=active?Math.floor(rnd()*Math.min(total,4)):total;
@@ -5265,29 +5266,29 @@ document.addEventListener('click', function(e){
   function shStatusChip(st){ var on=st==='Active'; return "<span style='font-size:9px;font-weight:700;text-transform:uppercase;color:"+(on?'#0E7A55':'#7C878E')+";background:"+(on?'#D5F2E3':'#EDEDF2')+";padding:3px 8px;border-radius:9999px;'>"+st+"</span>"; }
   function shRejectedCard(a){
     return "<div style='background:#fff;border:1px solid #F1C4CB;border-radius:14px;padding:16px 18px;'>"+
-      "<div style='display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;'><div><div style='font-size:15px;font-weight:700;color:#1A1B1E;'>"+a.mambu+"</div><div style='font-size:11px;color:#9A9AB0;margin-top:3px;'>COSACS "+a.cosacs+" \u00b7 applied "+a.applied+"</div></div><span style='font-size:11.5px;font-weight:700;color:#C0283A;display:inline-flex;align-items:center;gap:5px;'><span style='width:7px;height:7px;border-radius:50%;background:#E5566A;'></span>Rejected</span></div>"+
+      "<div style='display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;'><div><div style='font-size:15px;font-weight:700;color:#1A1B1E;'>"+a.mambu+"</div><div style='font-size:11px;color:#6B6E7C;margin-top:3px;'>COSACS "+a.cosacs+" \u00b7 applied "+a.applied+"</div></div><span style='font-size:11.5px;font-weight:700;color:#C0283A;display:inline-flex;align-items:center;gap:5px;'><span style='width:7px;height:7px;border-radius:50%;background:#E5566A;'></span>Rejected</span></div>"+
       "<div style='border-top:1px solid #F0F0F6;margin-top:12px;padding-top:13px;display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:16px;'>"+
-        "<div><div style='font-size:9.5px;text-transform:uppercase;letter-spacing:.04em;color:#9A9AB0;font-weight:600;'>Product</div><div style='font-size:14px;font-weight:700;color:#1A1B1E;margin-top:4px;'>"+a.product+"</div></div>"+
-        "<div><div style='font-size:9.5px;text-transform:uppercase;letter-spacing:.04em;color:#9A9AB0;font-weight:600;'>Requested amount</div><div style='font-size:18px;font-weight:800;color:#171C8F;margin-top:2px;'>"+shM(a.requested)+"</div></div>"+
-        "<div><div style='font-size:9.5px;text-transform:uppercase;letter-spacing:.04em;color:#9A9AB0;font-weight:600;'>Monthly installment</div><div style='font-size:14px;font-weight:700;color:#1A1B1E;margin-top:4px;'>"+shM(a.installment)+"/mo</div></div>"+
+        "<div><div style='font-size:9.5px;letter-spacing:.02em;color:#6B6E7C;font-weight:600;'>Product</div><div style='font-size:14px;font-weight:700;color:#1A1B1E;margin-top:4px;'>"+a.product+"</div></div>"+
+        "<div><div style='font-size:9.5px;letter-spacing:.02em;color:#6B6E7C;font-weight:600;'>Requested amount</div><div style='font-size:18px;font-weight:800;color:#171C8F;margin-top:2px;'>"+shM(a.requested)+"</div></div>"+
+        "<div><div style='font-size:9.5px;letter-spacing:.02em;color:#6B6E7C;font-weight:600;'>Monthly installment</div><div style='font-size:14px;font-weight:700;color:#1A1B1E;margin-top:4px;'>"+shM(a.installment)+"/mo</div></div>"+
       "</div>"+
-      "<div style='margin-top:14px;background:#FCEBED;border:1px solid #F1C4CB;border-radius:11px;padding:12px 14px;'><div style='font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:#A3283A;font-weight:700;margin-bottom:5px;'>Reason for rejection</div><div style='font-size:13px;color:#7a2230;line-height:1.5;'>"+a.reason+"</div></div>"+
+      "<div style='margin-top:14px;background:#FCEBED;border:1px solid #F1C4CB;border-radius:11px;padding:12px 14px;'><div style='font-size:10.5px;letter-spacing:.02em;color:#A3283A;font-weight:700;margin-bottom:5px;'>Reason for rejection</div><div style='font-size:13px;color:#7a2230;line-height:1.5;'>"+a.reason+"</div></div>"+
     "</div>";
   }
-  function shRejectedSection(list){ if(!list||!list.length) return ""; var cards=list.map(shRejectedCard).join(""); var icon="<svg width='17' height='17' viewBox='0 0 24 24' fill='none' stroke='#C0283A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'></circle><line x1='15' y1='9' x2='9' y2='15'></line><line x1='9' y1='9' x2='15' y2='15'></line></svg>"; return "<div style='display:flex;align-items:center;gap:9px;margin:18px 0 4px;'><span style='width:30px;height:30px;border-radius:9px;background:rgba(192,40,58,.1);display:inline-flex;align-items:center;justify-content:center;'>"+icon+"</span><span style='font-size:14px;font-weight:700;color:#1A1B1E;'>Rejected applications</span><span style='font-size:12px;color:#9A9AB0;'>"+list.length+"</span></div><div style='display:flex;flex-direction:column;gap:10px;'>"+cards+"</div>"; }
+  function shRejectedSection(list){ if(!list||!list.length) return ""; var cards=list.map(shRejectedCard).join(""); var icon="<svg width='17' height='17' viewBox='0 0 24 24' fill='none' stroke='#C0283A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'></circle><line x1='15' y1='9' x2='9' y2='15'></line><line x1='9' y1='9' x2='15' y2='15'></line></svg>"; return "<div style='display:flex;align-items:center;gap:9px;margin:18px 0 4px;'><span style='width:30px;height:30px;border-radius:9px;background:rgba(192,40,58,.1);display:inline-flex;align-items:center;justify-content:center;'>"+icon+"</span><span style='font-size:14px;font-weight:700;color:#1A1B1E;'>Rejected applications</span><span style='font-size:12px;color:#6B6E7C;'>"+list.length+"</span></div><div style='display:flex;flex-direction:column;gap:10px;'>"+cards+"</div>"; }
   function shAcctCard(a){
     var closed=a.status!=='Active';
     var pct=a.total?Math.max(4,Math.round(a.paid/a.total*100)):100;
     var statusPill=closed
-      ? "<span style='font-size:11.5px;font-weight:700;color:#7C878E;display:inline-flex;align-items:center;gap:5px;'><span style='width:7px;height:7px;border-radius:50%;background:#B7BBC9;'></span>Closed</span>"
+      ? "<span style='font-size:11.5px;font-weight:700;color:#5E686E;display:inline-flex;align-items:center;gap:5px;'><span style='width:7px;height:7px;border-radius:50%;background:#B7BBC9;'></span>Closed</span>"
       : (a.daysLate>0
         ? "<span style='font-size:11.5px;font-weight:700;color:#C0283A;display:inline-flex;align-items:center;gap:5px;'><span style='width:7px;height:7px;border-radius:50%;background:#E5566A;'></span>"+a.daysLate+" days late</span>"
         : "<span style='font-size:11.5px;font-weight:700;color:#0E7A55;display:inline-flex;align-items:center;gap:5px;'><span style='width:7px;height:7px;border-radius:50%;background:#1C9657;'></span>Up to date</span>");
-    function cell(k,v){ return "<div><div style='font-size:9.5px;text-transform:uppercase;letter-spacing:.04em;color:#9A9AB0;font-weight:600;'>"+k+"</div><div style='font-size:14px;font-weight:700;color:#1A1B1E;margin-top:4px;'>"+v+"</div></div>"; }
+    function cell(k,v){ return "<div><div style='font-size:9.5px;letter-spacing:.02em;color:#6B6E7C;font-weight:600;'>"+k+"</div><div style='font-size:14px;font-weight:700;color:#1A1B1E;margin-top:4px;'>"+v+"</div></div>"; }
     var grid="<div style='border-top:1px solid #F0F0F6;margin-top:12px;padding-top:13px;display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:16px;align-items:start;'>"+
-      "<div><div style='font-size:9.5px;text-transform:uppercase;letter-spacing:.04em;color:#9A9AB0;font-weight:600;'>Outstanding</div><div style='font-size:18px;font-weight:800;color:#171C8F;margin-top:2px;letter-spacing:-.01em;'>"+shM(a.outstanding)+"</div></div>"+
+      "<div><div style='font-size:9.5px;letter-spacing:.02em;color:#6B6E7C;font-weight:600;'>Outstanding</div><div style='font-size:18px;font-weight:800;color:#171C8F;margin-top:2px;letter-spacing:-.01em;'>"+shM(a.outstanding)+"</div></div>"+
       cell('Installment',shM(a.installment)+'/mo')+
-      "<div><div style='font-size:9.5px;text-transform:uppercase;letter-spacing:.04em;color:#9A9AB0;font-weight:600;'>Paid</div><div style='font-size:12px;color:#5a6072;margin:3px 0 5px;'>"+a.paid+" of "+a.total+"</div><div style='height:6px;border-radius:9999px;background:#ECECF4;overflow:hidden;'><div style='height:100%;width:"+pct+"%;background:"+(a.daysLate>0?'#E5566A':'#1C9657')+";'></div></div></div>"+
+      "<div><div style='font-size:9.5px;letter-spacing:.02em;color:#6B6E7C;font-weight:600;'>Paid</div><div style='font-size:12px;color:#5a6072;margin:3px 0 5px;'>"+a.paid+" of "+a.total+"</div><div style='height:6px;border-radius:9999px;background:#ECECF4;overflow:hidden;'><div style='height:100%;width:"+pct+"%;background:"+(a.daysLate>0?'#E5566A':'#1C9657')+";'></div></div></div>"+
       cell('Early settlement',shM(a.earlySettlement))+
       cell('Next due',a.nextDue)+
       cell('Total to pay',shM(a.totalToPay))+
@@ -5301,23 +5302,23 @@ document.addEventListener('click', function(e){
     var footer="<div class='sh-foot' style='border-top:1px solid #F0F0F6;margin-top:14px;padding-top:12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;'><div class='sh-util'>"+_util+"</div><button class='sh-more' data-sh-act='moreactions'><span class='sh-more-lbl'>More actions</span> <svg width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg></button><div class='sh-view' style='margin-left:auto;'>"+_view+"</div></div>";
     return "<div class='sh-acct' style='background:#fff;border:1px solid #E2E5EC;border-radius:14px;padding:16px 18px;'>"+
       "<div style='display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;'>"+
-        "<div><div style='font-size:15px;font-weight:700;color:#1A1B1E;'>"+a.mambu+"</div><div style='font-size:11px;color:#9A9AB0;margin-top:3px;'>COSACS "+a.cosacs+" · activated "+a.activated+"</div></div>"+
+        "<div><div style='font-size:15px;font-weight:700;color:#1A1B1E;'>"+a.mambu+"</div><div style='font-size:11px;color:#6B6E7C;margin-top:3px;'>COSACS "+a.cosacs+" · activated "+a.activated+"</div></div>"+
         "<div style='display:flex;align-items:center;gap:8px;'>"+statusPill+shRatingChip(a.rating)+"</div>"+
       "</div>"+grid+footer+"</div>";
   }
   function shGroup(label,kind,list){ if(!list.length) return ""; var icon=kind==='hp'?"<svg width='17' height='17' viewBox='0 0 24 24' fill='none' stroke='#1C9657' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='9' cy='20' r='1.4'></circle><circle cx='18' cy='20' r='1.4'></circle><path d='M2.5 3.5H5l2.2 11.1a1.6 1.6 0 0 0 1.6 1.3h8.5a1.6 1.6 0 0 0 1.6-1.25L21.5 7H6.2'></path></svg>":"<svg width='17' height='17' viewBox='0 0 24 24' fill='none' stroke='#1C9657' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='6' width='20' height='13' rx='2.5'></rect><path d='M2 10h20'></path></svg>";
     var cards=list.map(shAcctCard).join("");
-    return "<div style='display:flex;align-items:center;gap:9px;margin:18px 0 10px;'><span style='width:30px;height:30px;border-radius:9px;background:rgba(28,150,103,.1);display:inline-flex;align-items:center;justify-content:center;'>"+icon+"</span><span style='font-size:14px;font-weight:700;color:#1A1B1E;'>"+label+"</span><span style='font-size:12px;color:#9A9AB0;'>"+list.length+"</span></div><div style='display:flex;flex-direction:column;gap:10px;'>"+cards+"</div>";
+    return "<div style='display:flex;align-items:center;gap:9px;margin:18px 0 10px;'><span style='width:30px;height:30px;border-radius:9px;background:rgba(28,150,103,.1);display:inline-flex;align-items:center;justify-content:center;'>"+icon+"</span><span style='font-size:14px;font-weight:700;color:#1A1B1E;'>"+label+"</span><span style='font-size:12px;color:#6B6E7C;'>"+list.length+"</span></div><div style='display:flex;flex-direction:column;gap:10px;'>"+cards+"</div>";
   }
   function shSummary(act){
     var all=act.hp.concat(act.cash); var out=0,inst=0,late=0;
     all.forEach(function(a){ out+=a.outstanding; inst+=a.installment; if(a.daysLate>0) late++; });
     var pay=late>0?"<span style='display:inline-flex;align-items:center;gap:5px;color:#C0283A;'><span style='width:7px;height:7px;border-radius:50%;background:#E5566A;'></span>"+late+" past due</span>":"<span style='display:inline-flex;align-items:center;gap:5px;color:#0E7A55;'><span style='width:7px;height:7px;border-radius:50%;background:#1C9657;'></span>Up to date</span>";
     return "<div style='background:#F7F8FF;border:1px solid #E6E9F5;border-radius:14px;padding:16px 20px;display:flex;gap:14px;flex-wrap:wrap;justify-content:space-between;'>"+
-      "<div><div style='font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:#7C878E;font-weight:600;'>Total outstanding</div><div style='font-size:24px;font-weight:800;color:#171C8F;letter-spacing:-.02em;'>"+shM(out)+"</div></div>"+
-      "<div><div style='font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:#7C878E;font-weight:600;'>Monthly installment</div><div style='font-size:18px;font-weight:700;color:#1A1B1E;margin-top:3px;'>"+shM(inst)+"</div></div>"+
-      "<div><div style='font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:#7C878E;font-weight:600;'>Active products</div><div style='font-size:18px;font-weight:700;color:#1A1B1E;margin-top:3px;'>"+all.length+"</div></div>"+
-      "<div><div style='font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:#7C878E;font-weight:600;'>Payment status</div><div style='font-size:14px;font-weight:700;margin-top:5px;'>"+pay+"</div></div></div>";
+      "<div><div style='font-size:10.5px;letter-spacing:.02em;color:#5E686E;font-weight:600;'>Total outstanding</div><div style='font-size:24px;font-weight:800;color:#171C8F;letter-spacing:-.02em;'>"+shM(out)+"</div></div>"+
+      "<div><div style='font-size:10.5px;letter-spacing:.02em;color:#5E686E;font-weight:600;'>Monthly installment</div><div style='font-size:18px;font-weight:700;color:#1A1B1E;margin-top:3px;'>"+shM(inst)+"</div></div>"+
+      "<div><div style='font-size:10.5px;letter-spacing:.02em;color:#5E686E;font-weight:600;'>Active products</div><div style='font-size:18px;font-weight:700;color:#1A1B1E;margin-top:3px;'>"+all.length+"</div></div>"+
+      "<div><div style='font-size:10.5px;letter-spacing:.02em;color:#5E686E;font-weight:600;'>Payment status</div><div style='font-size:14px;font-weight:700;margin-top:5px;'>"+pay+"</div></div></div>";
   }
   window.shTab=function(which){
     ['active','closed'].forEach(function(t){ var p=document.getElementById('sh-pane-'+t); if(p) p.style.display=(t===which)?'block':'none';
@@ -5351,26 +5352,26 @@ document.addEventListener('click', function(e){
       lastPaymentDate:txns[0]?txns[0].date:'—', lastDatePaid:txns[0]?txns[0].date:'—', lastAmountPaid:txns[0]?txns[0].amount:0,
       frequency:'Monthly', maturity:shDate(rnd,2027,2028), txns:txns, totA:totA, totP:totP, totI:totI };
   };
-  function adRow(k,v){ return "<div style='display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-bottom:1px solid #F0F0F6;'><span style='font-size:12.5px;color:#7C878E;'>"+k+"</span><span style='font-size:12.5px;font-weight:700;color:#1A1B1E;text-align:right;'>"+v+"</span></div>"; }
+  function adRow(k,v){ var _z=(v==='$0'||v==='$0.00'||v==='\u2014'||v==='0 days'); return "<div style='display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-bottom:1px solid #F0F0F6;'><span style='font-size:12.5px;color:#5E686E;'>"+k+"</span><span style='font-size:12.5px;font-weight:"+(_z?'500':'700')+";color:"+(_z?'#9CA0AE':'#1A1B1E')+";text-align:right;'>"+v+"</span></div>"; }
   function adSection(title,icon,body,chip){ return "<section style='background:#fff;border:1px solid #E2E5EC;border-radius:14px;padding:18px 20px;margin-top:14px;'><div style='display:flex;align-items:center;gap:9px;margin-bottom:12px;'>"+icon+"<span style='font-size:14px;font-weight:700;color:#1A1B1E;'>"+title+"</span>"+(chip?"<span style='margin-left:auto;font-size:11px;font-weight:700;color:#5560C8;background:#EEF0FF;padding:4px 11px;border-radius:9999px;'>"+chip+"</span>":"")+"</div>"+body+"</section>"; }
-  function adBox(label,val){ return "<div style='background:#F7F8FF;border:1px solid #E6E9F5;border-radius:12px;padding:13px 15px;margin-top:10px;'><div style='font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:#7C878E;font-weight:700;'>"+label+"</div><div style='font-size:20px;font-weight:800;color:#171C8F;margin-top:3px;'>"+val+"</div></div>"; }
+  function adBox(label,val){ return "<div style='background:#F7F8FF;border:1px solid #E6E9F5;border-radius:12px;padding:13px 15px;margin-top:10px;'><div style='font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:#5E686E;font-weight:700;'>"+label+"</div><div style='font-size:20px;font-weight:800;color:#171C8F;margin-top:3px;'>"+val+"</div></div>"; }
   function renderAccountDetail(custId, det){
     var leftRows=det.isHP
       ? adRow('Goods value',shM(det.goods))+adRow('Deposit',shM(det.deposit))+adRow('Loan amount',shM(det.loanAmount))+adRow('Overdue',shM(det.overdue))+adRow('Balance due',shM(det.balanceDue))+adRow('Installment amount',shM(det.installment))+adRow('Days in arrears',det.arrears+' days')+adRow('Interest rate',det.rate)
       : adRow('Loan amount',shM(det.loanAmount))+adRow('Amount disbursed',shM(det.goods))+adRow('Overdue',shM(det.overdue))+adRow('Balance due',shM(det.balanceDue))+adRow('Installment amount',shM(det.installment))+adRow('Days in arrears',det.arrears+' days')+adRow('Interest rate',det.rate);
     var rightRows=adRow('Agreement date',det.agreementDate)+adRow('Outstanding principal',shM(det.outPrincipal))+adRow('Outstanding interest',shM(det.outInterest))+adRow('Outstanding fees',shM(det.outFees))+adRow('Outstanding penalties',shM(det.outPen));
     var info=adSection((det.isHP?'Hired purchase information':'Cash loan information'),AD_CART,"<div style='display:grid;grid-template-columns:1fr 1fr;gap:0 44px;'><div>"+leftRows+"</div><div>"+rightRows+adBox('Outstanding balance',shM(det.outBalance))+"</div></div>",det.ref);
-    var payLeft="<div style='background:#F7F8FF;border:1px solid #E6E9F5;border-radius:12px;padding:13px 15px;display:flex;justify-content:space-between;align-items:center;gap:12px;'><div><div style='font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:#7C878E;font-weight:700;'>Next payment</div><div style='font-size:14px;font-weight:700;color:#171C8F;margin-top:3px;'>"+det.nextDate+"</div></div><div style='font-size:20px;font-weight:800;color:#171C8F;'>"+shM(det.nextAmount)+"</div></div>"+adRow('Principal',shM(det.pPrincipal))+adRow('Principal due',shM(det.pPrincipalDue))+adRow('Interest',shM(det.pInterest))+adRow('Interest due',shM(det.pInterestDue));
+    var payLeft="<div style='background:#F7F8FF;border:1px solid #E6E9F5;border-radius:12px;padding:13px 15px;display:flex;justify-content:space-between;align-items:center;gap:12px;'><div><div style='font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:#5E686E;font-weight:700;'>Next payment</div><div style='font-size:14px;font-weight:700;color:#171C8F;margin-top:3px;'>"+det.nextDate+"</div></div><div style='font-size:20px;font-weight:800;color:#171C8F;'>"+shM(det.nextAmount)+"</div></div>"+adRow('Principal',shM(det.pPrincipal))+adRow('Principal due',shM(det.pPrincipalDue))+adRow('Interest',shM(det.pInterest))+adRow('Interest due',shM(det.pInterestDue));
     var payRight=adRow('Last payment date',det.lastPaymentDate)+adRow('Last date paid',det.lastDatePaid)+adRow('Last amount paid',shM(det.lastAmountPaid))+adRow('Payment frequency',det.frequency)+adRow('Loan maturity date',det.maturity);
     var pay=adSection('Payment information',AD_CAL,"<div style='display:grid;grid-template-columns:1fr 1fr;gap:0 44px;'><div>"+payLeft+"</div><div>"+payRight+"</div></div>");
     var heads=['Reference','Transaction date','Transaction type','Amount','Principal','Interest','Penalties','Fees & charges','Total balance'];
-    var th="<tr style='background:#F7F8FF;'>"+heads.map(function(h,ix){return "<th style='text-align:"+(ix<3?'left':'right')+";font-size:9.5px;text-transform:uppercase;letter-spacing:.03em;color:#7C878E;font-weight:700;padding:10px 12px;white-space:nowrap;'>"+h+"</th>";}).join("")+"</tr>";
-    var rows=det.txns.map(function(t){ return "<tr style='border-top:1px solid #F0F0F6;'><td style='padding:11px 12px;font-size:12.5px;color:#171C8F;font-weight:600;'>"+t.ref+"</td><td style='padding:11px 12px;font-size:12.5px;color:#1A1B1E;white-space:nowrap;'>"+t.date+"</td><td style='padding:11px 12px;font-size:12.5px;color:#1A1B1E;'>Repayment</td><td style='padding:11px 12px;font-size:12.5px;text-align:right;'>"+shM(t.amount)+"</td><td style='padding:11px 12px;font-size:12.5px;text-align:right;'>"+shM(t.principal)+"</td><td style='padding:11px 12px;font-size:12.5px;text-align:right;'>"+shM(t.interest)+"</td><td style='padding:11px 12px;font-size:12.5px;text-align:right;'>$0.00</td><td style='padding:11px 12px;font-size:12.5px;text-align:right;'>$0.00</td><td style='padding:11px 12px;font-size:12.5px;text-align:right;'>$0.00</td></tr>"; }).join("")||"<tr><td colspan='9' style='padding:16px 12px;font-size:12.5px;color:#9A9AB0;text-align:center;'>No payment transactions yet.</td></tr>";
-    var totalRow="<tr style='background:#F7F8FF;border-top:1px solid #E2E5EC;'><td colspan='3' style='padding:11px 12px;font-size:12.5px;font-weight:800;color:#1A1B1E;text-align:right;'>Total</td><td style='padding:11px 12px;font-size:12.5px;font-weight:800;text-align:right;'>"+shM(det.totA)+"</td><td style='padding:11px 12px;font-size:12.5px;font-weight:800;text-align:right;'>"+shM(det.totP)+"</td><td style='padding:11px 12px;font-size:12.5px;font-weight:800;text-align:right;'>"+shM(det.totI)+"</td><td style='padding:11px 12px;font-size:12.5px;font-weight:800;text-align:right;'>$0.00</td><td style='padding:11px 12px;font-size:12.5px;font-weight:800;text-align:right;'>$0.00</td><td style='padding:11px 12px;font-size:12.5px;font-weight:800;text-align:right;'>$0.00</td></tr>";
-    var txn=adSection('Payment transactions',AD_LIST,"<div style='overflow-x:auto;'><table style='width:100%;border-collapse:collapse;min-width:780px;'>"+th+rows+totalRow+"</table></div><div style='font-size:11px;color:#9A9AB0;text-align:center;margin-top:10px;'>Payments made on the same day may not be reflected in this document.</div>");
+    var th="<tr style='background:#F7F8FF;'>"+heads.map(function(h,ix){return "<th style='text-align:"+(ix<3?'left':'right')+";font-size:9.5px;text-transform:uppercase;letter-spacing:.03em;color:#5E686E;font-weight:700;padding:10px 12px;white-space:nowrap;'>"+h+"</th>";}).join("")+"</tr>";
+    var rows=det.txns.map(function(t){ return "<tr style='border-top:1px solid #F0F0F6;'><td style='padding:11px 12px;font-size:12.5px;color:#171C8F;font-weight:600;'>"+t.ref+"</td><td style='padding:11px 12px;font-size:12.5px;color:#1A1B1E;white-space:nowrap;'>"+t.date+"</td><td style='padding:11px 12px;font-size:12.5px;color:#1A1B1E;'>Repayment</td><td style='padding:11px 12px;font-size:12.5px;text-align:right;'>"+shM(t.amount)+"</td><td style='padding:11px 12px;font-size:12.5px;text-align:right;'>"+shM(t.principal)+"</td><td style='padding:11px 12px;font-size:12.5px;text-align:right;'>"+shM(t.interest)+"</td><td style='padding:11px 12px;font-size:12.5px;text-align:right;'>$0</td><td style='padding:11px 12px;font-size:12.5px;text-align:right;'>$0</td><td style='padding:11px 12px;font-size:12.5px;text-align:right;'>$0</td></tr>"; }).join("")||"<tr><td colspan='9' style='padding:16px 12px;font-size:12.5px;color:#6B6E7C;text-align:center;'>No payment transactions yet.</td></tr>";
+    var totalRow="<tr style='background:#F7F8FF;border-top:1px solid #E2E5EC;'><td colspan='3' style='padding:11px 12px;font-size:12.5px;font-weight:800;color:#1A1B1E;text-align:right;'>Total</td><td style='padding:11px 12px;font-size:12.5px;font-weight:800;text-align:right;'>"+shM(det.totA)+"</td><td style='padding:11px 12px;font-size:12.5px;font-weight:800;text-align:right;'>"+shM(det.totP)+"</td><td style='padding:11px 12px;font-size:12.5px;font-weight:800;text-align:right;'>"+shM(det.totI)+"</td><td style='padding:11px 12px;font-size:12.5px;font-weight:800;text-align:right;'>$0</td><td style='padding:11px 12px;font-size:12.5px;font-weight:800;text-align:right;'>$0</td><td style='padding:11px 12px;font-size:12.5px;font-weight:800;text-align:right;'>$0</td></tr>";
+    var txn=adSection('Payment transactions',AD_LIST,"<div style='overflow-x:auto;'><table style='width:100%;border-collapse:collapse;min-width:780px;'>"+th+rows+totalRow+"</table></div><div style='font-size:11px;color:#6B6E7C;text-align:center;margin-top:10px;'>Payments made on the same day may not be reflected in this document.</div>");
     function ub(act,label,svg){ return "<button data-ad-act='"+act+"' style='display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:#171C8F;background:#fff;border:1px solid #C7CBF0;border-radius:8px;padding:8px 13px;cursor:pointer;'>"+svg+label+"</button>"; }
     var actions="<div style='display:flex;gap:8px;flex-wrap:wrap;'>"+(det.isHP?ub('cart','See cart',AD_CART2):"")+ub('statement','Download account statement',AD_DL)+ub('contract','Download contract',AD_DOC)+"</div>";
-    var head="<div style='display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin:2px 0 6px;'><div><h2 style='font-size:22px;font-weight:800;color:#171C8F;margin:0;letter-spacing:-.01em;'>"+(det.mambu||'Account')+"</h2><div style='font-size:13px;color:#7C878E;margin-top:4px;'>"+(det.kindLabel||'')+" · Account No. "+det.accountNo+"</div></div>"+actions+"</div>";
+    var head="<div style='display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin:2px 0 6px;'><div><h2 style='font-size:22px;font-weight:800;color:#171C8F;margin:0;letter-spacing:-.01em;'>"+(det.mambu||'Account')+"</h2><div style='font-size:13px;color:#5E686E;margin-top:4px;'>"+(det.kindLabel||'')+" · Account No. "+det.accountNo+"</div></div>"+actions+"</div>";
     var back="<div style='margin-top:18px;'><button data-ad-back style='display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:#171C8F;background:#fff;border:1.5px solid #C7CBF0;border-radius:10px;padding:10px 16px;cursor:pointer;'>&larr; Back to Sales History</button></div>";
     return head+info+pay+txn;
   }
@@ -5398,7 +5399,7 @@ document.addEventListener('click', function(e){
   window.navSubBar=function(backLabel, backFn, ctx){
     return "<div style='display:flex;align-items:center;gap:11px;flex-wrap:wrap;margin:-2px 0 16px;'>"+
       "<button onclick=\""+backFn+"\" style='display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:#171C8F;background:#fff;border:1px solid #C7CBF0;border-radius:9px;padding:8px 14px;cursor:pointer;'><svg width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><line x1='19' y1='12' x2='5' y2='12'></line><polyline points='12 19 5 12 12 5'></polyline></svg>"+backLabel+"</button>"+
-      (ctx?"<span style='font-size:13px;color:#7C878E;font-weight:600;'>"+ctx+"</span>":"")+
+      (ctx?"<span style='font-size:13px;color:#5E686E;font-weight:600;'>"+ctx+"</span>":"")+
     "</div>";
   };
   (function(){ if(typeof document!=="undefined" && !document.getElementById('uc-anim-css')){ var st=document.createElement('style'); st.id='uc-anim-css'; st.textContent="@keyframes uc-shimmer{0%{background-position:-460px 0}100%{background-position:460px 0}}.uc-sk{background:#E9ECF5;border-radius:7px;background-image:linear-gradient(90deg,#E9ECF5 0,#F4F6FB 220px,#E9ECF5 440px);background-size:900px 100%;animation:uc-shimmer 1.25s linear infinite}.uc-skcard{background:#fff;border:1px solid #E6E9F5;border-radius:16px;padding:18px}@keyframes uc-fadeup{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}.uc-fadein{animation:uc-fadeup .3s cubic-bezier(.22,1,.36,1) both}@media (prefers-reduced-motion:reduce){.uc-sk{animation:none}.uc-fadein{animation:none}}"; (document.head||document.documentElement).appendChild(st); } })();
@@ -5467,10 +5468,10 @@ document.addEventListener('click', function(e){
       var trig=r[3];
       var ic=trig?"<span style='width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none;background:#FBEFD8;color:#C98A12;'><svg width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'><line x1='12' y1='8' x2='12' y2='13'></line><line x1='12' y1='16' x2='12.01' y2='16'></line></svg></span>":"<span style='width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none;background:#E3F4EC;color:#1C9657;'><svg width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'></polyline></svg></span>";
       var tag=trig?("<div style='font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;color:#C98A12;'>"+(r[4]==="analysis"?"Analysis":"Manual")+"</div>"):"<div style='font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;color:#0E7A55;'>Pass</div>";
-      return "<div style='display:flex;align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid #F2F3F8;'>"+ic+"<div style='min-width:0;'><div style='font-size:13.5px;font-weight:600;color:#1A1B1E;'>"+r[0]+"</div><div style='font-size:11.5px;color:#9A9AB0;margin-top:2px;'>"+r[1]+"</div></div><div style='margin-left:auto;text-align:right;flex:none;padding-left:12px;'><div style='font-size:13px;font-weight:700;color:"+(trig?"#8A5A00":"#1A1B1E")+";'>"+r[2]+"</div>"+tag+"</div></div>";
+      return "<div style='display:flex;align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid #F2F3F8;'>"+ic+"<div style='min-width:0;'><div style='font-size:13.5px;font-weight:600;color:#1A1B1E;'>"+r[0]+"</div><div style='font-size:11.5px;color:#6B6E7C;margin-top:2px;'>"+r[1]+"</div></div><div style='margin-left:auto;text-align:right;flex:none;padding-left:12px;'><div style='font-size:13px;font-weight:700;color:"+(trig?"#8A5A00":"#1A1B1E")+";'>"+r[2]+"</div>"+tag+"</div></div>";
     }).join("");
     var BANNER="<div style='display:flex;align-items:flex-start;gap:10px;background:#FFF8E8;border:1px solid #F0DBA8;border-radius:12px;padding:11px 14px;margin-bottom:16px;font-size:12px;color:#8A6A2E;line-height:1.5;'><svg width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round' style='flex:none;margin-top:1px;'><circle cx='12' cy='12' r='10'></circle><line x1='12' y1='16' x2='12' y2='12'></line><line x1='12' y1='8' x2='12.01' y2='8'></line></svg><span><b>Prototype only.</b> This rule-by-rule breakdown is shown for the demo. In the live product the sales rep would see only the engine’s final decision — not the individual rules.</span></div>";
-    var body=BANNER+hero+"<div style='background:#fff;border:1px solid #E6E9F5;border-radius:16px;padding:6px 20px 8px;margin-top:18px;'><div style='display:flex;justify-content:space-between;align-items:center;padding:14px 0 6px;border-bottom:1px solid #EEF0F5;'><span style='font-size:14px;font-weight:700;color:#171C8F;'>Automated decision rules</span><span style='font-size:11.5px;color:#9A9AB0;'>"+passCount+" of "+R.length+" passed</span></div>"+rows+"</div><div style='font-size:11.5px;color:#7C878E;background:#F7F8FF;border:1px solid #E6E9F5;border-radius:12px;padding:12px 16px;margin-top:14px;line-height:1.5;'><b style='color:#1A1B1E;'>How it decides:</b> if any rule is triggered the application routes to manual underwriting; a credit score of 460 or below routes to analysis; if every rule passes it gets instant credit approval.</div>";
+    var body=BANNER+hero+"<div style='background:#fff;border:1px solid #E6E9F5;border-radius:16px;padding:6px 20px 8px;margin-top:18px;'><div style='display:flex;justify-content:space-between;align-items:center;padding:14px 0 6px;border-bottom:1px solid #EEF0F5;'><span style='font-size:14px;font-weight:700;color:#171C8F;'>Automated decision rules</span><span style='font-size:11.5px;color:#6B6E7C;'>"+passCount+" of "+R.length+" passed</span></div>"+rows+"</div><div style='font-size:11.5px;color:#5E686E;background:#F7F8FF;border:1px solid #E6E9F5;border-radius:12px;padding:12px 16px;margin-top:14px;line-height:1.5;'><b style='color:#1A1B1E;'>How it decides:</b> if any rule is triggered the application routes to manual underwriting; a credit score of 460 or below routes to analysis; if every rule passes it gets instant credit approval.</div>";
     var sb=document.getElementById("dec-sidebar"); if(sb && !sb.children.length){ var src=document.querySelector("#screen-register-success .sidebar"); if(src) sb.innerHTML=src.innerHTML; }
     var hd=document.getElementById("dec-hd"); if(hd && window.buildCustHeader && cf.name) hd.innerHTML=window.buildCustHeader(d.cId, cf, "");
     var bd=document.getElementById("dec-body"); if(bd) bd.innerHTML=body;
@@ -5499,7 +5500,7 @@ document.addEventListener('click', function(e){
     var acc=window.salesAccounts(id);
     var na=acc.active.hp.length+acc.active.cash.length, nc=acc.closed.hp.length+acc.closed.cash.length;
     var _closedInner=(nc>0)?(shGroup('Hired Purchases','hp',acc.closed.hp)+shGroup('Cash Loans','cash',acc.closed.cash)):"";
-    var _closedSection=(nc>0)?("<div style='margin-top:24px;border-top:1px dashed #DFE2EC;padding-top:16px;'><div data-sh-closed-toggle style='display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;'><span style='font-size:14px;font-weight:700;color:#5a6072;'>Closed accounts <span style='color:#9A9AB0;font-weight:600;'>"+nc+"</span></span><span style='font-size:12.5px;font-weight:700;color:#171C8F;display:inline-flex;align-items:center;gap:5px;'><span class='sh-closed-label'>Show</span> <svg class='sh-closed-chev' width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round' style='transition:transform .2s ease;'><polyline points='6 9 12 15 18 9'></polyline></svg></span></div><div class='sh-closed-body' style='display:none;margin-top:6px;'>"+_closedInner+"</div></div>"):"";
+    var _closedSection=(nc>0)?("<div style='margin-top:24px;border-top:1px dashed #DFE2EC;padding-top:16px;'><div data-sh-closed-toggle style='display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;'><span style='font-size:14px;font-weight:700;color:#5a6072;'>Closed accounts <span style='color:#6B6E7C;font-weight:600;'>"+nc+"</span></span><span style='font-size:12.5px;font-weight:700;color:#171C8F;display:inline-flex;align-items:center;gap:5px;'><span class='sh-closed-label'>Show</span> <svg class='sh-closed-chev' width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round' style='transition:transform .2s ease;'><polyline points='6 9 12 15 18 9'></polyline></svg></span></div><div class='sh-closed-body' style='display:none;margin-top:6px;'>"+_closedInner+"</div></div>"):"";
     var body=window.custTabBar(id,'sales')+shSummary(acc.active)+shGroup('Hired Purchases','hp',acc.active.hp)+shGroup('Cash Loans','cash',acc.active.cash)+shRejectedSection(acc.rejected||[])+_closedSection;
     var sb=document.getElementById('sh-body'); sb.innerHTML=body;
     if(!sb.__shBound){ sb.__shBound=true; sb.addEventListener('click',function(e){
@@ -5720,7 +5721,7 @@ document.addEventListener('click', function(e){
           <div class="rev-crow">
             <span class="rev-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></span>
             <div class="rev-ctext"><div class="rev-clabel" id="rev-addr-label">Address on file</div><div class="rev-cval" id="rev-addr">12 Hopefield Avenue, Kingston 6, St. Andrew</div>
-              <div class="rev-addr-edit" id="rev-addr-input" style="display:none;width:100%;margin-top:8px"><input id="addr-street" placeholder="Street address (house no. + street)" style="width:100%;height:38px;border:1.5px solid #C7CBF0;border-radius:8px;padding:0 11px;font-family:inherit;font-size:14px;color:#1A1B1E;outline:none;margin-bottom:8px;box-sizing:border-box"><div style="display:flex;gap:8px;flex-wrap:wrap"><select id="addr-parish" style="flex:1;min-width:150px;height:38px;border:1.5px solid #E8E8F4;border-radius:8px;padding:0 8px;font-family:inherit;font-size:14px;color:#1A1B1E;background:#fff;outline:none;box-sizing:border-box"></select><input id="addr-city" placeholder="City / Town" style="flex:1;min-width:150px;height:38px;border:1.5px solid #E8E8F4;border-radius:8px;padding:0 11px;font-family:inherit;font-size:14px;color:#1A1B1E;outline:none;box-sizing:border-box"><select id="addr-zone" style="display:none;flex:1;min-width:150px;height:38px;border:1.5px solid #E8E8F4;border-radius:8px;padding:0 8px;font-family:inherit;font-size:14px;color:#1A1B1E;background:#fff;outline:none;box-sizing:border-box"></select></div><div style="margin-top:10px;"><div style="font-size:11px;font-weight:600;color:#7C878E;margin-bottom:5px;">Proof of address <span style="color:#C0283A;">*</span></div><div id="addrproof-review-slot"></div><div id="addrproof-review-err" style="display:none;font-size:11.5px;color:#C0283A;margin-top:6px;">Attach a proof of address to continue.</div></div><div style="display:flex;gap:8px;margin-top:8px;"><button type="button" onclick="revAddContact('addr')" style="height:36px;padding:0 18px;border:0;border-radius:9px;background:#171C8F;color:#fff;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">Add address</button><button type="button" onclick="revCancelContact('addr')" style="height:36px;padding:0 14px;border:0;border-radius:9px;background:#E4E4EF;color:#5a6072;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">Cancel</button></div></div></div>
+              <div class="rev-addr-edit" id="rev-addr-input" style="display:none;width:100%;margin-top:8px"><input id="addr-street" placeholder="Street address (house no. + street)" style="width:100%;height:38px;border:1.5px solid #C7CBF0;border-radius:8px;padding:0 11px;font-family:inherit;font-size:14px;color:#1A1B1E;outline:none;margin-bottom:8px;box-sizing:border-box"><div style="display:flex;gap:8px;flex-wrap:wrap"><select id="addr-parish" style="flex:1;min-width:150px;height:38px;border:1.5px solid #E8E8F4;border-radius:8px;padding:0 8px;font-family:inherit;font-size:14px;color:#1A1B1E;background:#fff;outline:none;box-sizing:border-box"></select><input id="addr-city" placeholder="City / Town" style="flex:1;min-width:150px;height:38px;border:1.5px solid #E8E8F4;border-radius:8px;padding:0 11px;font-family:inherit;font-size:14px;color:#1A1B1E;outline:none;box-sizing:border-box"><select id="addr-zone" style="display:none;flex:1;min-width:150px;height:38px;border:1.5px solid #E8E8F4;border-radius:8px;padding:0 8px;font-family:inherit;font-size:14px;color:#1A1B1E;background:#fff;outline:none;box-sizing:border-box"></select></div><div style="margin-top:10px;"><div style="font-size:11px;font-weight:600;color:#5E686E;margin-bottom:5px;">Proof of address <span style="color:#C0283A;">*</span></div><div id="addrproof-review-slot"></div><div id="addrproof-review-err" style="display:none;font-size:11.5px;color:#C0283A;margin-top:6px;">Attach a proof of address to continue.</div></div><div style="display:flex;gap:8px;margin-top:8px;"><button type="button" onclick="revAddContact('addr')" style="height:36px;padding:0 18px;border:0;border-radius:9px;background:#171C8F;color:#fff;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">Add address</button><button type="button" onclick="revCancelContact('addr')" style="height:36px;padding:0 14px;border:0;border-radius:9px;background:#E4E4EF;color:#5a6072;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">Cancel</button></div></div></div>
             
             <button class="rev-update" onclick="toggleUpdate('addr')">+ Add new</button>
           </div>
@@ -5791,7 +5792,7 @@ document.addEventListener('click', function(e){
 <div id="toast"></div></div>
 <style id="sim-styles">#screen-simulation{
     --navy:#171C8F; --green:#26D07C; --green-d:#1fb869; --ink:#1A1B1E;
-    --muted:#7C878E; --muted2:#8A8AA0; --line:#E8E8F4; --bg:#F5F5F5; --bg2:#F7F8FF;
+    --muted:#5E686E; --muted2:#8A8AA0; --line:#E8E8F4; --bg:#F5F5F5; --bg2:#F7F8FF;
     --amber:#F6BE00; --amber-d:#946F00; --red:#F4364C; --red-d:#D32F45;
     --shadow:0 2px 12px rgba(23,28,143,.10); --shadow-h:0 10px 30px rgba(23,28,143,.16);
   }#screen-simulation *{ margin:0; padding:0; box-sizing:border-box; }#screen-simulation{ background:var(--bg); font-family:'Roboto',-apple-system,BlinkMacSystemFont,sans-serif; color:var(--ink); }#screen-simulation .app{ min-height:100vh; display:flex; flex-direction:column; }#screen-simulation .hd{ background:var(--navy); color:#fff; padding:clamp(20px,2.4vw,28px) clamp(20px,4vw,48px) clamp(20px,2.4vw,26px);
@@ -5826,7 +5827,7 @@ a:focus-visible, button:focus-visible, [role="button"]:focus-visible, [onclick]:
 .jada-hd .hd-name-row > button{ background:transparent; border:0; height:auto; padding:0; margin-left:auto; color:#fff; font-weight:600; text-decoration:underline; }
 .hd-meta-toggle{ display:none; }
 .bottom-nav{ display:none; }
-.bottom-nav a{ flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; padding:6px 0; font-size:10.5px; font-weight:600; color:#9aa0ad; text-decoration:none; border-radius:10px; cursor:pointer; transition:color .15s ease, background .15s ease; }
+.bottom-nav a{ flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; padding:6px 0; font-size:10.5px; font-weight:600; color:#6B6E7C; text-decoration:none; border-radius:10px; cursor:pointer; transition:color .15s ease, background .15s ease; }
 .bottom-nav a svg{ width:21px; height:21px; }
 .bottom-nav a.active{ color:#171C8F; background:#F2F3FF; }
 @media (max-width:767.98px){ /* bottom-nav now covers all mobile+tablet (was 640) */
@@ -5958,15 +5959,13 @@ a:focus-visible, button:focus-visible, [role="button"]:focus-visible, [onclick]:
   .jada-hd .hd-meta{ gap:10px 16px !important; margin-top:12px !important; padding-top:12px !important; }
 }
 /* mobile: account-card actions overflow + account-detail responsive */
-.sh-util{ display:flex; gap:8px; flex-wrap:wrap; }
-.sh-more{ display:none; align-items:center; gap:6px; font-size:12.5px; font-weight:600; color:#5a6072; border:1px solid #E2E5EC; border-radius:9px; padding:8px 13px; background:#fff; cursor:pointer; font-family:inherit; }
+.sh-util{ display:none; gap:8px; flex-wrap:wrap; order:3; flex-basis:100%; margin-top:8px; }
+.sh-more{ display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:600; color:#5a6072; border:1px solid #E2E5EC; border-radius:9px; padding:8px 13px; background:#fff; cursor:pointer; font-family:inherit; }
 .sh-more svg{ transition:transform .2s ease; }
 .sh-acct.acts-open .sh-more svg{ transform:rotate(180deg); }
+.sh-acct.acts-open .sh-util{ display:flex; }
+.sh-acct .sh-view{ margin-left:auto; }
 @media (max-width:767.98px){
-  .sh-acct .sh-util{ display:none; order:3; flex-basis:100%; margin-top:8px; }
-  .sh-acct.acts-open .sh-util{ display:flex; }
-  .sh-acct .sh-more{ display:inline-flex; }
-  .sh-acct .sh-view{ margin-left:auto; }
   #screen-account-detail .main, #screen-account-detail .content-area{ overflow-x:hidden; }
   #screen-account-detail .content-area [style*="grid-template-columns:1fr 1fr"]{ grid-template-columns:1fr !important; gap:0 !important; }
 }
@@ -6205,32 +6204,32 @@ a:focus-visible, button:focus-visible, [role="button"]:focus-visible, [onclick]:
   window.addContactVersion=function(c,f,val){ window.ensureContactLog(c); val=(val||"").trim(); if(!val) return false; var a=c.contactLog[f]; for(var i=0;i<a.length;i++){ if(a[i].value===val){ c.contactPrimary[f]=i; c[f]=val; return true; } } a.push({value:val,date:todayStr()}); c.contactPrimary[f]=a.length-1; c[f]=val; return true; };
   window.setContactPrimary=function(c,f,idx){ window.ensureContactLog(c); var a=c.contactLog[f]; if(idx<0||idx>=a.length) return; c.contactPrimary[f]=idx; c[f]=a[idx].value; };
   window.areaSel=function(id){ return "<select id='"+id+"' style='width:104px;height:42px;border:1.5px solid #C7CBF0;border-radius:9px;padding:0 10px;font-family:inherit;font-size:14px;color:#1A1B1E;background:#fff;cursor:pointer;box-sizing:border-box;'><option value='876'>876</option><option value='658'>658</option></select>"; };
-  window.contactHistProfile=function(c,f){ window.ensureContactLog(c); var a=c.contactLog[f]; if(a.length<=1) return ""; var rows=""; for(var i=a.length-1;i>=0;i--){ var cur=(i===a.length-1); rows+="<div style='display:flex;justify-content:space-between;gap:10px;align-items:flex-start;"+(cur?"":"opacity:.65;")+"'><div><div style='font-size:13px;font-weight:"+(cur?"600":"500")+";color:"+(cur?"#1A1B1E":"#5a6072")+";"+(cur?"":"text-decoration:line-through;")+"'>"+a[i].value+"</div><div style='font-size:11px;color:#9A9AB0;'>"+a[i].date+"</div></div>"+(cur?"<span style='font-size:10px;font-weight:700;color:#15A35B;white-space:nowrap;'>CURRENT</span>":"")+"</div>"; } return "<details style='margin-top:9px;'><summary style='font-size:12px;font-weight:600;color:#171C8F;cursor:pointer;'>History ("+a.length+")</summary><div style='margin-top:8px;border-left:2px solid #ECECF4;padding-left:12px;display:flex;flex-direction:column;gap:9px;'>"+rows+"</div></details>"; };
-  window.contactHistReview=function(c,f){ window.ensureContactLog(c); var a=c.contactLog[f]; if(a.length<=1) return ""; var prev=a.slice(0,a.length-1).slice(-2).reverse(); var sx=prev.map(function(e){ return "<span style='text-decoration:line-through;'>"+e.value+"</span> <span style='color:#B6B6C6;'>("+e.date+")</span>"; }).join(" &middot; "); return "<div style='font-size:11px;color:#9A9AB0;margin-top:5px;'>Previous: "+sx+"</div>"; };
+  window.contactHistProfile=function(c,f){ window.ensureContactLog(c); var a=c.contactLog[f]; if(a.length<=1) return ""; var rows=""; for(var i=a.length-1;i>=0;i--){ var cur=(i===a.length-1); rows+="<div style='display:flex;justify-content:space-between;gap:10px;align-items:flex-start;"+(cur?"":"opacity:.65;")+"'><div><div style='font-size:13px;font-weight:"+(cur?"600":"500")+";color:"+(cur?"#1A1B1E":"#5a6072")+";"+(cur?"":"text-decoration:line-through;")+"'>"+a[i].value+"</div><div style='font-size:11px;color:#6B6E7C;'>"+a[i].date+"</div></div>"+(cur?"<span style='font-size:10px;font-weight:700;color:#15A35B;white-space:nowrap;'>CURRENT</span>":"")+"</div>"; } return "<details style='margin-top:9px;'><summary style='font-size:12px;font-weight:600;color:#171C8F;cursor:pointer;'>History ("+a.length+")</summary><div style='margin-top:8px;border-left:2px solid #ECECF4;padding-left:12px;display:flex;flex-direction:column;gap:9px;'>"+rows+"</div></details>"; };
+  window.contactHistReview=function(c,f){ window.ensureContactLog(c); var a=c.contactLog[f]; if(a.length<=1) return ""; var prev=a.slice(0,a.length-1).slice(-2).reverse(); var sx=prev.map(function(e){ return "<span style='text-decoration:line-through;'>"+e.value+"</span> <span style='color:#B6B6C6;'>("+e.date+")</span>"; }).join(" &middot; "); return "<div style='font-size:11px;color:#6B6E7C;margin-top:5px;'>Previous: "+sx+"</div>"; };
   window.contactBlockProfile=function(c,f,label,addLabel){
     window.ensureContactLog(c); var a=c.contactLog[f]; var pi=c.contactPrimary[f]; var primary=a[pi];
     var others=[]; for(var i=a.length-1;i>=0;i--){ if(i!==pi && a[i] && a[i].value) others.push({e:a[i],idx:i}); }
     var shown=others.slice(0,4); var hidden=others.length-shown.length;
     var primaryRow=(primary&&primary.value)
       ? "<div style='display:flex;justify-content:space-between;align-items:center;gap:10px;background:#F8F9FB;border:1px solid #EAECF2;border-radius:9px;padding:9px 12px;'><span style='font-size:13.5px;font-weight:700;color:#1A1B1E;word-break:break-word;'>"+primary.value+"</span><span style='font-size:10.5px;font-weight:600;color:#5A6072;background:#EEF0F5;border:1px solid #E2E4EC;padding:3px 9px;border-radius:9999px;flex:none;'>Primary</span></div>"
-      : "<div style='font-size:12px;color:#9A9AB0;padding:5px 2px;'>None on file</div>";
+      : "<div style='font-size:12px;color:#6B6E7C;padding:5px 2px;'>None on file</div>";
     var otherRows=shown.map(function(o){ return "<div style='display:flex;justify-content:space-between;align-items:center;gap:10px;padding:6px 11px;border-bottom:1px solid #F2F2F7;'><span style='font-size:13px;color:#5a6072;word-break:break-word;'>"+o.e.value+" <span style='color:#AEB2BE;font-size:11px;'>&middot; added "+o.e.date+"</span></span><span class='cmkprim' data-f='"+f+"' data-i='"+o.idx+"' style='font-size:11.5px;font-weight:600;color:#171C8F;cursor:pointer;white-space:nowrap;flex:none;'>Make primary</span></div>"; }).join("");
-    var moreNote=hidden>0?"<div style='font-size:11px;color:#9A9AB0;padding:5px 11px;'>+"+hidden+" older not shown</div>":"";
+    var moreNote=hidden>0?"<div style='font-size:11px;color:#6B6E7C;padding:5px 11px;'>+"+hidden+" older not shown</div>":"";
     var form;
-    if(f==='address'){ form="<div class='cadd-form' data-f='address' style='display:none;margin-top:10px;border:1px dashed #C7CBF0;border-radius:10px;padding:12px;background:#F7F8FF;'>"+addrField('')+"<div style='margin-top:12px;'><div style='font-size:11px;font-weight:600;color:#7C878E;margin-bottom:5px;'>Proof of address <span style='color:#C0283A;'>*</span></div><div id='addrproof-profile-slot'></div><div id='addrproof-profile-err' style='display:none;font-size:11.5px;color:#C0283A;margin-top:6px;'>Attach a proof of address to continue.</div></div>"+"<div style='display:flex;gap:8px;margin-top:6px;'><button class='cadd-confirm' data-f='address' style='height:36px;padding:0 16px;border:0;border-radius:9px;background:#171C8F;color:#fff;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;'>Add address</button><button class='cadd-cancel' data-f='address' style='height:36px;padding:0 14px;border:0;border-radius:9px;background:#E4E4EF;color:#5a6072;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;'>Cancel</button></div></div>"; }
+    if(f==='address'){ form="<div class='cadd-form' data-f='address' style='display:none;margin-top:10px;border:1px dashed #C7CBF0;border-radius:10px;padding:12px;background:#F7F8FF;'>"+addrField('')+"<div style='margin-top:12px;'><div style='font-size:11px;font-weight:600;color:#5E686E;margin-bottom:5px;'>Proof of address <span style='color:#C0283A;'>*</span></div><div id='addrproof-profile-slot'></div><div id='addrproof-profile-err' style='display:none;font-size:11.5px;color:#C0283A;margin-top:6px;'>Attach a proof of address to continue.</div></div>"+"<div style='display:flex;gap:8px;margin-top:6px;'><button class='cadd-confirm' data-f='address' style='height:36px;padding:0 16px;border:0;border-radius:9px;background:#171C8F;color:#fff;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;'>Add address</button><button class='cadd-cancel' data-f='address' style='height:36px;padding:0 14px;border:0;border-radius:9px;background:#E4E4EF;color:#5a6072;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;'>Cancel</button></div></div>"; }
     else if(f==='email'){ form="<div class='cadd-form' data-f='email' style='display:none;margin-top:10px;border:1px dashed #C7CBF0;border-radius:10px;padding:12px;background:#F7F8FF;'><input id='cadd-input-email' placeholder='New email address' style='width:100%;height:42px;border:1.5px solid #C7CBF0;border-radius:9px;padding:0 12px;font-family:inherit;font-size:14px;color:#1A1B1E;outline:none;box-sizing:border-box;'><div style='display:flex;gap:8px;margin-top:8px;'><button class='cadd-confirm' data-f='email' style='height:36px;padding:0 16px;border:0;border-radius:9px;background:#171C8F;color:#fff;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;'>Add</button><button class='cadd-cancel' data-f='email' style='height:36px;padding:0 14px;border:0;border-radius:9px;background:#E4E4EF;color:#5a6072;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;'>Cancel</button></div></div>"; }
     else { form="<div class='cadd-form' data-f='"+f+"' style='display:none;margin-top:10px;border:1px dashed #C7CBF0;border-radius:10px;padding:12px;background:#F7F8FF;'><div style='display:flex;gap:8px;'>"+window.areaSel('cadd-area-'+f)+"<input id='cadd-input-"+f+"' inputmode='numeric' placeholder='Phone number' style='flex:1;min-width:120px;height:42px;border:1.5px solid #C7CBF0;border-radius:9px;padding:0 12px;font-family:inherit;font-size:14px;color:#1A1B1E;outline:none;box-sizing:border-box;'></div><div style='display:flex;gap:8px;margin-top:8px;'><button class='cadd-confirm' data-f='"+f+"' style='height:36px;padding:0 16px;border:0;border-radius:9px;background:#171C8F;color:#fff;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;'>Add</button><button class='cadd-cancel' data-f='"+f+"' style='height:36px;padding:0 14px;border:0;border-radius:9px;background:#E4E4EF;color:#5a6072;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;'>Cancel</button></div></div>"; }
     return "<div style='border-top:1px solid #F0F0F6;margin-top:16px;padding-top:16px;'><div style='display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;'><div style='font-size:13px;font-weight:700;color:#1A1B1E;'>"+label+"</div><button class='cadd-btn' data-f='"+f+"' style='border:0;background:none;color:#171C8F;font-family:inherit;font-size:12.5px;font-weight:600;cursor:pointer;padding:4px 2px;'>+ "+addLabel+"</button></div>"+primaryRow+otherRows+moreNote+form+"</div>";
   };
-  window.contactSavedReview=function(c,f){ window.ensureContactLog(c); var a=c.contactLog[f]; if(a.length<=1) return ""; var items=""; for(var i=a.length-2;i>=0;i--){ items+="<div style='display:flex;justify-content:space-between;gap:8px;padding:5px 0;font-size:13px;color:#5a6072;'><span style='word-break:break-word;'>"+a[i].value+"</span><span style='color:#9A9AB0;font-size:11px;white-space:nowrap;'>"+a[i].date+"</span></div>"; } return "<details style='margin-top:6px;'><summary style='font-size:12px;font-weight:600;color:#171C8F;cursor:pointer;'>"+(a.length-1)+" previous saved</summary><div style='border-top:1px solid #F0F0F6;margin-top:5px;padding-top:3px;'>"+items+"</div></details>"; };
+  window.contactSavedReview=function(c,f){ window.ensureContactLog(c); var a=c.contactLog[f]; if(a.length<=1) return ""; var items=""; for(var i=a.length-2;i>=0;i--){ items+="<div style='display:flex;justify-content:space-between;gap:8px;padding:5px 0;font-size:13px;color:#5a6072;'><span style='word-break:break-word;'>"+a[i].value+"</span><span style='color:#6B6E7C;font-size:11px;white-space:nowrap;'>"+a[i].date+"</span></div>"; } return "<details style='margin-top:6px;'><summary style='font-size:12px;font-weight:600;color:#171C8F;cursor:pointer;'>"+(a.length-1)+" previous saved</summary><div style='border-top:1px solid #F0F0F6;margin-top:5px;padding-top:3px;'>"+items+"</div></details>"; };
   function profAddrValue(){ var st=((document.getElementById('pf-addr-street')||{}).value||"").trim(); var p=(document.getElementById('pf-addr-parish')||{}).value||""; var K=(p==="Kingston"||p==="St. Andrew"); var loc=K?((document.getElementById('pf-addr-zone')||{}).value||""):(((document.getElementById('pf-addr-city')||{}).value||"").trim()); var bits=[]; if(st)bits.push(st); if(loc)bits.push(loc); if(p)bits.push(p); return bits.join(", "); }
   (function(){ var CF=window.CUSTOMER_FULL||{}; var j=CF.jada; if(j){ window.ensureContactLog(j); if(j.contactLog.phone.length===1) j.contactLog.phone.unshift({value:"+1 876 401 9920",date:"Mar 02, 2026"}); if(j.contactLog.address.length===1) j.contactLog.address.unshift({value:"7 Caledonia Avenue, Kingston 5, St. Andrew",date:"Nov 12, 2025"}); if(j.contactLog.home.length===1) j.contactLog.home.unshift({value:"+1 876 901 3320",date:"Feb 20, 2026"}); ['phone','home','email','address'].forEach(function(f){ j.contactPrimary[f]=j.contactLog[f].length-1; }); } })();
 
-  function roRow(label,val){ return "<div style='display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid #F0F0F6;font-size:13px;'><span style='color:#7C878E;'>"+label+"</span><span style='font-weight:600;color:#1A1B1E;text-align:right;'>"+val+"</span></div>"; }
-  function editF(label,val,full){ return "<div"+(full?" style='grid-column:1/-1;'":"")+"><div style='font-size:11px;font-weight:600;color:#7C878E;margin-bottom:5px;'>"+label+"</div><input class='prof-edit' value='"+val+"' style='width:100%;height:42px;border:1.5px solid #C7CBF0;border-radius:9px;padding:0 12px;font-family:inherit;font-size:14px;color:#1A1B1E;outline:none;box-sizing:border-box;'></div>"; }
+  function roRow(label,val){ return "<div style='display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid #F0F0F6;font-size:13px;'><span style='color:#5E686E;'>"+label+"</span><span style='font-weight:600;color:#1A1B1E;text-align:right;'>"+val+"</span></div>"; }
+  function editF(label,val,full){ return "<div"+(full?" style='grid-column:1/-1;'":"")+"><div style='font-size:11px;font-weight:600;color:#5E686E;margin-bottom:5px;'>"+label+"</div><input class='prof-edit' value='"+val+"' style='width:100%;height:42px;border:1.5px solid #C7CBF0;border-radius:9px;padding:0 12px;font-family:inherit;font-size:14px;color:#1A1B1E;outline:none;box-sizing:border-box;'></div>"; }
   function addrField(addr){
  var FS="width:100%;height:42px;border:1.5px solid #C7CBF0;border-radius:9px;padding:0 12px;font-family:inherit;font-size:14px;color:#1A1B1E;outline:none;box-sizing:border-box;";
- return "<div style='grid-column:1/-1;'><div style='font-size:11px;font-weight:600;color:#7C878E;margin-bottom:5px;'>Address</div><div style='display:grid;grid-template-columns:1fr 1fr;gap:10px;'>"+
+ return "<div style='grid-column:1/-1;'><div style='font-size:11px;font-weight:600;color:#5E686E;margin-bottom:5px;'>Address</div><div style='display:grid;grid-template-columns:1fr 1fr;gap:10px;'>"+
  "<input id='pf-addr-street' class='prof-edit' placeholder='Street address' style='grid-column:1/-1;"+FS+"'>"+
  "<select id='pf-addr-parish' class='prof-edit' style='"+FS+"background:#fff;cursor:pointer;'></select>"+
  "<select id='pf-addr-zone' class='prof-edit' style='"+FS+"background:#fff;cursor:pointer;'></select>"+
@@ -6254,8 +6253,8 @@ function initProfileAddr(addr){
  mode(); pa.addEventListener("change", mode);
 }
   window.__addrProof={profile:false,review:false};
-  window.resetAddrProof=function(scope){ window.__addrProof[scope]=false; var slot=document.getElementById('addrproof-'+scope+'-slot'); if(slot){ slot.innerHTML="<div onclick=\"window.attachAddrProof('"+scope+"')\" style='display:flex;align-items:center;gap:9px;border:1.5px dashed #C7CBF0;border-radius:9px;padding:11px 12px;cursor:pointer;background:#fff;'><svg width='17' height='17' viewBox='0 0 24 24' fill='none' stroke='#171C8F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z'></path><circle cx='12' cy='13' r='3.2'></circle></svg><span style='font-size:12.5px;font-weight:600;color:#171C8F;'>Attach photo</span><span style='font-size:11px;color:#9A9AB0;margin-left:auto;'>Required</span></div>"; } var err=document.getElementById('addrproof-'+scope+'-err'); if(err) err.style.display='none'; };
-  window.attachAddrProof=function(scope){ window.__addrProof[scope]=true; var slot=document.getElementById('addrproof-'+scope+'-slot'); if(slot){ slot.innerHTML="<div style='display:flex;align-items:center;gap:10px;border:1px solid #CDE9DA;border-radius:9px;padding:9px 11px;background:#F2FBF6;'><span style='width:40px;height:40px;border-radius:7px;background:#E3ECF7;display:flex;align-items:center;justify-content:center;color:#5560C8;flex:none;'><svg width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='3' width='18' height='18' rx='2'></rect><circle cx='8.5' cy='8.5' r='1.6'></circle><path d='m21 15-5-5L5 21'></path></svg></span><div style='min-width:0;flex:1;'><div style='font-size:12.5px;font-weight:700;color:#1A1B1E;'>proof-of-address.jpg</div><div style='font-size:11px;color:#0E7A55;'>Attached</div></div><span style='color:#1C9657;flex:none;'><svg width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'></polyline></svg></span><button onclick=\"window.resetAddrProof('"+scope+"')\" style='border:0;background:none;color:#9A9AB0;cursor:pointer;flex:none;padding:2px;font-size:16px;line-height:1;'>&times;</button></div>"; } var err=document.getElementById('addrproof-'+scope+'-err'); if(err) err.style.display='none'; };
+  window.resetAddrProof=function(scope){ window.__addrProof[scope]=false; var slot=document.getElementById('addrproof-'+scope+'-slot'); if(slot){ slot.innerHTML="<div onclick=\"window.attachAddrProof('"+scope+"')\" style='display:flex;align-items:center;gap:9px;border:1.5px dashed #C7CBF0;border-radius:9px;padding:11px 12px;cursor:pointer;background:#fff;'><svg width='17' height='17' viewBox='0 0 24 24' fill='none' stroke='#171C8F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z'></path><circle cx='12' cy='13' r='3.2'></circle></svg><span style='font-size:12.5px;font-weight:600;color:#171C8F;'>Attach photo</span><span style='font-size:11px;color:#6B6E7C;margin-left:auto;'>Required</span></div>"; } var err=document.getElementById('addrproof-'+scope+'-err'); if(err) err.style.display='none'; };
+  window.attachAddrProof=function(scope){ window.__addrProof[scope]=true; var slot=document.getElementById('addrproof-'+scope+'-slot'); if(slot){ slot.innerHTML="<div style='display:flex;align-items:center;gap:10px;border:1px solid #CDE9DA;border-radius:9px;padding:9px 11px;background:#F2FBF6;'><span style='width:40px;height:40px;border-radius:7px;background:#E3ECF7;display:flex;align-items:center;justify-content:center;color:#5560C8;flex:none;'><svg width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='3' width='18' height='18' rx='2'></rect><circle cx='8.5' cy='8.5' r='1.6'></circle><path d='m21 15-5-5L5 21'></path></svg></span><div style='min-width:0;flex:1;'><div style='font-size:12.5px;font-weight:700;color:#1A1B1E;'>proof-of-address.jpg</div><div style='font-size:11px;color:#0E7A55;'>Attached</div></div><span style='color:#1C9657;flex:none;'><svg width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'></polyline></svg></span><button onclick=\"window.resetAddrProof('"+scope+"')\" style='border:0;background:none;color:#6B6E7C;cursor:pointer;flex:none;padding:2px;font-size:16px;line-height:1;'>&times;</button></div>"; } var err=document.getElementById('addrproof-'+scope+'-err'); if(err) err.style.display='none'; };
 function contactCard(c){ return "<section style='background:#fff;border:1px solid #E8E8F4;border-radius:16px;padding:20px;'>"+
     "<div style='display:flex;align-items:center;gap:9px;margin-bottom:6px;'><span style='font-size:14px;font-weight:700;color:#1A1B1E;'>Contact information</span><span style='display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:#6E7488;background:#F1F2F6;border:1px solid #E4E6EE;border-radius:9999px;padding:3px 9px;'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 20h9'></path><path d='M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z'></path></svg>Editable</span></div>"+
     "<div style='font-size:12px;color:#8A8F9E;margin-bottom:4px;line-height:1.5;'>New details are added without replacing the old ones &mdash; past values stay as history. Set any saved value as the primary.</div>"+
@@ -6270,25 +6269,25 @@ function contactCard(c){ return "<section style='background:#fff;border:1px soli
     (d.photo?"<img class='prof-doc-thumb' src='"+d.photo+"' style='width:100%;height:72px;object-fit:cover;border-radius:8px;margin-bottom:10px;'>":"")+
     "<div style='display:flex;align-items:center;gap:7px;margin-bottom:10px;'><span style='width:24px;height:24px;border-radius:6px;background:#EEF0FF;display:inline-flex;align-items:center;justify-content:center;color:#171C8F;font-size:9px;font-weight:800;'>ID</span><span style='font-size:13px;font-weight:700;color:#1A1B1E;'>"+d.name+"</span>"+(d.added?"<span style='font-size:9px;font-weight:700;text-transform:uppercase;color:#15A35B;background:#E1F5EE;padding:2px 7px;border-radius:9999px;margin-left:auto;'>New</span>":"")+"</div>"+
     "<div style='font-size:12.5px;color:#1A1B1E;font-weight:600;margin-bottom:3px;'>"+d.number+"</div>"+
-    "<div style='font-size:11px;color:#9aa0ad;'>Uploaded "+d.uploaded+(d.photo?" &middot; photo attached":"")+"</div>"+
+    "<div style='font-size:11px;color:#6B6E7C;'>Uploaded "+d.uploaded+(d.photo?" &middot; photo attached":"")+"</div>"+
     "<div style='margin-top:10px;'><a class='prof-doc-view' style='font-size:12px;font-weight:700;color:#171C8F;cursor:pointer;'>View document &rarr;</a></div></div>"; }
   function supCard(d){ return "<div class='prof-doc-card' style='border:1px solid #E8E8F4;border-radius:11px;padding:13px;'>"+
     "<div style='display:flex;align-items:center;gap:7px;margin-bottom:10px;'><span style='width:24px;height:24px;border-radius:6px;background:#EEF0FF;display:inline-flex;align-items:center;justify-content:center;color:#171C8F;font-size:9px;font-weight:800;'>PDF</span><span style='font-size:13px;font-weight:700;color:#1A1B1E;'>"+d.name+"</span></div>"+
     "<div style='font-size:12px;color:#5a6072;margin-bottom:3px;'>"+d.sub+"</div>"+
-    "<div style='font-size:11px;color:#9aa0ad;'>Uploaded "+d.uploaded+"</div>"+
+    "<div style='font-size:11px;color:#6B6E7C;'>Uploaded "+d.uploaded+"</div>"+
     "<div style='margin-top:10px;'><a class='prof-doc-view' style='font-size:12px;font-weight:700;color:#171C8F;cursor:pointer;'>View document &rarr;</a></div></div>"; }
   function docsSectionHTML(c){
     var ALLT=[["trn","TRN number"],["voters","Voters ID"],["passport","Passport"],["license","Driver's licence"],["nids","NIDS"]];
     var have={}; for(var hi=0;hi<c.documents.length;hi++){ have[c.documents[hi].type]=true; }
     var opts="", navail=0;
     for(var oi=0;oi<ALLT.length;oi++){ if(!have[ALLT[oi][0]]){ opts+="<option value='"+ALLT[oi][0]+"'>"+ALLT[oi][1]+"</option>"; navail++; } }
-    var addBtn = navail>0 ? "<button id='prof-add-doc' style='height:32px;padding:0 13px;border:1.5px solid #171C8F;background:#fff;color:#171C8F;border-radius:9px;font-family:inherit;font-size:12.5px;font-weight:700;cursor:pointer;'>+ Add document</button>" : "<button id='prof-add-doc' disabled style='height:32px;padding:0 13px;border:1.5px solid #D3D1C7;background:#F1EFE8;color:#9A9AB0;border-radius:9px;font-family:inherit;font-size:12.5px;font-weight:700;cursor:not-allowed;'>All types on file</button>";
+    var addBtn = navail>0 ? "<button id='prof-add-doc' style='height:32px;padding:0 13px;border:1.5px solid #171C8F;background:#fff;color:#171C8F;border-radius:9px;font-family:inherit;font-size:12.5px;font-weight:700;cursor:pointer;'>+ Add document</button>" : "<button id='prof-add-doc' disabled style='height:32px;padding:0 13px;border:1.5px solid #D3D1C7;background:#F1EFE8;color:#6B6E7C;border-radius:9px;font-family:inherit;font-size:12.5px;font-weight:700;cursor:not-allowed;'>All types on file</button>";
     var h="<div style='display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:4px;'><div style='font-size:13px;font-weight:700;'>Identification documents</div>"+addBtn+"</div>"+
-    "<div style='font-size:11.5px;color:#7C878E;margin-bottom:16px;'>"+c.documents.length+" document"+(c.documents.length===1?"":"s")+" on file. A customer can have several identification documents associated.</div>"+
+    "<div style='font-size:11.5px;color:#5E686E;margin-bottom:16px;'>"+c.documents.length+" document"+(c.documents.length===1?"":"s")+" on file. A customer can have several identification documents associated.</div>"+
     "<div id='prof-add-form' style='display:none;border:1px dashed #C7CBF0;border-radius:12px;padding:14px;margin-bottom:14px;background:#F7F8FF;'><div style='display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;'>"+
-      "<div style='flex:1;min-width:140px;'><div style='font-size:11px;font-weight:600;color:#7C878E;margin-bottom:5px;'>Document type</div><select id='prof-add-type' style='width:100%;height:40px;border:1.5px solid #C7CBF0;border-radius:9px;padding:0 10px;font-family:inherit;font-size:14px;background:#fff;box-sizing:border-box;'>"+opts+"</select></div>"+
-      "<div style='flex:1;min-width:140px;'><div style='font-size:11px;font-weight:600;color:#7C878E;margin-bottom:5px;'>Document number</div><input id='prof-add-num' placeholder='Document number' style='width:100%;height:40px;border:1.5px solid #C7CBF0;border-radius:9px;padding:0 11px;font-family:inherit;font-size:14px;box-sizing:border-box;'></div>"+
-      "<div style='flex:0 0 auto;'><div style='font-size:11px;font-weight:600;color:#7C878E;margin-bottom:5px;'>Photo (required)</div><label for='prof-add-photo' style='display:inline-flex;align-items:center;gap:7px;height:40px;padding:0 14px;border:1.5px dashed #C7CBF0;border-radius:9px;cursor:pointer;font-size:13px;color:#171C8F;font-weight:600;background:#fff;'>Attach photo</label><input type='file' accept='image/*' id='prof-add-photo' style='display:none'></div>"+
+      "<div style='flex:1;min-width:140px;'><div style='font-size:11px;font-weight:600;color:#5E686E;margin-bottom:5px;'>Document type</div><select id='prof-add-type' style='width:100%;height:40px;border:1.5px solid #C7CBF0;border-radius:9px;padding:0 10px;font-family:inherit;font-size:14px;background:#fff;box-sizing:border-box;'>"+opts+"</select></div>"+
+      "<div style='flex:1;min-width:140px;'><div style='font-size:11px;font-weight:600;color:#5E686E;margin-bottom:5px;'>Document number</div><input id='prof-add-num' placeholder='Document number' style='width:100%;height:40px;border:1.5px solid #C7CBF0;border-radius:9px;padding:0 11px;font-family:inherit;font-size:14px;box-sizing:border-box;'></div>"+
+      "<div style='flex:0 0 auto;'><div style='font-size:11px;font-weight:600;color:#5E686E;margin-bottom:5px;'>Photo (required)</div><label for='prof-add-photo' style='display:inline-flex;align-items:center;gap:7px;height:40px;padding:0 14px;border:1.5px dashed #C7CBF0;border-radius:9px;cursor:pointer;font-size:13px;color:#171C8F;font-weight:600;background:#fff;'>Attach photo</label><input type='file' accept='image/*' id='prof-add-photo' style='display:none'></div>"+
       "<button id='prof-add-confirm' style='height:40px;padding:0 18px;border:0;border-radius:9px;background:#171C8F;color:#fff;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;'>Add</button>"+
       "<button id='prof-add-cancel' style='height:40px;padding:0 14px;border:0;border-radius:9px;background:#E4E4EF;color:#5a6072;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;'>Cancel</button></div>"+
       "<div id='prof-add-err' style='display:none;margin-top:10px;font-size:12px;color:#C62828;font-weight:600;'>Please attach a photo of the document to add it.</div>"+"<div id='prof-add-photo-prev' style='margin-top:10px;'></div></div>"+
@@ -6297,7 +6296,7 @@ function contactCard(c){ return "<section style='background:#fff;border:1px soli
     return h+"</div>";
   }
   function supportingSectionHTML(c){
-    var h="<div style='font-size:13px;font-weight:700;margin-bottom:4px;'>Supporting documents</div><div style='font-size:11.5px;color:#7C878E;margin-bottom:16px;'>Income and address verification from onboarding. Read-only.</div><div style='display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;'>";
+    var h="<div style='font-size:13px;font-weight:700;margin-bottom:4px;'>Supporting documents</div><div style='font-size:11.5px;color:#5E686E;margin-bottom:16px;'>Income and address verification from onboarding. Read-only.</div><div style='display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;'>";
     var s=c.supporting||[]; for(var i=0;i<s.length;i++){ h+=supCard(s[i]); } return h+"</div>";
   }
   function buildProfile(c){
