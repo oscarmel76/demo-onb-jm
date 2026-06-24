@@ -3292,7 +3292,7 @@ a {
       <div class="hd-id-text">
         <div class="hd-name-row">
           <h1 class="hd-name">Jada Marcia Smith Thompson</h1><button onclick="openProfile('jada')" style="order:2;margin-left:auto;display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 14px;border:1.5px solid rgba(255,255,255,.35);background:rgba(255,255,255,.08);color:#fff;border-radius:9999px;font-family:inherit;font-size:12.5px;font-weight:700;cursor:pointer;">View full profile &rarr;</button>
-          <span class="hd-chip rating" title="Internal credit rating from A (highest) to E (lowest). Drives pricing, limits and approval rules." style="cursor:help;">Rating A</span>
+          <span class="hd-chip rating" data-tip="Internal credit rating from A (highest) to E (lowest). Drives pricing, limits and approval rules.">Rating A</span>
           <span class="hd-chip ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Up to date</span>
         </div>
         <button class="hd-toggle" aria-expanded="false" onclick="toggleCustHeader(this)">
@@ -3516,7 +3516,7 @@ a {
       <div class="hd-id-text">
         <div class="hd-name-row">
           <h1 class="hd-name">Jada Marcia Smith Thompson</h1><button onclick="openProfile(window.__cartsCust||'jada')" style="order:2;margin-left:auto;display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 14px;border:1.5px solid rgba(255,255,255,.35);background:rgba(255,255,255,.08);color:#fff;border-radius:9999px;font-family:inherit;font-size:12.5px;font-weight:700;cursor:pointer;">View full profile &rarr;</button>
-          <span class="hd-chip rating" title="Internal credit rating from A (highest) to E (lowest). Drives pricing, limits and approval rules." style="cursor:help;">Rating A</span>
+          <span class="hd-chip rating" data-tip="Internal credit rating from A (highest) to E (lowest). Drives pricing, limits and approval rules.">Rating A</span>
           <span class="hd-chip ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Up to date</span>
         </div>
         <button class="hd-toggle" aria-expanded="false" onclick="toggleCustHeader(this)">
@@ -5490,7 +5490,7 @@ document.addEventListener('click', function(e){
         : "<span class='hd-chip ok'>"+CHK+" Up to date</span>");
     var trnSpan="<span><b>TRN</b> "+(cf.trnOnFile?cf.trn:"<span style='color:#8E93C8'>&mdash;</span>")+"</span>";
     var pdocSpan=(!cf.trnOnFile&&cf.primaryDoc)?"<span><b>"+cf.primaryDoc.label+"</b> "+cf.primaryDoc.number+"</span>":"";
-    return "<header class='blue-header jada-hd'><div class='hd-top'>"+crumbs+"</div><div class='hd-main'><div class='hd-id'><div class='hd-id-text'><div class='hd-name-row'><h1 class='hd-name customer-name'>"+cf.name+"</h1><span class='hd-chip rating' title='Internal credit rating from A (highest) to E (lowest). Drives pricing, limits and approval rules.' style='cursor:help;'>Rating "+rating+"</span>"+statusChip+"</div><div class='hd-meta'>"+trnSpan+pdocSpan+"<span><b>COSACS</b> "+cf.cosacs+"</span><span><b>Phone</b> "+(cf.phone||'—')+"</span><span><b>Updated</b> "+(cf.updated||'—')+"</span></div></div></div></div></header>";
+    return "<header class='blue-header jada-hd'><div class='hd-top'>"+crumbs+"</div><div class='hd-main'><div class='hd-id'><div class='hd-id-text'><div class='hd-name-row'><h1 class='hd-name customer-name'>"+cf.name+"</h1><span class='hd-chip rating' data-tip='Internal credit rating from A (highest) to E (lowest). Drives pricing, limits and approval rules.'>Rating "+rating+"</span>"+statusChip+"</div><div class='hd-meta'>"+trnSpan+pdocSpan+"<span><b>COSACS</b> "+cf.cosacs+"</span><span><b>Phone</b> "+(cf.phone||'—')+"</span><span><b>Updated</b> "+(cf.updated||'—')+"</span></div></div></div></div></header>";
   };
   window.openSalesHistory=function(id){
     id=id||window.__activeCustId||'jada'; var cf=(window.CUSTOMER_FULL||{})[id]||window.CUSTOMER_FULL.jada; window.__activeCustId=id; window.__shId=id;
@@ -5592,7 +5592,7 @@ document.addEventListener('click', function(e){
     </div>
     <div class="hd-name-row">
       <span class="hd-name">Jada Marcia Smith Thompson</span>
-      <span class="chip rating" title="Internal credit rating from A (highest) to E (lowest). Drives pricing, limits and approval rules." style="cursor:help;">Rating A</span>
+      <span class="chip rating" data-tip="Internal credit rating from A (highest) to E (lowest). Drives pricing, limits and approval rules.">Rating A</span>
       <span class="chip ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Up to date</span>
     </div>
     <div class="hd-meta">
@@ -5969,6 +5969,11 @@ a:focus-visible, button:focus-visible, [role="button"]:focus-visible, [onclick]:
   #screen-account-detail .main, #screen-account-detail .content-area{ overflow-x:hidden; }
   #screen-account-detail .content-area [style*="grid-template-columns:1fr 1fr"]{ grid-template-columns:1fr !important; gap:0 !important; }
 }
+.hd-chip.rating, .chip.rating{ position:relative; cursor:help; }
+.hd-chip.rating::after, .chip.rating::after{ content:attr(data-tip); position:absolute; top:calc(100% + 9px); left:0; width:248px; max-width:74vw; background:#11131A; color:#fff; font-size:11.5px; font-weight:500; line-height:1.45; letter-spacing:normal; text-transform:none; text-align:left; padding:10px 12px; border-radius:10px; box-shadow:0 10px 26px rgba(0,0,0,.32); opacity:0; visibility:hidden; transform:translateY(-4px); transition:opacity .14s ease, transform .14s ease; z-index:80; pointer-events:none; white-space:normal; }
+.hd-chip.rating::before, .chip.rating::before{ content:''; position:absolute; top:calc(100% + 3px); left:14px; border:6px solid transparent; border-bottom-color:#11131A; opacity:0; visibility:hidden; transition:opacity .14s ease; z-index:81; pointer-events:none; }
+.hd-chip.rating:hover::after, .hd-chip.rating.tip-open::after, .chip.rating:hover::after, .chip.rating.tip-open::after,
+.hd-chip.rating:hover::before, .hd-chip.rating.tip-open::before, .chip.rating:hover::before, .chip.rating.tip-open::before{ opacity:1; visibility:visible; transform:translateY(0); }
 /* ===================== mtopbar-css ===================== */
 .m-topbar{ display:none; }
 @media (max-width:640px){
@@ -6745,4 +6750,5 @@ window.initSimulation=function(params){
 };
 
 </script>
+<script>document.addEventListener('click',function(e){var t=e.target;var chip=t.closest?t.closest('.hd-chip.rating, .chip.rating'):null;var open=document.querySelectorAll('.tip-open');for(var i=0;i<open.length;i++){if(open[i]!==chip)open[i].classList.remove('tip-open');}if(chip){if(chip.getAttribute('data-tip'))chip.classList.toggle('tip-open');}},true);</script>
 </body></html>
