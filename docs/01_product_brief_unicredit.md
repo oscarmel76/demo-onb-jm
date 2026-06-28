@@ -1,7 +1,7 @@
 # Unicredit — Product Brief / Visión (archivo de instrucciones del proyecto)
 
 **Plataforma de onboarding de crédito de consumo en tienda — Jamaica**
-Versión: 1.0 (supuestos validados con Oscar + revisión del prototipo publicado)
+Versión: 1.1 (supuestos validados + motor de decisión corregido sobre el prototipo)
 Owner de producto: Oscar Melgar
 Última actualización: 2026-06-27
 Demo en vivo revisada: https://oscarmel76.github.io/demo-onb-jm/
@@ -88,7 +88,7 @@ Revisión del prototipo publicado (`index.html` + `simulation.html`, HTML plano)
 - **Carritos de compra** (`screen-carts`, `cart-modal`): ítems a financiar, monto de compra, enganche, monto a financiar.
 - **Simulación de financiamiento** (`screen-simulation` / `simulation.html`): selección de **promoción** (fija rate, rango de plazo y periodo de gracia), selección de **plazo** (por defecto al plazo máximo), cuota mensual, primera cuota, plazo·tasa, gracia, **seguro CPI**, total financiado.
 - **Review & confirm** (`review-view`): verificación de TRN, teléfono y teléfono fijo, **dirección + proof of address obligatorio**, **screening PEP** (titular y parientes con tipo de relación), autorización del CSR, y **envío de la solicitud a COSACS**.
-- **Decisión** (`screen-decision`): resultado automático **Pre-approved / Rejected** con motivo, basado en reglas contra el límite disponible ("Within / Exceeds approved limit", "Automated decision rules", "Instant credit approval").
+- **Decisión** (`screen-decision`): **motor de reglas automáticas** con tres salidas — **Instant pre-approval** (pasa todas las reglas), **In analysis** (enrutada a revisión humana, *read-only* hasta que crédito devuelva decisión) y **Rejected** con motivo. La "In analysis" tiene dos sub-rutas: *manual underwriting* y *analysis* (ver §7.1). Estados de cliente/solicitud adicionales: **With observations** e **In arrears**.
 - **Pipeline del CSR** (`screen-pipeline`) e **historial de ventas** (`screen-sales-history`): solicitudes en curso y enviadas, con tarjetas de aprobadas y rechazadas (con motivo de rechazo).
 - **Perfil del cliente** (`screen-profile`).
 
@@ -102,7 +102,7 @@ Revisión del prototipo publicado (`index.html` + `simulation.html`, HTML plano)
 - Modelo de **línea pre-aprobada** con Spending Limit y MMI, y dos bolsas de producto (HP / Cash Loan).
 - **Simulación** con promociones (rate/plazo/gracia), enganche, seguro CPI y cuota fija.
 - **Verificación en el punto de envío:** TRN, contacto, dirección + proof of address, PEP (titular y parientes), autorización CSR.
-- **Decisión automática Pre-approved / Rejected** con motivo, contra el límite y la capacidad mensual.
+- **Motor de decisión automática de tres salidas** (Instant pre-approval / In analysis / Rejected) contra reglas de límite, capacidad mensual, mora interna, rating y score.
 - **Pipeline e historial** del CSR (aprobadas / rechazadas con motivo).
 - Solicitud de **aumento de límite** (estado "pending review").
 
@@ -113,11 +113,7 @@ Revisión del prototipo publicado (`index.html` + `simulation.html`, HTML plano)
 - **Multimoneda** (solo JMD).
 - Integración productiva real con COSACS / core (en el prototipo el envío y la decisión están simulados).
 - Desembolso/fondeo real, y cobranza/administración post-originación.
-- Estado **"Referido"** a analista en la decisión de crédito: **el modelo actual es binario (Pre-approved / Rejected) por reglas automáticas.** (Ver §6.1 — decisión a tomar.)
-
-### 6.1 Decisión pendiente
-
-**PENDIENTE — ¿se necesita un estado intermedio "Referido a analista"?** Hoy la decisión es binaria y automática. Si existen casos de zona gris (p. ej. monto que excede el límite pero el cliente tiene buen rating, o verificación documental incompleta) que ameriten revisión humana antes de rechazar, conviene introducir un estado `REFERRED`. Recomendación: definirlo en función de cuántos rechazos automáticos serían "recuperables" por un analista.
+- Cola/back-office del analista para resolver casos **In analysis** end-to-end (el prototipo muestra el estado y el banner, pero no la bandeja de trabajo completa del underwriter).
 
 ---
 
@@ -130,18 +126,40 @@ SEARCH ─► [CUSTOMER_FOUND | REGISTER_NEW ─► REGISTERED]
         ─► SIMULATION (promoción, plazo, CPI, cuota fija)
         ─► REVIEW (TRN + contacto + dirección + proof of address + PEP + auth CSR)
         ─► SUBMIT_TO_COSACS
-        ─► DECISION: [PRE_APPROVED | REJECTED(motivo)]
-PRE_APPROVED ─► (sale registrada → Sales history / Pipeline)
+        ─► DECISION (motor de reglas): [INSTANT_PREAPPROVED | IN_ANALYSIS | REJECTED]
+INSTANT_PREAPPROVED ─► (sale registrada → Sales history / Pipeline)
+IN_ANALYSIS ─► (read-only hasta que crédito devuelve decisión) ─► [APPROVED | REJECTED]
 REJECTED ─► (con motivo → Sales history: rejected applications)
 ```
 
 Reglas de integridad que el prototipo debe sostener:
 
 - No se llega a `SUBMIT_TO_COSACS` sin: proof of address adjunto, screening PEP resuelto y autorización del CSR.
-- La decisión `PRE_APPROVED` exige que el monto a financiar esté **dentro del Spending Limit disponible** y dentro de la **capacidad mensual (MMI)**.
+- `INSTANT_PREAPPROVED` solo si la solicitud **pasa todas las reglas** del motor (§7.1).
+- `IN_ANALYSIS` deja la solicitud **read-only** ("Credit application under review — read-only until credit returns a decision"); el CSR no puede modificarla hasta que vuelva la decisión.
 - El producto (HP vs Cash Loan) **ramifica las reglas de cumplimiento** (Cash Loan = regulado BOJ).
 - Concurrencia en tienda: una misma solicitud/carrito no debe poder operarse en paralelo desde dos sesiones (origen típico de inconsistencias).
 - Una solicitud enviada es inmutable; un cambio abre una nueva.
+
+### 7.1 Motor de decisión (reglas reales del prototipo)
+
+La decisión NO es binaria. El motor evalúa la solicitud contra un conjunto de reglas; si **alguna** se dispara, la solicitud se enruta a revisión humana (**In analysis**), distinguiendo dos sub-rutas: *manual underwriting* y *analysis*. Si **ninguna** se dispara, hay **pre-aprobación instantánea**.
+
+| Regla | Condición que enruta | Sub-ruta |
+|---|---|---|
+| Pre-approved customer | Cliente ya pre-aprobado | manual |
+| Credit rating | Rating D, E, Ñ o Z | manual |
+| Days of internal delinquency | Mora interna > 7 días | manual |
+| Locked account | Cuenta bloqueada | manual |
+| Internal delinquency balance | Saldo en mora > $500 | manual |
+| Amount financed vs. maximum credit amount | Monto > $800,000 | manual |
+| Installment vs. max monthly installment | Cuota sobre MMI (con tolerancia) | manual |
+| Amount financed vs. spending limit available | Monto sobre límite disponible (con tolerancia) | manual |
+| Credit scoring | Score ≤ 460 | analysis |
+
+Resultado: `manual` si se dispara alguna regla manual; si no, `analysis` si se dispara la de score; si no, `instant`. Estados de cliente/solicitud relacionados que el prototipo ya maneja: **Pre-approved**, **In analysis**, **With observations**, **In arrears**, **Rejected**, **Active**.
+
+**Decisión de producto abierta (§11):** ¿*manual underwriting* y *analysis* van a **colas/SLA distintas** del back-office, o se atienden como una sola bandeja "In analysis"? Hoy se distinguen en la lógica pero comparten estado visible.
 
 ---
 
@@ -160,7 +178,7 @@ Métricas de soporte: *time-to-decision* mediano (objetivo demostrable < 5 min e
 | Sincronización con COSACS (línea, mora, ID) | Decidir sobre datos desactualizados | Mostrar "Updated" / timestamp; modelar el submit/decision como contrato hacia COSACS |
 | Cash Loan tratado igual que HP | Riesgo regulatorio (BOJ) | Ramificar reglas/gates por producto |
 | Proof of address / PEP mal capturados | Riesgo de cumplimiento (POCA / KYC) | Gates obligatorios antes del submit |
-| Decisión binaria sin "Referido" | Rechazos recuperables se pierden | Evaluar estado `REFERRED` (§6.1) |
+| "In analysis" sin bandeja de analista completa | Casos enrutados quedan sin resolución operativa | Definir cola/SLA del underwriter (§7.1) |
 | Concurrencia en tienda | Datos inconsistentes / doble crédito | Bloqueo de carrito/solicitud en uso |
 | Scope creep | Prototipo interminable | Corte In/Out de §6 como referencia firme |
 
@@ -170,7 +188,7 @@ Métricas de soporte: *time-to-decision* mediano (objetivo demostrable < 5 min e
 
 - **Fase 0 — Fundación (hecha):** brief v1.0, repo conectado, CI/CD a GitHub Pages, prototipo navegable revisado.
 - **Fase 1 — Endurecer el flujo feliz:** consistencia de estados, gates de cumplimiento por producto, casos de borde (carrito duplicado, sesión perdida, exceso de límite).
-- **Fase 2 — Decisión y back-office:** definir `REFERRED` si aplica, pipeline del analista, motivos de rechazo accionables.
+- **Fase 2 — Decisión y back-office:** bandeja del analista para casos **In analysis** (manual / analysis), SLA, pipeline y motivos de rechazo accionables.
 - **Fase 3 — Contratos de integración:** definición formal de la interfaz con COSACS (cliente, línea, submit, decisión) para handoff a ingeniería; preparar el hueco para buró a futuro.
 
 ---
@@ -179,11 +197,14 @@ Métricas de soporte: *time-to-decision* mediano (objetivo demostrable < 5 min e
 
 **Validadas:** Jamaica / JMD sin multimoneda; canal solo asistido en tienda; originador = retailer financiero; productos HP (no regulado) y Cash Loan cuota fija (regulado BOJ); una línea de crédito con bolsas HP/Cash; sin buró por ahora; público = stakeholders + equipo de desarrollo; stack = HTML plano.
 
-**Pendientes:** (a) necesidad de estado `REFERRED` en la decisión (§6.1); (b) reglas de cumplimiento específicas del Cash Loan bajo BOJ a confirmar con Legal; (c) TTL/vigencia de una simulación/oferta antes de requerir recálculo.
+**Validado adicional:** la decisión es un **motor de reglas de tres salidas** (Instant pre-approval / In analysis / Rejected); "In analysis" es el estado de revisión humana (lo que en v1.0 nombré erróneamente como decisión pendiente). Estados de cliente: Pre-approved, In analysis, With observations, In arrears, Rejected, Active.
+
+**Pendientes:** (a) ¿*manual underwriting* y *analysis* en colas/SLA distintas o bandeja única "In analysis"? (§7.1); (b) reglas de cumplimiento específicas del Cash Loan bajo BOJ a confirmar con Legal; (c) TTL/vigencia de una simulación/oferta antes de requerir recálculo.
 
 ---
 
 ## 12. Changelog
 
-- **v1.0 (2026-06-27):** validación de todos los supuestos con Oscar; revisión del prototipo publicado; reconstrucción de In/Out y máquina de estados sobre la realidad (línea pre-aprobada, COSACS, decisión Pre-approved/Rejected, HP vs Cash Loan, sin buró).
+- **v1.1 (2026-06-27):** corrección del modelo de decisión — NO es binario. Documentado el **motor de reglas de tres salidas** (Instant pre-approval / In analysis / Rejected), las reglas reales (rating, mora, score ≤460, límite, MMI, monto máx.), las sub-rutas manual/analysis y los estados de cliente (With observations, In arrears). El estado "In analysis" es el de revisión humana señalado por Oscar.
+- **v1.0 (2026-06-27):** validación de todos los supuestos con Oscar; revisión del prototipo publicado; reconstrucción de In/Out y máquina de estados sobre la realidad (línea pre-aprobada, COSACS, HP vs Cash Loan, sin buró).
 - **v0.1:** borrador inicial con supuestos por validar.
