@@ -873,7 +873,7 @@ a {
 .results-head,
 .results-row {
   display: grid;
-  grid-template-columns: minmax(150px, 1.7fr) 1.2fr 1.2fr 1fr 1.05fr 1.1fr minmax(120px, 1.5fr) 24px;
+  grid-template-columns: minmax(150px, 1.7fr) 1.1fr 1.1fr 0.95fr 1fr 1.05fr minmax(170px, 1.8fr) minmax(110px, 1.4fr) 24px;
   align-items: center;
   gap: var(--space-3);
   padding: var(--space-4) var(--space-5);
@@ -919,6 +919,12 @@ a {
   letter-spacing: 0.02em;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
+}
+
+.cell-email {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-variant-numeric: normal;
 }
 
 .cell-status { display: flex; align-items: center; }
@@ -1117,6 +1123,8 @@ a {
 #screen-register-customer .field-icon { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--emma-gray-500); display: flex; align-items: center; pointer-events: none; }
 #screen-register-customer .field.with-icon .field-control { padding-right: 44px; }
 #screen-register-customer .field-hint { font-size: 11px; color: var(--emma-gray-500); padding: 6px 0 0 14px; }
+#screen-register-customer .field.has-error .field-control { border-color: #C8102E; }
+#screen-register-customer .field.has-error .field-hint { color: #C8102E; }
 
 #screen-register-customer #field-phone .phone-inp{ width:100%; height:48px; box-sizing:border-box; border:1.5px solid var(--emma-gray-300); border-radius:var(--radius-btn); background:var(--emma-white); padding:18px 16px 6px 78px; font-family:var(--font-brand); font-size:14px; color:var(--emma-black); outline:none; transition:border-color .15s ease, border-width .15s ease; }
 #screen-register-customer #field-phone .phone-inp:hover{ border-color:var(--emma-gray-500); }
@@ -2533,6 +2541,10 @@ a {
                 <input type="text" class="input-field" id="refine-phone" placeholder="876-XXX-XXXX" inputmode="numeric" autocomplete="off" oninput="formatRefinePhone(); updateRefineButton();">
                 <label class="input-label">Phone number</label>
               </div>
+              <div class="input-group">
+                <input type="email" class="input-field" id="refine-email" placeholder="e.g. name@email.com" autocomplete="off" inputmode="email" oninput="updateRefineButton()">
+                <label class="input-label">Email</label>
+              </div>
               <div class="input-group input-group--spacer" aria-hidden="true"></div>
               <div class="refine-actions">
                 <button type="button" class="btn btn-primary disabled" id="refine-search-btn" onclick="refineResults()" disabled="">Refine results</button>
@@ -2549,121 +2561,131 @@ a {
               <div class="col">COSACS ID</div>
               <div class="col">DOB</div>
               <div class="col">Phone number</div>
+              <div class="col">Email</div>
               <div class="col">Status</div>
               <div class="col"></div>
             </div>
 
-            <div class="results-row" onclick="openCustomerFromRow(this)">
+            <div class="results-row" data-email="jada.brown@gmail.com" onclick="openCustomerFromRow(this)">
               <div class="cell-name">Jada Brown</div>
               <div class="cell-meta">TRN</div>
               <div class="cell-meta">124-558-903</div>
               <div class="cell-meta">JABR200392</div>
               <div class="cell-meta">14 / 03 / 1988</div>
               <div class="cell-meta">876-412-8890</div>
+              <div class="cell-meta cell-email">jada.brown@gmail.com</div>
               <div class="cell-status"><span class="recent-chip chip-approved">Active</span></div>
               <div class="cell-chevron">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
               </div>
             </div>
 
-            <div class="results-row" onclick="openCustomerFromRow(this)">
+            <div class="results-row" data-email="jade.brown95@yahoo.com" onclick="openCustomerFromRow(this)">
               <div class="cell-name">Jade Brown</div>
               <div class="cell-meta">Passport</div>
               <div class="cell-meta">A2341567</div>
               <div class="cell-meta">JDBR104872</div>
               <div class="cell-meta">02 / 11 / 1995</div>
               <div class="cell-meta">876-555-2014</div>
+              <div class="cell-meta cell-email">jade.brown95@yahoo.com</div>
               <div class="cell-status"><span class="recent-chip chip-analysis">Analysis</span></div>
               <div class="cell-chevron">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
               </div>
             </div>
 
-            <div class="results-row" onclick="openCustomerFromRow(this)">
+            <div class="results-row" data-email="jayda.b@hotmail.com" onclick="openCustomerFromRow(this)">
               <div class="cell-name">Jayda Brown</div>
               <div class="cell-meta">Driver's licence</div>
               <div class="cell-meta">9290000 13</div>
               <div class="cell-meta">JYBR330021</div>
               <div class="cell-meta">27 / 06 / 1991</div>
               <div class="cell-meta">876-318-7745</div>
+              <div class="cell-meta cell-email">jayda.b@hotmail.com</div>
               <div class="cell-status"><span class="recent-chip chip-observations">With observations</span></div>
               <div class="cell-chevron">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
               </div>
             </div>
 
-            <div class="results-row" onclick="openCustomerFromRow(this)">
+            <div class="results-row" data-email="jaida.brown@gmail.com" onclick="openCustomerFromRow(this)">
               <div class="cell-name">Jaida Brown</div>
               <div class="cell-meta">NIDS</div>
               <div class="cell-meta">750123456</div>
               <div class="cell-meta">JIBR228190</div>
               <div class="cell-meta">19 / 09 / 1992</div>
               <div class="cell-meta">876-902-7781</div>
+              <div class="cell-meta cell-email">jaida.brown@gmail.com</div>
               <div class="cell-status"><span class="recent-chip chip-rejected">Rejected</span></div>
               <div class="cell-chevron">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
               </div>
             </div>
 
-            <div class="results-row" onclick="openCustomerFromRow(this)">
+            <div class="results-row" data-email="jadah.brown85@outlook.com" onclick="openCustomerFromRow(this)">
               <div class="cell-name">Jadah Brown</div>
               <div class="cell-meta">TRN</div>
               <div class="cell-meta">338-902-771</div>
               <div class="cell-meta">JHBR551203</div>
               <div class="cell-meta">05 / 01 / 1985</div>
               <div class="cell-meta">876-447-3390</div>
+              <div class="cell-meta cell-email">jadah.brown85@outlook.com</div>
               <div class="cell-status"><span class="recent-chip chip-approved">Active</span></div>
               <div class="cell-chevron">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
               </div>
             </div>
 
-            <div class="results-row" onclick="openCustomerFromRow(this)">
+            <div class="results-row" data-email="jada.browne@gmail.com" onclick="openCustomerFromRow(this)">
               <div class="cell-name">Jada Browne</div>
               <div class="cell-meta">Passport</div>
               <div class="cell-meta">B7741203</div>
               <div class="cell-meta">JBRE770456</div>
               <div class="cell-meta">30 / 08 / 1990</div>
               <div class="cell-meta">876-220-6613</div>
+              <div class="cell-meta cell-email">jada.browne@gmail.com</div>
               <div class="cell-status"><span class="recent-chip chip-analysis">Analysis</span></div>
               <div class="cell-chevron">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
               </div>
             </div>
 
-            <div class="results-row" onclick="openCustomerFromRow(this)">
+            <div class="results-row" data-email="jada.browning@yahoo.com" onclick="openCustomerFromRow(this)">
               <div class="cell-name">Jada Browning</div>
               <div class="cell-meta">Driver's licence</div>
               <div class="cell-meta">8845120 09</div>
               <div class="cell-meta">JBRN662890</div>
               <div class="cell-meta">11 / 12 / 1983</div>
               <div class="cell-meta">876-489-3301</div>
+              <div class="cell-meta cell-email">jada.browning@yahoo.com</div>
               <div class="cell-status"><span class="recent-chip chip-observations">With observations</span></div>
               <div class="cell-chevron">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
               </div>
             </div>
 
-            <div class="results-row" onclick="openCustomerFromRow(this)">
+            <div class="results-row" data-email="jada.marie.brown@gmail.com" onclick="openCustomerFromRow(this)">
               <div class="cell-name">Jada Marie Brown</div>
               <div class="cell-meta">TRN</div>
               <div class="cell-meta">645-771-302</div>
               <div class="cell-meta">JMBR889321</div>
               <div class="cell-meta">23 / 04 / 1997</div>
               <div class="cell-meta">876-771-3028</div>
+              <div class="cell-meta cell-email">jada.marie.brown@gmail.com</div>
               <div class="cell-status"><span class="recent-chip chip-approved">Active</span></div>
               <div class="cell-chevron">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
               </div>
             </div>
 
-            <div class="results-row" onclick="openCustomerFromRow(this)">
+            <div class="results-row" data-email="jada.brownwilliams@hotmail.com" onclick="openCustomerFromRow(this)">
               <div class="cell-name">Jada Brown-Williams</div>
               <div class="cell-meta">NIDS</div>
               <div class="cell-meta">880145923</div>
               <div class="cell-meta">JBWL114820</div>
               <div class="cell-meta">08 / 07 / 1993</div>
               <div class="cell-meta">876-655-1148</div>
+              <div class="cell-meta cell-email">jada.brownwilliams@hotmail.com</div>
               <div class="cell-status"><span class="recent-chip chip-rejected">Rejected</span></div>
               <div class="cell-chevron">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
@@ -2967,6 +2989,23 @@ a {
 
             <section class="form-section">
               <div class="form-grid">
+                <div class="field" id="field-trn">
+                  <input class="field-control" id="trn-control" type="text" placeholder=" " inputmode="numeric" autocomplete="off" maxlength="11">
+                  <label class="field-label">TRN <span class="opt">(optional)</span></label>
+                  <p class="field-hint" id="trn-hint">Format: 9 digits (0–9)</p>
+                </div>
+                <div class="field with-icon date-field" id="field-dob">
+                  <input class="field-control date-control" id="dob-control" type="date" placeholder=" ">
+                  <label class="field-label">Date of birth</label>
+                  <span class="field-icon" id="dob-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                  </span>
+                </div>
+              </div>
+            </section>
+
+            <section class="form-section">
+              <div class="form-grid">
                 <div class="field">
                   <input class="field-control" id="firstname-control" type="text" placeholder=" " autocomplete="off">
                   <label class="field-label">First name</label>
@@ -2988,13 +3027,6 @@ a {
 
             <section class="form-section">
               <div class="form-grid">
-                <div class="field with-icon date-field" id="field-dob">
-                  <input class="field-control date-control" id="dob-control" type="date" placeholder=" ">
-                  <label class="field-label">Date of birth</label>
-                  <span class="field-icon" id="dob-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                  </span>
-                </div>
                 <div class="field span-2" id="field-phone">
                   <div style="font-size:11px;font-weight:600;color:#5E686E;margin-bottom:6px;">Cell phone</div>
                   <div style="display:flex;gap:10px;">
@@ -3964,7 +3996,8 @@ function clearRegistration() {
     if (el) { el.value = ''; el.dispatchEvent(new Event('input', { bubbles: true })); }
   };
   ['firstname-control', 'secondname-control', 'lastname-control',
-   'secondlastname-control', 'email-control', 'phone-control'].forEach(clear);
+   'secondlastname-control', 'email-control', 'phone-control', 'trn-control'].forEach(clear);
+  const ftrn = document.getElementById('field-trn'); if (ftrn) ftrn.classList.remove('has-error', 'has-value');
   const dob = document.getElementById('dob-control');
   if (dob) { dob.value = ''; dob.classList.remove('has-date'); dob.dispatchEvent(new Event('change', { bubbles: true })); }
   /* Document-type select + number */
@@ -3999,7 +4032,10 @@ function prefillRegistration() {
       if (opt) opt.click();
       setVal('docnumber-control', (s.docValue || '').replace(/\s/g, ''));
     }
-    /* TRN searches have no equivalent field in the registration form — left blank. */
+    /* TRN search → prefill the optional TRN field (digits only; the field re-formats). */
+    if (s.docType === 'trn') {
+      setVal('trn-control', (s.docValue || '').replace(/\D/g, ''));
+    }
   }
   /* COSACS ID searches have no equivalent registration field — left blank. */
 }
@@ -4074,9 +4110,10 @@ function populateRefine() {
   set('refine-last',  s.last);
   set('refine-dob',   s.dob);
   set('refine-phone', '');
+  set('refine-email', '');
   /* Snapshot the pristine (pre-filled) state so the button stays disabled
-     until the CSR changes any value or adds a phone number. */
-  refineInitial = { first: s.first || '', last: s.last || '', dob: s.dob || '', phone: '' };
+     until the CSR changes any value or adds a phone / email. */
+  refineInitial = { first: s.first || '', last: s.last || '', dob: s.dob || '', phone: '', email: '' };
   updateRefineButton();
   /* Clear any filtering left over from a previous refine, so every match shows. */
   document.querySelectorAll('#screen-results .results-row').forEach(r => { r.style.display = ''; });
@@ -4088,12 +4125,13 @@ function updateRefineButton() {
   const btn = document.getElementById('refine-search-btn');
   if (!btn) return;
   const gv = id => (document.getElementById(id) || {}).value || '';
-  const init = refineInitial || { first: '', last: '', dob: '', phone: '' };
+  const init = refineInitial || { first: '', last: '', dob: '', phone: '', email: '' };
   const changed =
     gv('refine-first') !== init.first ||
     gv('refine-last')  !== init.last  ||
     gv('refine-dob')   !== init.dob   ||
-    gv('refine-phone') !== init.phone;
+    gv('refine-phone') !== init.phone ||
+    gv('refine-email') !== init.email;
   btn.disabled = !changed;
   btn.classList.toggle('disabled', !changed);
 }
@@ -4117,6 +4155,7 @@ function refineResults() {
   const last  = get('refine-last').trim().toLowerCase();
   const dobRaw = get('refine-dob');                       /* yyyy-mm-dd */
   const phone = get('refine-phone').replace(/\D/g, '');
+  const email = get('refine-email').trim().toLowerCase();
 
   let dobFmt = '';
   if (dobRaw) {
@@ -4129,6 +4168,7 @@ function refineResults() {
     const cells = row.querySelectorAll('.cell-meta');
     const rowDob   = (cells[3] ? cells[3].textContent : '').replace(/\D/g, ''); /* ddmmyyyy */
     const rowPhone = (cells[4] ? cells[4].textContent : '').replace(/\D/g, '');
+    const rowEmail = (row.getAttribute('data-email') || '').toLowerCase();
     const nameLc = name.toLowerCase();
 
     let ok = true;
@@ -4136,6 +4176,7 @@ function refineResults() {
     if (last  && nameLc.indexOf(last)  === -1) ok = false;
     if (dobFmt && rowDob !== dobFmt) ok = false;
     if (phone && rowPhone.indexOf(phone) === -1) ok = false;
+    if (email && rowEmail.indexOf(email) === -1) ok = false;
 
     row.style.display = ok ? '' : 'none';
   });
@@ -4159,15 +4200,16 @@ function refineResults() {
   /* ---------- Document type config ---------- */
   var DOC_TYPES = {
     trn:      { label: 'TRN number',        placeholder: 'e.g. 098-765-432', hint: 'Format: 9 digits with hyphens' },
-    voters:   { label: 'Voters ID',         placeholder: 'e.g. 1234567',     hint: 'Format: 7 digits, no spaces' },
-    licence:  { label: "Driver's licence", hint: '9 digits — e.g. 1234567 89' },
-    passport: { label: 'Passport',         hint: '1 letter + 7 digits — e.g. A1234567' },
-    nids:     { label: 'NIDS',             hint: '9 digits — e.g. 123456789' }
+    voters:   { label: 'Voters ID',         placeholder: 'e.g. ABC12345',    hint: 'Format: 2–3 letters + 5–7 digits' },
+    licence:  { label: "Driver's licence", placeholder: 'e.g. 1234567',      hint: 'Format: 7 digits' },
+    passport: { label: 'Passport',         placeholder: 'e.g. A1234567',     hint: 'Format: 1–2 letters + 6–7 digits' },
+    nids:     { label: 'NIDS',             placeholder: 'e.g. NID-12345678', hint: 'Format: NID- + 8 digits' }
   };
 
   var state = {
     docType: '',
     docNumber: '',
+    trn: '',
     firstName: '',
     secondName: '',
     lastName: '',
@@ -4231,7 +4273,7 @@ function refineResults() {
     setHasValue(docField, false);
     docInput.disabled = false;
     docInput.removeAttribute('inputmode');
-    if (state.docType === 'passport') {
+    if (state.docType === 'passport' || state.docType === 'voters') {
       docInput.setAttribute('inputmode', 'text');
     } else {
       docInput.setAttribute('inputmode', 'numeric');
@@ -4240,41 +4282,53 @@ function refineResults() {
     docHint.textContent = DOC_TYPES[state.docType].hint;
   }
 
-  function formatDocNumber(raw, type) {
-    if (type === 'trn') {
-      var t = raw.replace(/\D/g, '').slice(0, 9);
-      var groups = [];
-      for (var j = 0; j < t.length; j += 3) groups.push(t.slice(j, j + 3));
-      return groups.join('-');
+  // Mask: up to `maxLetters` leading A–Z, then up to `maxDigits` 0–9.
+  function maskAlphaNum(raw, maxLetters, maxDigits) {
+    var clean = (raw || '').replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+    var letters = '', digits = '', i, ch;
+    for (i = 0; i < clean.length; i++) {
+      ch = clean[i];
+      if (digits.length === 0 && /[A-Z]/.test(ch) && letters.length < maxLetters) {
+        letters += ch;
+      } else if (/[0-9]/.test(ch) && digits.length < maxDigits) {
+        digits += ch;
+      }
     }
+    return letters + digits;
+  }
+
+  function formatDocNumber(raw, type) {
     if (type === 'voters') {
-      return raw.replace(/\D/g, '').slice(0, 7);
+      // 2–3 letters + 5–7 digits  (^[A-Z]{2,3}[0-9]{5,7}$)
+      return maskAlphaNum(raw, 3, 7);
     }
     if (type === 'passport') {
-      var clean = raw.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
-      var out = '';
-      for (var i = 0; i < clean.length; i++) {
-        var ch = clean[i];
-        if (out.length === 0) { if (/[A-Z]/.test(ch)) out += ch; }
-        else if (/[0-9]/.test(ch) && out.length < 8) { out += ch; }
-      }
-      return out;
+      // 1–2 letters + 6–7 digits  (^[A-Z]{1,2}[0-9]{6,7}$)
+      return maskAlphaNum(raw, 2, 7);
     }
     if (type === 'licence') {
-      var d = raw.replace(/\D/g, '').slice(0, 9);
-      return d.length > 7 ? d.slice(0, 7) + ' ' + d.slice(7) : d;
+      // exactly 7 digits
+      return raw.replace(/\D/g, '').slice(0, 7);
     }
-    // nids
-    return raw.replace(/\D/g, '').slice(0, 9);
+    if (type === 'nids') {
+      // NID- + 8 digits  (^NID-[0-9]{8}$)
+      var d = raw.replace(/\D/g, '').slice(0, 8);
+      return d.length ? 'NID-' + d : '';
+    }
+    // trn (legacy; not selectable in registration)
+    var t = raw.replace(/\D/g, '').slice(0, 9);
+    var groups = [];
+    for (var j = 0; j < t.length; j += 3) groups.push(t.slice(j, j + 3));
+    return groups.join('-');
   }
 
   function docNumberValid() {
     var v = state.docNumber;
+    if (state.docType === 'voters')   return /^[A-Z]{2,3}[0-9]{5,7}$/.test(v);
+    if (state.docType === 'passport') return /^[A-Z]{1,2}[0-9]{6,7}$/.test(v);
+    if (state.docType === 'licence')  return /^[0-9]{7}$/.test(v);
+    if (state.docType === 'nids')     return /^NID-[0-9]{8}$/.test(v);
     if (state.docType === 'trn')      return v.replace(/\D/g, '').length === 9;
-    if (state.docType === 'voters')   return v.replace(/\D/g, '').length === 7;
-    if (state.docType === 'passport') return /^[A-Z]\d{7}$/.test(v);
-    if (state.docType === 'licence')  return v.replace(/\s/g, '').length === 9;
-    if (state.docType === 'nids')     return v.replace(/\s/g, '').length === 9;
     return false;
   }
 
@@ -4286,6 +4340,42 @@ function refineResults() {
     setHasValue(docField, formatted.length > 0);
     validate();
   });
+
+  /* ============================================================
+     TRN — optional · 9 digits (0–9), shown in blocks of 3
+     ============================================================ */
+  var trnField = $('#field-trn');
+  var trnInput = $('#trn-control');
+  var trnHint  = $('#trn-hint');
+
+  function formatTRN(raw) {
+    var t = (raw || '').replace(/\D/g, '').slice(0, 9);
+    var groups = [];
+    for (var j = 0; j < t.length; j += 3) groups.push(t.slice(j, j + 3));
+    return groups.join('-');
+  }
+
+  // Optional: valid when empty OR exactly 9 digits.
+  function trnValid() {
+    var digits = state.trn.replace(/\D/g, '');
+    return digits.length === 0 || digits.length === 9;
+  }
+
+  if (trnInput) {
+    trnInput.addEventListener('input', function () {
+      var formatted = formatTRN(trnInput.value);
+      trnInput.value = formatted;
+      state.trn = formatted;
+      setHasValue(trnField, formatted.length > 0);
+      var digits = formatted.replace(/\D/g, '');
+      var incomplete = digits.length > 0 && digits.length < 9;
+      trnField.classList.toggle('has-error', incomplete);
+      if (trnHint) trnHint.textContent = incomplete
+        ? 'TRN must be 9 digits'
+        : 'Format: 9 digits (0–9)';
+      validate();
+    });
+  }
 
   /* ============================================================
      PHONE — +1 (876) ###-####
@@ -4360,6 +4450,7 @@ function refineResults() {
     return (
       !!state.docType &&
       docNumberValid() &&
+      trnValid() &&
       state.firstName.length >= 3 &&
       state.lastName.length >= 3 &&
       !!state.dob &&
@@ -4415,7 +4506,7 @@ function refineResults() {
       customerId: 'UC-1004732',
       cosacs: 'RAWL150873',
       docTypeLabel: "Driver's licence",
-      docNumberFmt: '9290000 01',
+      docNumberFmt: '9290001',
       dob: '14 Mar 1979',
       phone: '+1 (876) 412-8890',
       email: 'rosa.williams@mail.com',
@@ -4499,7 +4590,7 @@ function refineResults() {
 
     /* ===== Scenario 1 · Identical document (blocking) ===== */
     {
-      docType: 'licence', docNumber: '929000001',
+      docType: 'licence', docNumber: '9290001',
       build: function () {
         var p = RECORDS.rosa;
         return {
@@ -4560,7 +4651,7 @@ function refineResults() {
 
     /* ===== Scenario 3 · Possible typo (same name + DOB + doc type, different number) ===== */
     {
-      docType: 'licence', docNumber: '929000003',
+      docType: 'licence', docNumber: '9290003',
       build: function (form) {
         var p = RECORDS.jada;
         /* Doc-type phrase with its article, driven by what the CSR was entering. */
@@ -4583,7 +4674,7 @@ function refineResults() {
               name: fullNameOf(form) || p.fullName,
               lines: [
                 { label: 'Document type', value: form.docTypeLabel || "Driver's licence" },
-                { label: 'Document number', value: form.number || '929000003' }
+                { label: 'Document number', value: form.number || '9290003' }
               ]
             },
             found: {
@@ -4606,7 +4697,7 @@ function refineResults() {
 
     /* ===== Scenario 4 · Similar matches (similar name + same DOB, new document) ===== */
     {
-      docType: 'licence', docNumber: '929000004',
+      docType: 'licence', docNumber: '9290004',
       build: function () {
         return {
           title: 'Similar matches',
@@ -5094,7 +5185,7 @@ document.addEventListener('click', function(e){
    {id:'jada',first:'Jada',mid:'Marcia',last:'Smith',last2:'Thompson',full:'Jada Marcia Smith Thompson',
     trn:'998-887-776',cosacs:'JMJS000543',trnOnFile:true,primaryDoc:null,dob:'18 / 06 / 1990',phone:'+1 876 978 4128', addr:'12 Hopefield Avenue, Kingston 6, St. Andrew',type:'Current',rating:'A',status:'active',home:'jada'},
    {id:'rosa',first:'Rosa',mid:'Andrew',last:'Williams',last2:'',full:'Rosa Andrew Williams',
-    trn:'',cosacs:'RAWL150873',trnOnFile:false,primaryDoc:{label:"Driver's licence",number:'9290000 01'},dob:'14 / 03 / 1979',phone:'+1 876 412 8890', addr:'21 Mannings Hill Road, Kingston 8, St. Andrew',type:'Current',rating:'A',status:'active',income:95000,dsr:0.40,committed:12000,updated:'Jun 15, 2026'},
+    trn:'',cosacs:'RAWL150873',trnOnFile:false,primaryDoc:{label:"Driver's licence",number:'9290001'},dob:'14 / 03 / 1979',phone:'+1 876 412 8890', addr:'21 Mannings Hill Road, Kingston 8, St. Andrew',type:'Current',rating:'A',status:'active',income:95000,dsr:0.40,committed:12000,updated:'Jun 15, 2026'},
    {id:'marcus',first:'Marcus',mid:'Anthony',last:'Brown',last2:'',full:'Marcus Anthony Brown',
     trn:'117-204-558',cosacs:'MABR118042',trnOnFile:false,primaryDoc:{label:'Licence',number:'2045583117'},dob:'22 / 07 / 1985',phone:'+1 876 433 2107', addr:'45 Constant Spring Road, Kingston 10',type:'Current',rating:'A',status:'active',
     income:78000,dsr:0.40,committed:11000,updated:'May 28, 2026'},
@@ -6194,12 +6285,12 @@ a:focus-visible, button:focus-visible, [role="button"]:focus-visible, [onclick]:
       dsr:0.35,committed:0,
       documents:[{type:"passport",name:"Passport",number:"P2240551",uploaded:"20 Jun 2026",expires:"19 Jun 2034"}],
       supporting:sup("GraceKennedy Ltd","20 Jun 2026")},
-    rosa:{name:"Rosa Andrew Williams",rating:"A",status:"active",trn:"",cosacs:"RAWL150873",primaryDoc:{label:"Driver's licence",number:"9290000 01"},trnOnFile:false,updated:"Jun 15, 2026",
+    rosa:{name:"Rosa Andrew Williams",rating:"A",status:"active",trn:"",cosacs:"RAWL150873",primaryDoc:{label:"Driver's licence",number:"9290001"},trnOnFile:false,updated:"Jun 15, 2026",
       dob:"14 March 1979",gender:"Female",nationality:"Jamaican",marital:"Married",
       phone:"+1 876 412 8890",homephone:"+1 876 924 7711",email:"rosa.williams@mail.com",address:"21 Mannings Hill Road, Kingston 8, St. Andrew",
       employer:"Scotiabank Jamaica",position:"Branch Supervisor",income:95000,employed:"6 years 4 months",workphone:"+1 876 922 1000",
       dsr:0.40,committed:12000,
-      documents:[{type:"license",name:"Driver's licence",number:"9290000 01",uploaded:"10 Mar 2020"}],
+      documents:[{type:"license",name:"Driver's licence",number:"9290001",uploaded:"10 Mar 2020"}],
       supporting:sup("Scotiabank Jamaica","10 Mar 2020")}
   };
   window.CUSTOMER_FULL=CUSTOMER_FULL;
