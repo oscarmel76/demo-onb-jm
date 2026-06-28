@@ -27,7 +27,7 @@ En Jamaica, el acceso a crédito de consumo en punto de venta (retail finance) e
 
 Para el negocio, esto se traduce en abandono en tienda, costo operativo alto por expediente y exposición a riesgo por verificaciones inconsistentes (KYC/AML débil o tardío).
 
-🔶 **Supuesto de problema central:** el cuello de botella prioritario es el *time-to-decision* en sucursal, no el back-office de cobranza. Si tu prioridad real es otra (p. ej. recolección documental o suscripción del analista), ajustamos el foco del prototipo.
+✅ **Problema central (validado por Oscar):** el cuello de botella prioritario es el *time-to-decision* en sucursal, no el back-office de cobranza. El foco del prototipo queda en la experiencia de tienda (CSR-led) y en acortar el camino de la intención de compra a la decisión de crédito.
 
 ---
 
