@@ -73,6 +73,10 @@ jobs:
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
+        with:
+          # Fija la fuente de Pages en "GitHub Actions" (deja de usar el deploy legacy por rama),
+          # asi solo este pipeline gateado publica en produccion.
+          enablement: true
 
       - name: Upload artifact (sitio estatico completo)
         uses: actions/upload-pages-artifact@v3
