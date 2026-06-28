@@ -1,0 +1,84 @@
+name: Deploy prototype to GitHub Pages
+
+# Pipeline de puesta en produccion del prototipo Unicredit.
+# Flujo: push a main  ->  validar  ->  publicar en GitHub Pages.
+# En Pull Requests solo corre la validacion (no publica), para revisar antes de mergear.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch: {}   # permite disparo manual desde la pestania Actions
+
+# Permisos minimos para que el deploy a Pages funcione
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Evita despliegues solapados; deja terminar el que esta en curso
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  # 1) GATE DE CALIDAD: corre siempre (push y PR). Si falla, no se publica.
+  validate:
+    name: Validate static site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Required files present
+        run: |
+          set -e
+          for f in index.html simulation.html 01-customer-search.html; do
+            if [ ! -f "$f" ]; then
+              echo "::error::Falta el archivo requerido: $f"
+              exit 1
+            fi
+          done
+          echo "OK: archivos requeridos presentes."
+
+      - name: No merge-conflict markers
+        run: |
+          if grep -RInE '^(<<<<<<<|=======|>>>>>>>)' --include='*.html' .; then
+            echo "::error::Se encontraron marcadores de conflicto de merge sin resolver."
+            exit 1
+          fi
+          echo "OK: sin marcadores de conflicto."
+
+      - name: Basic HTML sanity (html-validate)
+        run: |
+          npm init -y >/dev/null 2>&1
+          npx --yes html-validate@8 index.html simulation.html 01-customer-search.html \
+            --config .htmlvalidate.json || {
+              echo "::warning::html-validate reporto observaciones (no bloqueante en esta fase del prototipo).";
+            }
+
+  # 2) DEPLOY: solo en push a main (no en PR) y si paso la validacion.
+  deploy:
+    name: Deploy to Pages
+    needs: validate
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact (sitio estatico completo)
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
